@@ -1,0 +1,322 @@
+GRACELYN UNIVERSITY
+AMBASSADOR PROGRAM - MOTIVATION FRAMES
+File: ambassador_motivation_frames.txt
+Location: WorkDrive 08 - Brand Assets
+Version: 1.0 (Launch Version - Pre-A/B Data)
+
+This document defines the six motivation types used to personalize ambassador
+engagement content. It is used by Agent 3 (Engagement Agent) when generating
+weekly emails and milestone communications, and by Agent 0 (Research and
+Intelligence Agent) when building prospect profiles.
+
+IMPORTANT: This is the launch version of this document. The motivation frames
+described here are informed hypotheses, not confirmed data. They are based on
+knowledge of the target ambassador populations and their likely motivations.
+
+At day 90 after launch, Agent 3 A/B test data and onboarding discovery
+responses will be synthesized and this document will be updated with
+confirmed frames and refined content guidance for each motivation type.
+
+Until day 90: use UNKNOWN as the default motivation tag for all ambassadors
+whose motivation has not been confirmed through onboarding discovery or
+engagement data. Apply Mission Impact framing to UNKNOWN ambassadors.
+
+=============================================================
+HOW MOTIVATION TAGS ARE SET
+=============================================================
+
+Source 1: Onboarding discovery questions
+At the end of the Ambassador Training acknowledgment step, ambassadors
+answer two questions:
+  - "What drew you to the Gracelyn ambassador program?"
+  - "What do you care most about as an educator or in your community?"
+
+Responses are stored in the Motivation_Discovery_Response field.
+Agent 2 reads these responses and uses Claude API to classify the
+ambassador's motivation tag from the six options below.
+The tag is written to the Motivation_Tag field in Zoho CRM.
+
+Source 2: A/B engagement data (available after day 90)
+Agent 3 runs two content variants per weekly email in the first 90 days:
+Mission Impact framing and Professional Growth framing.
+Open rate and click rate by role category and by ambassador confirm
+which frame resonates more. Data is fed back to update this document
+and the Motivation_Tag fields of ambassadors with UNKNOWN tags.
+
+Source 3: Agent 0 prospect profile inference
+For prospects being recruited before they apply, Agent 0 infers a
+motivation hypothesis based on their public content, community
+involvement, and professional role. This is stored as
+Motivation_Hypothesis in the Prospects module and becomes the initial
+Motivation_Tag after the ambassador is onboarded if no discovery
+response overrides it.
+
+=============================================================
+THE SIX MOTIVATION TYPES
+=============================================================
+
+-------------------------------------------------------------
+MOTIVATION TYPE 1: PROFESSIONAL GROWTH
+-------------------------------------------------------------
+
+WHO THIS IS:
+K-12 classroom teachers, instructional coaches, and curriculum specialists
+who are motivated by their own professional development and career trajectory.
+They care deeply about being excellent at their craft. They want credentials,
+skills, and recognition that validates their expertise.
+
+WHAT MOVES THEM:
+- The idea that becoming a better educator is a continuous calling
+- Professional development that has real value independent of a certificate
+- Recognition as a leader in their field, not just in their school
+- Content that speaks to the educator they are becoming, not just who they are
+
+WHAT DOES NOT MOVE THEM:
+- Pure mission language without professional substance
+- Financial incentive framing
+- Content that feels like a volunteer ask rather than a professional opportunity
+
+CONTENT FRAMING GUIDANCE:
+Lead with educator growth and mastery. Reference specific professional skills,
+instructional strategies, or leadership development. Connect the ambassador
+role to their professional identity: sharing Gracelyn is what educators who
+care about their profession do for each other. The mission is present but
+positioned as the deeper why behind professional excellence.
+
+EXAMPLE OPENING FRAMES:
+"The best educators share what works. You know that better than most."
+"Your growth as an educator is the most powerful thing you can share
+ with someone who needs it."
+"What you have learned as an educator is worth passing forward."
+
+-------------------------------------------------------------
+MOTIVATION TYPE 2: MISSION IMPACT
+-------------------------------------------------------------
+
+WHO THIS IS:
+Educators, childcare workers, youth-serving professionals, and others
+who are primarily motivated by the difference their work makes for children.
+They are not chasing credentials or career advancement. They are doing this
+because they believe children's lives depend on great educators.
+
+WHAT MOVES THEM:
+- Specific stories of children whose lives changed because a teacher was ready
+- The idea that every educator they help reach becomes a multiplier for children
+- Language that honors the weight and the worth of their daily work
+- Content that connects their small act (sharing a link) to a large impact (a child)
+
+WHAT DOES NOT MOVE THEM:
+- Professional development or career framing
+- Financial incentive framing
+- Abstract institutional language
+
+CONTENT FRAMING GUIDANCE:
+Open with a child. Lead with impact. The educator in the story is doing
+something that changes a child's trajectory. The ambassador is the person
+who made that possible by sharing Gracelyn. The mission statement
+(every vulnerable child deserves an incredible teacher) should appear
+naturally in mission-focused content for this audience.
+
+EXAMPLE OPENING FRAMES:
+"Every vulnerable child deserves an incredible teacher. You believe that.
+ So does everyone you are about to share this with."
+"The educator you refer today might be the teacher who changes
+ a child's life tomorrow."
+"Some of the most important work you will ever do happens in a referral."
+
+-------------------------------------------------------------
+MOTIVATION TYPE 3: KINGDOM CALLING
+-------------------------------------------------------------
+
+WHO THIS IS:
+Faith community leaders, youth pastors, Christian school teachers,
+homeschool educators, and mission organization volunteers who see their
+work as an expression of their faith. For this audience, education is
+not a profession. It is a calling. They are motivated by what God is
+doing through the work of teachers who love children.
+
+WHAT MOVES THEM:
+- Language that honors calling over career
+- The idea that equipping a teacher is an act of faith and stewardship
+- Content that connects their community leadership to something that
+  outlasts their direct involvement
+- Stories of educators who felt called and found Gracelyn waiting
+
+WHAT DOES NOT MOVE THEM:
+- Secular professional framing
+- Financial incentive framing
+- Content that feels disconnected from faith or community purpose
+
+CONTENT FRAMING GUIDANCE:
+Lead with calling and purpose. Reference the inherent worth of children
+and the responsibility of those who serve them. Use words like calling,
+stewardship, equip, and serve naturally. Do not be preachy. The faith
+foundation is present in the values expressed, not in explicit doctrine.
+
+EXAMPLE OPENING FRAMES:
+"Some things are bigger than a career. The work of equipping a teacher
+ is one of them."
+"You believe every child is made for more. Gracelyn was built on that same belief."
+"The people in your community who teach are carrying something important.
+ Gracelyn wants to help them carry it well."
+
+-------------------------------------------------------------
+MOTIVATION TYPE 4: RECOGNITION
+-------------------------------------------------------------
+
+WHO THIS IS:
+Childcare workers, paraprofessionals, and early childhood educators
+who are chronically undervalued in their communities and professions.
+They are doing important work and few people acknowledge it. The
+ambassador program speaks to them first by seeing them before asking
+anything of them.
+
+WHAT MOVES THEM:
+- Being acknowledged for the work they already do
+- An invitation that treats them as important, not as an afterthought
+- Content that validates their role in children's lives
+- The idea that their influence matters even without a title
+
+WHAT DOES NOT MOVE THEM:
+- Content that assumes professional status they may not have
+- Financial incentive framing as a primary hook
+- Content that feels like it was written for someone else and adapted
+
+CONTENT FRAMING GUIDANCE:
+Open with acknowledgment. Name what this person does and why it matters
+before asking anything. The ambassador invitation should feel like
+recognition, not recruitment. The referral fee is mentioned as an
+acknowledgment of their contribution, consistent with how they should
+feel valued throughout the ambassador experience.
+
+EXAMPLE OPENING FRAMES:
+"The work you do every day with children matters more than most people
+ acknowledge. We see it. And we want to partner with you."
+"You have been showing up for children in ways that do not always get
+ recognized. That is exactly why we want you as an ambassador."
+"Not everyone can see the difference you make. We can."
+
+-------------------------------------------------------------
+MOTIVATION TYPE 5: PRIDE AND GRATITUDE
+-------------------------------------------------------------
+
+WHO THIS IS:
+Current Gracelyn students and alumni who have already been transformed
+by Gracelyn and want to share what they found with others who need it.
+This is the highest-trust, lowest-friction audience. They are not being
+convinced of anything. They already believe. The ask is simply to pay
+it forward.
+
+WHAT MOVES THEM:
+- The memory of where they were before Gracelyn and where they are now
+- The idea that their referral gives someone else what they found
+- Community: they are part of something, and they can extend it
+- Simplicity: they do not need to be sold on Gracelyn; they just need
+  a clear, easy path to share it
+
+WHAT DOES NOT MOVE THEM:
+- Content that tries to convince them Gracelyn is great (they know)
+- Long explanations of programs they have already completed
+- Financial incentive as primary framing (it can be mentioned, but it
+  is not why they will act)
+
+CONTENT FRAMING GUIDANCE:
+Lead with the transformation they experienced. Connect their growth to
+the educator they can help. The ask is simple: share what you found with
+someone who needs it. The tone is warm, collegial, and brief. These
+ambassadors do not need convincing. They need a clear invitation and
+an easy path to act.
+
+EXAMPLE OPENING FRAMES:
+"You found Gracelyn when you needed it. Someone is out there right now
+ in the same place you were."
+"What Gracelyn gave you is worth sharing. Here is how."
+"The educator who nominated you believed in you. Now you can do the same
+ for someone else."
+
+-------------------------------------------------------------
+MOTIVATION TYPE 6: UNKNOWN (DEFAULT)
+-------------------------------------------------------------
+
+WHO THIS IS:
+Any ambassador whose motivation has not yet been confirmed through
+onboarding discovery questions or A/B engagement data.
+
+CONTENT FRAMING GUIDANCE:
+Use Mission Impact framing as the default. The mission statement
+(every vulnerable child deserves an incredible teacher) resonates
+across all populations and is never wrong as an opening frame.
+Do not fabricate personalization. Do not guess at specific motivations.
+Keep the content mission-focused, warm, and genuine.
+
+This tag should be updated as data becomes available. If an ambassador
+has been in the system for more than 90 days and still has UNKNOWN,
+Parmeet should review whether onboarding discovery data was captured
+and whether A/B data provides a signal.
+
+=============================================================
+A/B TEST HYPOTHESES FOR FIRST 90 DAYS
+=============================================================
+
+Agent 3 runs two content variants per weekly email in the first 90 days.
+Both variants go to all ambassadors. Open rate and click rate by role
+category determine which frame is confirmed for each audience type.
+
+VARIANT A (Mission Impact frame):
+- Opens with a child or community impact statement
+- Mission language dominant
+- Referral fee mentioned briefly near close
+
+VARIANT B (Professional Growth frame):
+- Opens with educator development or mastery
+- Professional vocabulary dominant
+- Mission present but secondary
+
+ROLE CATEGORIES BEING TESTED:
+- Teacher: hypothesis is Professional Growth or Mission Impact (test both)
+- Paraprofessional: hypothesis is Recognition (neither A nor B maps perfectly;
+  watch for low engagement on both and flag for Parmeet review)
+- Childcare: hypothesis is Recognition or Mission Impact (test B secondary)
+- Faith Leader: hypothesis is Kingdom Calling (neither A nor B maps perfectly;
+  flag Paraprofessional and Faith Leader for custom frame development at day 90)
+- Influencer: hypothesis is Mission Impact or audience-trust (test Mission Impact)
+- Alumni and Student: hypothesis is Pride and Gratitude (Mission Impact frame
+  is the closest proxy in A/B testing)
+
+AT DAY 90:
+Parmeet reviews engagement data by role category.
+Claude synthesizes findings.
+This document is updated with confirmed frames.
+ambassador_motivation_frames.txt is overwritten with v1.1.
+All UNKNOWN motivation tags are reviewed and updated based on data.
+
+=============================================================
+INSTRUCTIONS FOR CLAUDE API CALLS
+=============================================================
+
+When generating ambassador engagement content, Claude must:
+
+1. Read the ambassador's Motivation_Tag from the CRM record passed
+   in the prompt context.
+
+2. Apply the corresponding framing guidance from this document.
+
+3. If Motivation_Tag = UNKNOWN, apply Mission Impact framing.
+
+4. Never fabricate motivation data. If the motivation tag field is
+   empty or unavailable, treat it as UNKNOWN.
+
+5. Use the ambassador's Ambassador_Role_Category to add contextual
+   accuracy to the content (a teacher email sounds different from
+   a childcare worker email even within the same motivation frame).
+
+6. Never mention the motivation tag or frame explicitly in the content.
+   The framing is applied through word choice, opening theme, and
+   emphasis, not through direct statement.
+
+7. Always follow ambassador_copy_rules.txt regardless of motivation
+   frame. The copy rules are not overridden by motivation framing.
+
+=============================================================
+END OF AMBASSADOR MOTIVATION FRAMES
+=============================================================

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gracelyn Ambassador Program — Project Kickoff</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #111; color: #e8e8e8; }
+    }
+
+    .page { max-width: 680px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+    /* HEADER */
+    .header { margin-bottom: 2rem; }
+    .header h1 { font-size: 22px; font-weight: 500; color: #1a1a1a; }
+    @media (prefers-color-scheme: dark) { .header h1 { color: #f0f0f0; } }
+    .gold-bar { height: 3px; background: #C8A96E; border-radius: 2px; width: 48px; margin: 8px 0 10px; }
+    .header-sub { font-size: 13px; color: #777; line-height: 1.6; }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #999; margin-bottom: 10px;
+    }
+
+    /* STATUS BANNER */
+    .status-banner {
+      background: #eaf3de; border: 0.5px solid #97c459;
+      border-radius: 8px; padding: 12px 16px; margin-bottom: 2rem;
+      font-size: 13px; color: #3b6d11; line-height: 1.6;
+    }
+    @media (prefers-color-scheme: dark) {
+      .status-banner { background: #172e08; border-color: #3b6d11; color: #97c459; }
+    }
+    .status-banner strong { font-weight: 500; }
+
+    /* STEP CARDS */
+    .steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 2rem; }
+    .step { display: flex; gap: 14px; align-items: flex-start; }
+    .step-connector { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #3D002B; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; flex-shrink: 0;
+    }
+    .step-line { width: 1px; background: #e0e0da; flex: 1; min-height: 24px; }
+    @media (prefers-color-scheme: dark) { .step-line { background: #333; } }
+    .step-body { padding-bottom: 20px; padding-top: 4px; }
+    .step-title { font-size: 14px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; }
+    @media (prefers-color-scheme: dark) { .step-title { color: #f0f0f0; } }
+    .step-detail { font-size: 13px; color: #555; line-height: 1.6; }
+    @media (prefers-color-scheme: dark) { .step-detail { color: #aaa; } }
+    .step-detail ul { margin: 6px 0 0 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .step-detail li { display: flex; align-items: flex-start; gap: 8px; }
+    .step-detail li::before { content: "·"; color: #C8A96E; font-size: 16px; line-height: 1.3; flex-shrink: 0; }
+    .step-tag {
+      display: inline-block; font-size: 10px; font-weight: 500;
+      padding: 2px 7px; border-radius: 10px; margin-left: 8px;
+      vertical-align: middle;
+    }
+    .tag-you { background: #e6f1fb; color: #185fa5; }
+    .tag-cc  { background: #eaf3de; color: #3b6d11; }
+    .tag-par { background: #f0ede8; color: #7a5c1e; border: 0.5px solid #C8A96E; }
+    .tag-all { background: #f5f0ff; color: #4B0082; }
+
+    /* CARDS */
+    .card {
+      background: #f7f7f5; border: 0.5px solid #e0e0da;
+      border-radius: 8px; padding: 14px 16px; margin-bottom: 10px;
+    }
+    @media (prefers-color-scheme: dark) { .card { background: #1c1c1c; border-color: #333; } }
+    .card-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 8px; }
+    @media (prefers-color-scheme: dark) { .card-title { color: #e0e0e0; } }
+    .card-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .card-list li { font-size: 12px; color: #555; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+    @media (prefers-color-scheme: dark) { .card-list li { color: #aaa; } }
+    .card-list li::before { content: "·"; color: #C8A96E; font-size: 16px; line-height: 1.3; flex-shrink: 0; }
+
+    /* WARNING */
+    .warn {
+      background: #fff8ed; border: 0.5px solid #f0b429;
+      border-radius: 8px; padding: 12px 16px; margin-bottom: 2rem;
+      font-size: 12px; color: #7a4f00; line-height: 1.6;
+    }
+    @media (prefers-color-scheme: dark) { .warn { background: #2a1e06; border-color: #854f0b; color: #ef9f27; } }
+    .warn strong { font-weight: 500; }
+
+    /* LEGEND */
+    .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 2rem; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
+    @media (prefers-color-scheme: dark) { .legend-item { color: #999; } }
+
+    /* TIMELINE */
+    .timeline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 2rem; }
+    .tl-card {
+      background: #f7f7f5; border: 0.5px solid #e0e0da;
+      border-radius: 8px; padding: 10px 12px;
+    }
+    @media (prefers-color-scheme: dark) { .tl-card { background: #1c1c1c; border-color: #333; } }
+    .tl-week { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: #C8A96E; }
+    .tl-title { font-size: 12px; font-weight: 500; color: #1a1a1a; margin: 3px 0; }
+    @media (prefers-color-scheme: dark) { .tl-title { color: #e0e0e0; } }
+    .tl-detail { font-size: 11px; color: #777; line-height: 1.5; }
+
+    /* FOOTER */
+    .footer { border-top: 0.5px solid #e0e0da; padding-top: 16px; margin-top: 2rem; font-size: 12px; color: #999; }
+    @media (prefers-color-scheme: dark) { .footer { border-top-color: #333; } }
+
+    @media print {
+      body { background: white; color: black; }
+      .card, .tl-card, .warn, .status-banner { background: #f9f9f9 !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>Gracelyn University — Ambassador Program Build</h1>
+    <div class="gold-bar"></div>
+    <p class="header-sub">Project kickoff guide. All 15 project documents are complete. This is the execution starting point. Target: production-ready by August 1.</p>
+  </div>
+
+  <div class="status-banner">
+    <strong>What is already done.</strong> The full system has been designed, all policy decisions are locked, and 15 build documents are complete and in your hands — the System Architecture v3.0, Pre-Build Checklist v2.0, Ambassador Agreement v2.0, Payment Policy v2.0, and Agent documents for all 11 agents. No design decisions remain open. Every field name, environment variable, Zoho Flow, Make.com scenario, and Catalyst function is specified. The job now is to build what is documented.
+  </div>
+
+  <div class="section-label">legend</div>
+  <div class="legend" style="margin-bottom:1.5rem">
+    <div class="legend-item"><span class="step-tag tag-you">You</span> Dr. Flippen executes directly</div>
+    <div class="legend-item"><span class="step-tag tag-cc">Claude Code</span> Claude Code in browser writes the code</div>
+    <div class="legend-item"><span class="step-tag tag-par">Parmeet</span> Coordinate with Parmeet before executing</div>
+    <div class="legend-item"><span class="step-tag tag-all">Both</span> You and Claude Code together</div>
+  </div>
+
+  <div class="section-label">first steps — in order</div>
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">1</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Audit existing content against the content draft list <span class="step-tag tag-you">You</span></div>
+        <div class="step-detail">
+          Before creating anything new, check what Gracelyn already has against these three content needs. Most of it likely exists in some form.
+          <ul>
+            <li><strong>Folder 08 brand assets</strong> — voice guidelines, copy rules, program descriptions, update brief. Source material exists in existing Gracelyn brand and enrollment documents.</li>
+            <li><strong>Folder 06 lead magnets</strong> — one resource per audience track: K12 educator, early childhood, faith community, youth serving professional. You likely have the K12 and faith resources already. Early childhood and youth serving are likely gaps.</li>
+            <li><strong>Agent 5 knowledge base</strong> — 8 topic areas covering referral mechanics, fees, compliance, portal navigation, international payment, and program rules. Source material is in the Ambassador Agreement v2.0, Payment Policy v2.0, and Training Guide. It needs reformatting, not rewriting.</li>
+          </ul>
+          Bring what you have. Claude drafts whatever is missing.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">2</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Draft missing content with Claude <span class="step-tag tag-all">Both</span></div>
+        <div class="step-detail">
+          Once you know the gaps from Step 1, Claude produces the missing items in this conversation. Expected gaps based on Gracelyn's existing focus: early childhood lead magnet, youth serving professional lead magnet, and the formatted Agent 5 knowledge base text. These are the only content items that cannot be resolved by code or UI configuration. They need to be approved by you and Dr. Flippen before going into the system.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">3</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Open Wise Business and Tremendous accounts <span class="step-tag tag-you">You</span></div>
+        <div class="step-detail">
+          These two accounts have a 1-3 day business verification process. Open them immediately — do not wait. Everything else in the build can proceed in parallel while verification completes. Both are free to open.
+          <ul>
+            <li>Wise Business — wise.com/business. Fund with an initial balance for outgoing international transfers.</li>
+            <li>Tremendous — tremendous.com. Pay-as-you-go, no monthly fee. API key available immediately after signup.</li>
+            <li>Confirm PayPal Business account is active with Payouts API enabled.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">4</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Build CRM modules and fields in Zoho <span class="step-tag tag-you">You</span></div>
+        <div class="step-detail">
+          This is the longest UI task in the pre-build phase. Work through the Pre-Build Checklist v2.0 Section 1 in order. Three modules need to be built or extended.
+          <ul>
+            <li><strong>Ambassadors module</strong> — 39 new fields added to the existing module. Work from the checklist field-by-field. Encrypted field type required for Bank_Account_Routing and Bank_Account_Number.</li>
+            <li><strong>Prospects module</strong> — entire new module, 20 fields. Create this before Agent 0 development begins.</li>
+            <li><strong>Support Tickets module</strong> — entire new module, 12 fields. Critical: the exact API names here must match what is in the Agent 4 and Agent 5 documents. Do not rename fields.</li>
+          </ul>
+          Record every field API name exactly as you create it. Developers reference these names in every CRM call.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">5</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Create WorkDrive folder structure and upload content <span class="step-tag tag-you">You</span></div>
+        <div class="step-detail">
+          Nine folders required. Most already exist. What is new in v2.0:
+          <ul>
+            <li><strong>Folder 06 subfolders</strong> — create four subfolders: k12-educator, early-childhood, faith-community, youth-serving. Upload one lead magnet file to each before Agent 1D is activated.</li>
+            <li><strong>Folder 08</strong> — upload the four brand asset text files produced in Steps 1 and 2.</li>
+            <li><strong>Folder 09</strong> — create this folder for VIP Prospect briefings. Agent 0 writes here. Agent 1B reads here. VIP Relationship Manager receives links from here.</li>
+          </ul>
+          Record every folder ID. Developers need these IDs before they can write a single WorkDrive API call.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">6</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Build all 8 Zoho Forms <span class="step-tag tag-you">You</span></div>
+        <div class="step-detail">
+          Field names and conditional logic for all 8 forms are specified in the Agent 2 and Agent 1D documents. The two most critical are new in v2.0.
+          <ul>
+            <li><strong>Combined compliance form</strong> — three scrollable sections (Agreement, Ethics, Training Guide), three e-signature capture areas, motivation discovery questions before Part 3 signature, single submission. Replaces the three sequential documents from v1.</li>
+            <li><strong>Win-back survey form</strong> — one question, four radio button options (Too Busy, Confused, Not Sure, Technical Problem). Linked from the Day 15 win-back email. Response fires Make.com routing.</li>
+            <li><strong>Story intake form</strong> — batch submission, up to 5 stories per submission, Role Category dropdown required on each slot.</li>
+            <li><strong>Four lead capture forms</strong> — one per audience track with hidden lead_magnet_id, utm_source, and utm_campaign fields.</li>
+          </ul>
+          Record every form ID. Agent 2 and Agent 1D reference these.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">7</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Start Claude Code on agent Catalyst functions <span class="step-tag tag-all">Both</span></div>
+        <div class="step-detail">
+          While you are doing Steps 4-6, Claude Code begins writing the Catalyst functions. These do not require a live environment to be written — they are written against the confirmed field names and environment variable names from the project documents. Start with Agent 5A (the validation agent) since it must run before anything else is deployed.
+          <ul>
+            <li>Agent 5A first — validates all credentials before any other agent touches a live system.</li>
+            <li>Agent 0 second — the intelligence layer everything else depends on.</li>
+            <li>Agents 1A through 1D in parallel — recruiting sub-agents.</li>
+            <li>Agents 2, 3, 4, 5, 6 in sequence — onboarding through engagement and oversight.</li>
+          </ul>
+          Claude Code writes each function file. You review. Parmeet deploys to Catalyst when the pre-build environment is ready.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">8</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Confirm all policy environment variables with Dr. Flippen <span class="step-tag tag-you">You</span></div>
+        <div class="step-detail">
+          Twenty policy decisions are locked and documented in the Pre-Build Checklist v2.0 Section 8. These become Catalyst environment variables. Before any agent code runs against a live system, Dr. Flippen should confirm the five most operationally sensitive values.
+          <ul>
+            <li>APPROVAL_MODE — starts as MANUAL. Dr. Flippen decides when to flip to AUTO.</li>
+            <li>VIP percentage bands — 2.5% / 5% under 10k ambassadors, 0.5% / 2.5% above. Confirmed.</li>
+            <li>NON_REFERRAL_DAYS_THRESHOLD — 90 days. Confirmed.</li>
+            <li>DORMANT_DAYS_THRESHOLD — 30 days. Confirmed.</li>
+            <li>MISSION_KEYWORDS — initial list for Agent 1B warm-follow matching. Needs Dr. Flippen input.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">9</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">WordPress portal changes — schedule with Parmeet <span class="step-tag tag-par">Parmeet</span></div>
+        <div class="step-detail">
+          Claude Code produces the WordPress changes needed (role types, referral dashboard display logic, portal chat widget integration). Do not deploy to WordPress without Parmeet present. Schedule a working session where you both review the changes together before anything is applied to the live site. This is the one task in the build where the conservative approach is non-negotiable — a broken WordPress site affects current students.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-connector"><div class="step-num">10</div></div>
+      <div class="step-body">
+        <div class="step-title">Run Agent 5A validation — go/no-go gate <span class="step-tag tag-all">Both</span></div>
+        <div class="step-detail">
+          When all pre-build tasks are complete and all Catalyst environment variables are set, Agent 5A runs. It checks every credential and environment variable before any production agent is deployed. If 5A passes, the build proceeds. If it fails, it tells you exactly which variable is missing or invalid. Nothing deploys until 5A gives a clean pass.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="warn">
+    <strong>Three cross-agent coordination points that must be confirmed at kickoff between Claude Code sessions:</strong> (1) Agent 3 and Agent 6 must use the exact same ROLE_CATEGORY header line label in story files — a mismatch produces silent fallback with no error. (2) Agent 4 and Agent 5 must use the exact same API names for all 9 Support Tickets SLA fields — a mismatch breaks SLA tracking silently. (3) The escalation_timestamp in Agent 5's webhook payload must be the identical ISO string written to Escalation_Timestamp in the CRM ticket — Agent 4's SLA calculation depends on this match.
+  </div>
+
+  <div class="section-label">4-week target timeline</div>
+  <div class="timeline-grid">
+    <div class="tl-card">
+      <div class="tl-week">Week 1</div>
+      <div class="tl-title">Pre-build and content</div>
+      <div class="tl-detail">Content audit and gap fill. Wise + Tremendous accounts open. CRM fields created. WorkDrive folders structured. Claude Code writing Agent 5A and Agent 0.</div>
+    </div>
+    <div class="tl-card">
+      <div class="tl-week">Week 2</div>
+      <div class="tl-title">Forms, flows, and agent code</div>
+      <div class="tl-detail">All 8 Zoho Forms built. All 10 Zoho Flows configured. Claude Code completing Agents 1A-1D and Agent 2. Make.com scenario specs ready for your build.</div>
+    </div>
+    <div class="tl-card">
+      <div class="tl-week">Week 3</div>
+      <div class="tl-title">Deployment sprint</div>
+      <div class="tl-detail">Agent 5A validates. All agents deployed to Catalyst. Make.com scenarios built and connected. WordPress changes applied with Parmeet. OpenAI knowledge base loaded.</div>
+    </div>
+    <div class="tl-card">
+      <div class="tl-week">Week 4</div>
+      <div class="tl-title">Integration test and launch</div>
+      <div class="tl-detail">End-to-end pipeline test with a real form submission. Debug any failures. First ambassador cohort activated. Weekly engagement cycle confirmed running. System live.</div>
+    </div>
+  </div>
+
+  <div class="section-label">key documents to read first</div>
+  <div class="card">
+    <ul class="card-list">
+      <li><strong>System Brief HTML</strong> — 60-second orientation to the full system. Read this first.</li>
+      <li><strong>Pre-Build Checklist v2.0</strong> — your operational guide for Weeks 1-2. Every UI task is in here in order.</li>
+      <li><strong>System Architecture v3.0</strong> — the master design reference if you need context on any decision.</li>
+      <li><strong>Agent 5A document</strong> — read before any deployment. Understaning what it validates tells you exactly what must be in place before the build can go live.</li>
+      <li><strong>Agent 2 document</strong> — the most complex agent. Read it early so the combined compliance form and win-back sequence are clear before you build the Zoho Forms.</li>
+    </ul>
+  </div>
+
+  <div class="section-label">how to work with claude on this project</div>
+  <div class="card">
+    <ul class="card-list">
+      <li>Use <strong>this Claude conversation</strong> for architecture questions, content drafting, document production, and decision-making. Claude has full context on every decision made during the design phase.</li>
+      <li>Use <strong>Claude Code in the browser</strong> for writing, testing, and debugging all Catalyst function code, Deluge scripts, and WordPress changes. Start a Claude Code session, paste in the relevant agent document, and tell it to build the function.</li>
+      <li>When Claude Code produces a function file, <strong>review it against the agent document</strong> before deploying. The agent documents are the specification — Claude Code output should match them exactly.</li>
+      <li>If you hit an error in a live system, <strong>paste the error log into Claude Code</strong>. It will identify the cause and produce the fix.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    Gracelyn University Ambassador Program — Build v2.0 — Target: August 1, 2026. All design decisions locked. All 15 project documents complete. This document is the execution starting point.
+  </div>
+
+</div>
+</body>
+</html>

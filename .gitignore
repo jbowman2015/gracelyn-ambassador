@@ -1,0 +1,54 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Gracelyn University — Ambassador Scaling Program
+# CONFIDENTIAL. Nothing in this list may ever be committed.
+# All credentials and any ambassador/prospect PII must never enter version control.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Secrets & credentials — NEVER commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*_jwt*
+*jwt_token*
+credentials.json
+client_secret*.json
+service-account*.json
+
+# Ambassador / prospect data / PII — must never be stored in the repo
+*.csv
+*.xlsx
+*.xls
+exports/
+data/
+uploads/
+attachments/
+
+# Zoho Catalyst build/deploy artifacts
+.catalyst/
+catalyst.json.local
+**/.functions/
+.zsclirc
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+*.tgz
+
+# Logs (may contain PII at runtime) — keep out of the repo
+*.log
+logs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+__MACOSX/

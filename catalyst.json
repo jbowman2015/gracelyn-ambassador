@@ -1,0 +1,9 @@
+{
+  "functions": {
+    "source": "functions",
+    "targets": [
+      "agent5A",
+      "cliqSummaryFunction"
+    ]
+  }
+}

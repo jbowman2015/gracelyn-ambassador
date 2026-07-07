@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gracelyn University — Ambassador Program AI Agent System Brief</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #111; color: #e8e8e8; }
+    }
+
+    /* ── LAYOUT ── */
+    .brief { padding: 2.5rem 2rem; max-width: 720px; margin: 0 auto; }
+
+    /* ── HEADER ── */
+    .header { margin-bottom: 2rem; }
+    .header h1 { font-size: 22px; font-weight: 500; color: #1a1a1a; }
+    @media (prefers-color-scheme: dark) { .header h1 { color: #f0f0f0; } }
+    .header p { font-size: 14px; color: #666; margin-top: 4px; }
+    .gold-bar { height: 3px; background: #C8A96E; border-radius: 2px; width: 48px; margin: 8px 0 12px; }
+    .tagline { font-size: 13px; color: #555; line-height: 1.6; max-width: 540px; }
+    @media (prefers-color-scheme: dark) { .tagline { color: #aaa; } }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #999; margin-bottom: 10px;
+    }
+
+    /* ── PIPELINE ── */
+    .pipeline { display: flex; align-items: center; gap: 0; margin-bottom: 2rem; flex-wrap: wrap; row-gap: 8px; }
+    .agent-pill { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 68px; }
+    .agent-num {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; border: 0.5px solid;
+    }
+    .agent-label { font-size: 10px; color: #777; text-align: center; line-height: 1.3; max-width: 66px; }
+    .arrow { font-size: 13px; color: #bbb; padding: 0 1px; margin-top: -16px; flex-shrink: 0; }
+
+    .a0  { background: #e6f1fb; border-color: #85b7eb; color: #185fa5; }
+    .a1  { background: #f0ede8; border-color: #C8A96E; color: #7a5c1e; }
+    .a2  { background: #eaf3de; border-color: #97c459; color: #3b6d11; }
+    .a3  { background: #faeeda; border-color: #ef9f27; color: #854f0b; }
+    .a4  { background: #fcebeb; border-color: #f09595; color: #a32d2d; }
+    .a5  { background: #e6f1fb; border-color: #85b7eb; color: #185fa5; }
+    .a5a { background: #f5f5f5; border-color: #ccc; color: #666; }
+    .a6  { background: #f0ede8; border-color: #C8A96E; color: #7a5c1e; }
+
+    @media (prefers-color-scheme: dark) {
+      .a0  { background: #0c2a44; border-color: #185fa5; color: #85b7eb; }
+      .a1, .a6 { background: #2a2218; border-color: #8a6c2e; color: #C8A96E; }
+      .a2  { background: #172e08; border-color: #3b6d11; color: #97c459; }
+      .a3  { background: #2a1e06; border-color: #854f0b; color: #ef9f27; }
+      .a4  { background: #2d0e0e; border-color: #a32d2d; color: #f09595; }
+      .a5  { background: #0c2a44; border-color: #185fa5; color: #85b7eb; }
+      .a5a { background: #222; border-color: #444; color: #999; }
+    }
+
+    /* ── CARDS ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
+    .card {
+      background: #f7f7f5; border: 0.5px solid #e0e0da;
+      border-radius: 8px; padding: 12px 14px;
+    }
+    @media (prefers-color-scheme: dark) { .card { background: #1c1c1c; border-color: #333; } }
+    .card-title { font-size: 12px; font-weight: 500; color: #1a1a1a; margin-bottom: 6px; }
+    @media (prefers-color-scheme: dark) { .card-title { color: #e0e0e0; } }
+    .card-list { list-style: none; }
+    .card-list li { font-size: 12px; color: #555; padding: 2px 0; display: flex; align-items: flex-start; gap: 6px; line-height: 1.4; }
+    @media (prefers-color-scheme: dark) { .card-list li { color: #aaa; } }
+    .dot { width: 5px; height: 5px; border-radius: 50%; background: #C8A96E; flex-shrink: 0; margin-top: 4px; }
+
+    /* ── ENGAGEMENT TRACKS ── */
+    .tracks { display: flex; flex-direction: column; gap: 6px; margin-bottom: 2rem; }
+    .track-row {
+      display: flex; align-items: flex-start; gap: 10px; font-size: 12px;
+      padding: 8px 10px; background: #f7f7f5; border: 0.5px solid #e0e0da;
+      border-radius: 8px;
+    }
+    @media (prefers-color-scheme: dark) { .track-row { background: #1c1c1c; border-color: #333; } }
+    .track-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 1px; white-space: nowrap; }
+    .std-badge { background: #eaf3de; color: #3b6d11; }
+    .alt-badge { background: #faeeda; color: #854f0b; }
+    .dor-badge { background: #f5f5f5; color: #777; border: 0.5px solid #ccc; }
+    @media (prefers-color-scheme: dark) {
+      .std-badge { background: #172e08; color: #97c459; }
+      .alt-badge { background: #2a1e06; color: #ef9f27; }
+      .dor-badge { background: #222; color: #888; border-color: #444; }
+    }
+    .track-detail { color: #555; line-height: 1.5; }
+    @media (prefers-color-scheme: dark) { .track-detail { color: #aaa; } }
+
+    /* ── TECH STACK ── */
+    .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 2rem; }
+    .stack-item {
+      background: #f7f7f5; border: 0.5px solid #e0e0da;
+      border-radius: 8px; padding: 8px 10px;
+    }
+    @media (prefers-color-scheme: dark) { .stack-item { background: #1c1c1c; border-color: #333; } }
+    .stack-role { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.06em; }
+    .stack-tool { font-size: 12px; font-weight: 500; color: #1a1a1a; margin-top: 2px; }
+    @media (prefers-color-scheme: dark) { .stack-tool { color: #e0e0e0; } }
+    .stack-cost { font-size: 11px; color: #777; margin-top: 1px; }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; margin-bottom: 2rem; }
+    .phase { display: flex; gap: 12px; align-items: flex-start; }
+    .phase-connector { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .phase-dot { width: 10px; height: 10px; border-radius: 50%; background: #C8A96E; flex-shrink: 0; margin-top: 4px; }
+    .phase-line { width: 1px; background: #ddd; flex: 1; min-height: 28px; }
+    @media (prefers-color-scheme: dark) { .phase-line { background: #333; } }
+    .phase-body { padding-bottom: 16px; }
+    .phase-name { font-size: 12px; font-weight: 500; color: #1a1a1a; }
+    @media (prefers-color-scheme: dark) { .phase-name { color: #e0e0e0; } }
+    .phase-detail { font-size: 12px; color: #666; margin-top: 2px; line-height: 1.5; }
+    @media (prefers-color-scheme: dark) { .phase-detail { color: #999; } }
+
+    /* ── BUDGET ── */
+    .budget-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 0.5px solid #e0e0da; font-size: 12px; }
+    @media (prefers-color-scheme: dark) { .budget-row { border-bottom-color: #333; } }
+    .budget-row:last-child { border-bottom: none; font-weight: 500; color: #1a1a1a; }
+    @media (prefers-color-scheme: dark) { .budget-row:last-child { color: #e0e0e0; } }
+    .budget-label { color: #666; }
+    @media (prefers-color-scheme: dark) { .budget-label { color: #999; } }
+    .budget-val { color: #1a1a1a; font-family: "SF Mono", "Fira Code", monospace; font-size: 11px; }
+    @media (prefers-color-scheme: dark) { .budget-val { color: #e0e0e0; } }
+
+    /* ── DOCS GRID ── */
+    .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .doc-item {
+      display: flex; align-items: center; gap: 8px; font-size: 12px; color: #666;
+      padding: 6px 8px; background: #f7f7f5; border-radius: 8px;
+    }
+    @media (prefers-color-scheme: dark) { .doc-item { background: #1c1c1c; color: #aaa; } }
+    .doc-badge { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 10px; flex-shrink: 0; }
+    .v1 { background: #f0f0f0; color: #888; border: 0.5px solid #ddd; }
+    .v2 { background: #e6f1fb; color: #185fa5; }
+    .v3 { background: #eaf3de; color: #3b6d11; }
+    @media (prefers-color-scheme: dark) {
+      .v1 { background: #222; color: #777; border-color: #444; }
+      .v2 { background: #0c2a44; color: #85b7eb; }
+      .v3 { background: #172e08; color: #97c459; }
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: white; color: black; }
+      .brief { max-width: 100%; }
+      .card, .track-row, .stack-item, .doc-item { background: #f9f9f9 !important; border-color: #ccc !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="brief">
+
+  <div class="header">
+    <h1>Gracelyn University — Ambassador Program AI Agent System</h1>
+    <div class="gold-bar"></div>
+    <p class="tagline">An 11-agent system recruiting, onboarding, and engaging mission-driven ambassadors at scale — with intelligent engagement tracks, a VIP Prospect Pipeline for influencers, and international payment support from day one.</p>
+  </div>
+
+  <div class="section-label">11-agent pipeline</div>
+  <div class="pipeline">
+    <div class="agent-pill"><div class="agent-num a5a">5A</div><div class="agent-label">Setup Validation</div></div>
+    <div class="arrow">→</div>
+    <div class="agent-pill"><div class="agent-num a0">0</div><div class="agent-label">Research &amp; Intel</div></div>
+    <div class="arrow">→</div>
+    <div class="agent-pill"><div class="agent-num a1">1A</div><div class="agent-label">Email</div></div>
+    <div class="arrow">+</div>
+    <div class="agent-pill"><div class="agent-num a1">1B</div><div class="agent-label">Social</div></div>
+    <div class="arrow">+</div>
+    <div class="agent-pill"><div class="agent-num a1">1C</div><div class="agent-label">Paid Ads</div></div>
+    <div class="arrow">+</div>
+    <div class="agent-pill"><div class="agent-num a1">1D</div><div class="agent-label">Lead Capture</div></div>
+    <div class="arrow">→</div>
+    <div class="agent-pill"><div class="agent-num a2">2</div><div class="agent-label">Onboarding</div></div>
+    <div class="arrow">→</div>
+    <div class="agent-pill"><div class="agent-num a3">3</div><div class="agent-label">Engagement</div></div>
+    <div class="arrow">→</div>
+    <div class="agent-pill"><div class="agent-num a4">4</div><div class="agent-label">Oversight</div></div>
+    <div class="arrow">+</div>
+    <div class="agent-pill"><div class="agent-num a5">5</div><div class="agent-label">Support</div></div>
+    <div class="arrow">+</div>
+    <div class="agent-pill"><div class="agent-num a6">6</div><div class="agent-label">Story Intake</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">What it recruits</div>
+      <ul class="card-list">
+        <li><span class="dot"></span>K-12 teachers and paraprofessionals</li>
+        <li><span class="dot"></span>Early childhood and childcare workers</li>
+        <li><span class="dot"></span>Faith and community educators</li>
+        <li><span class="dot"></span>Youth-serving professionals</li>
+        <li><span class="dot"></span>Mission-aligned influencers (VIP Pipeline)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">What ambassadors earn</div>
+      <ul class="card-list">
+        <li><span class="dot"></span>$100 — undergraduate referral</li>
+        <li><span class="dot"></span>$200 — graduate referral</li>
+        <li><span class="dot"></span>$50 — recruiting referral fee (undergrad)</li>
+        <li><span class="dot"></span>$100 — recruiting referral fee (grad)</li>
+        <li><span class="dot"></span>Paid after 4 consecutive months enrolled</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Human-in-the-loop</div>
+      <ul class="card-list">
+        <li><span class="dot"></span>VIP Prospect Pipeline — human cultivates influencers</li>
+        <li><span class="dot"></span>Phase 1 manual approvals → Phase 2 auto at 1,000</li>
+        <li><span class="dot"></span>HeyGen scripts require Dr. Flippen sign-off</li>
+        <li><span class="dot"></span>Daily coordinator checkpoint + kill switch</li>
+        <li><span class="dot"></span>Support SLA: 24hr Tier 2, 4hr VIP</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">International from day one</div>
+      <ul class="card-list">
+        <li><span class="dot"></span>PayPal — worldwide</li>
+        <li><span class="dot"></span>ACH — US bank accounts only</li>
+        <li><span class="dot"></span>Wise — 80+ countries, local currency delivery</li>
+        <li><span class="dot"></span>Tremendous — universal fallback, virtual prepaid card</li>
+        <li><span class="dot"></span>Country field at application drives options shown</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label">Ambassador engagement tracks</div>
+  <div class="tracks">
+    <div class="track-row">
+      <span class="track-badge std-badge">Standard</span>
+      <span class="track-detail">All ambassadors at activation. Weekly email following the four-week rotating calendar (Mission Moment, Success Story by role category, Ambassador Spotlight, Program Update). Full referral ask cadence. Returns here from Alternative on first referral.</span>
+    </div>
+    <div class="track-row">
+      <span class="track-badge alt-badge">Alternative</span>
+      <span class="track-detail">Active 90+ days with zero referrals. Bi-weekly email. Three content types rotating monthly: story submission invitation, experience sharing invitation, one-tap referral ask (one person, one message, no pressure). Automatic return to Standard on first referral.</span>
+    </div>
+    <div class="track-row">
+      <span class="track-badge dor-badge">Dormant</span>
+      <span class="track-detail">30+ days no email engagement and no referral activity. Day 30: re-engagement attempt 1. Day 45: attempt 2 with different framing. Day 60: escalated to coordinator for human outreach decision. No automated contact after Day 60 until coordinator re-activates.</span>
+    </div>
+  </div>
+
+  <div class="section-label">Technology stack</div>
+  <div class="stack-grid">
+    <div class="stack-item"><div class="stack-role">CRM + Storage</div><div class="stack-tool">Zoho CRM + WorkDrive</div><div class="stack-cost">Included in Zoho One</div></div>
+    <div class="stack-item"><div class="stack-role">Orchestration</div><div class="stack-tool">Make.com + Zoho Flow</div><div class="stack-cost">$16–29/mo</div></div>
+    <div class="stack-item"><div class="stack-role">Code hosting</div><div class="stack-tool">Zoho Catalyst</div><div class="stack-cost">Included in Zoho One</div></div>
+    <div class="stack-item"><div class="stack-role">AI brain</div><div class="stack-tool">Claude API (Sonnet)</div><div class="stack-cost">~$40–80/mo</div></div>
+    <div class="stack-item"><div class="stack-role">Support AI</div><div class="stack-tool">OpenAI Assistants</div><div class="stack-cost">~$10–20/mo</div></div>
+    <div class="stack-item"><div class="stack-role">Video</div><div class="stack-tool">HeyGen API</div><div class="stack-cost">$89–149/mo + credits</div></div>
+    <div class="stack-item"><div class="stack-role">Social posting</div><div class="stack-tool">Ayrshare</div><div class="stack-cost">$49/mo</div></div>
+    <div class="stack-item"><div class="stack-role">Payment intl.</div><div class="stack-tool">Wise Business</div><div class="stack-cost">Per transfer, no monthly fee</div></div>
+    <div class="stack-item"><div class="stack-role">Payment fallback</div><div class="stack-tool">Tremendous</div><div class="stack-cost">Per card, no monthly fee</div></div>
+    <div class="stack-item"><div class="stack-role">Payment US</div><div class="stack-tool">PayPal + ACH</div><div class="stack-cost">Per transaction</div></div>
+    <div class="stack-item"><div class="stack-role">Fee processing</div><div class="stack-tool">Zoho Books</div><div class="stack-cost">Included in Zoho One</div></div>
+    <div class="stack-item"><div class="stack-role">Ads</div><div class="stack-tool">Meta + Google Ads</div><div class="stack-cost">Dr. Flippen sets budget</div></div>
+  </div>
+
+  <div class="section-label">Build timeline</div>
+  <div class="timeline">
+    <div class="phase">
+      <div class="phase-connector"><div class="phase-dot"></div><div class="phase-line"></div></div>
+      <div class="phase-body">
+        <div class="phase-name">Weeks 1–2 — Parmeet pre-build</div>
+        <div class="phase-detail">57 Ambassador module fields, 3 new CRM modules, 9 WorkDrive folders, 8 Zoho Forms, 10 Zoho Flows, Wise and Tremendous accounts. Agent 5A validates all environment variables before any developer writes production code.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-connector"><div class="phase-dot"></div><div class="phase-line"></div></div>
+      <div class="phase-body">
+        <div class="phase-name">Weeks 3–7 — Parallel build (11 developers)</div>
+        <div class="phase-detail">Each developer builds against their Agent Project Document v2.0. Weekly architect sync. Three cross-agent coordination points confirmed at kickoff: Agent 3 and 6 on ROLE_CATEGORY header format; Agent 4 and 5 on Support Tickets SLA field names; Agent 4 and 5 on escalation timestamp identity.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-connector"><div class="phase-dot"></div><div class="phase-line"></div></div>
+      <div class="phase-body">
+        <div class="phase-name">Weeks 7–9 — Integration sprint</div>
+        <div class="phase-detail">End-to-end pipeline test. VIP Prospect Pipeline validated. International payment routing confirmed for all four methods. Support escalation ten-field webhook tested. SLA tracking and breach detection confirmed.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-connector"><div class="phase-dot"></div><div class="phase-line"></div></div>
+      <div class="phase-body">
+        <div class="phase-name">Weeks 9–11 — Compliance and engagement tuning</div>
+        <div class="phase-detail">Phase 1 manual approvals live. Weekly engagement cycle stress-tested at scale with batch concurrency. Content calendar populated across all four role categories. Combined compliance form tested end-to-end.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-connector"><div class="phase-dot"></div></div>
+      <div class="phase-body">
+        <div class="phase-name">Weeks 11–14 — Launch and scale</div>
+        <div class="phase-detail">First ambassador cohort activated. VIP Prospect Pipeline cultivation begins. Auto-approve threshold monitoring active. Story buffer monitoring confirmed. System declared production-ready.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Monthly operating cost</div>
+  <div class="card" style="margin-bottom:2rem">
+    <div class="budget-row"><span class="budget-label">Zoho One (CRM, WorkDrive, Catalyst, Flow, Analytics, Books)</span><span class="budget-val">Already subscribed</span></div>
+    <div class="budget-row"><span class="budget-label">Make.com</span><span class="budget-val">$16–29</span></div>
+    <div class="budget-row"><span class="budget-label">Ayrshare</span><span class="budget-val">$49</span></div>
+    <div class="budget-row"><span class="budget-label">HeyGen Business + API credits</span><span class="budget-val">$89–149 + usage</span></div>
+    <div class="budget-row"><span class="budget-label">Claude API, OpenAI, Wise, Tremendous</span><span class="budget-val">~$60–110 + per-payment fees</span></div>
+    <div class="budget-row"><span class="budget-label">Meta + Google Ads</span><span class="budget-val">Dr. Flippen sets budget</span></div>
+    <div class="budget-row"><span class="budget-label">Estimated platform total (excluding ads)</span><span class="budget-val">~$215–340/mo</span></div>
+  </div>
+
+  <div class="section-label">Handoff document set (all complete)</div>
+  <div class="docs-grid">
+    <div class="doc-item"><span class="doc-badge v3">v3</span>System Architecture</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Parmeet Pre-Build Checklist</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Ambassador Agreement</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Payment Policy</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 0: Research + Intel</div>
+    <div class="doc-item"><span class="doc-badge v1">v1</span>Agent 1A: Email</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 1B: Social Outreach</div>
+    <div class="doc-item"><span class="doc-badge v1">v1</span>Agent 1C: Paid Ads</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 1D: Lead Capture</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 2: Onboarding</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 3: Engagement</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 4: Oversight</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 5: Support</div>
+    <div class="doc-item"><span class="doc-badge v1">v1</span>Agent 5A: Setup Validation</div>
+    <div class="doc-item"><span class="doc-badge v2">v2</span>Agent 6: Story Intake</div>
+  </div>
+
+</div>
+</body>
+</html>

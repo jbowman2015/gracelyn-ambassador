@@ -1,0 +1,13 @@
+{
+  "name": "agent5a-setup-validation",
+  "version": "1.0.0",
+  "description": "Ambassador Scaling Program — Agent 5A go/no-go setup validation gate",
+  "main": "index.js",
+  "scripts": {
+    "test": "node __tests__/validate.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "zcatalyst-sdk-node": "latest"
+  }
+}

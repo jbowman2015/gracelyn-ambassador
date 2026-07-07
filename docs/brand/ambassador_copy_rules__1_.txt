@@ -1,0 +1,194 @@
+GRACELYN UNIVERSITY
+AMBASSADOR PROGRAM - COPY RULES
+File: ambassador_copy_rules.txt
+Location: WorkDrive 08 - Brand Assets
+Version: 1.0
+
+These rules apply to every piece of copy produced by the Ambassador AI Agent
+System: recruiting emails, onboarding communications, weekly engagement emails,
+milestone messages, re-engagement sequences, VIP outreach, social content for
+ambassadors to share, and coordinator alerts.
+
+Every Claude API call that generates content for the ambassador program must
+include these rules in the system prompt. Agent 4 verifies compliance on all
+outbound ambassador-facing content before it is sent.
+
+=============================================================
+RULE 1: NEVER USE THE WORD COMMISSION
+=============================================================
+
+The referral fee is always called a referral fee. The word commission
+must never appear in any content, field label, email template, portal
+display text, or automated message of any kind.
+
+This rule exists because ambassadors are mission-driven participants, not
+sales agents. Commission implies a commercial transaction. Referral fee
+acknowledges a contribution to the mission.
+
+VIOLATION: "Your commission will be paid after four months of enrollment."
+CORRECT:   "Your referral fee will be paid after four months of active enrollment."
+
+VIOLATION: "Earn a $200 commission for each graduate referral."
+CORRECT:   "Receive a $200 referral fee when a graduate student you referred
+            completes four consecutive months of active enrollment."
+
+=============================================================
+RULE 2: NEVER USE EM DASHES
+=============================================================
+
+Never use em dashes (the long dash or the unicode character U+2014)
+anywhere in any copy. This includes mid-sentence breaks, parenthetical
+asides, and list introductions.
+
+Instead: use a comma, semicolon, colon, or reword the sentence entirely.
+
+VIOLATION: "The mission is clear -- every child deserves a great teacher."
+CORRECT:   "The mission is clear: every child deserves a great teacher."
+
+VIOLATION: "She referred five educators -- all of whom enrolled."
+CORRECT:   "She referred five educators, all of whom enrolled."
+
+=============================================================
+RULE 3: MISSION BEFORE FEE IN ALL CONTENT
+=============================================================
+
+Every piece of ambassador-facing content must establish the mission case
+before mentioning the referral fee. Content that opens with the referral
+fee or leads with financial incentive is wrong regardless of how it continues.
+
+The referral fee is mentioned near the close of recruiting content, after
+the mission and the social proof are established. In ongoing engagement
+content, the referral fee may be mentioned briefly when relevant to a
+milestone or eligibility update, but it is never the opening theme.
+
+VIOLATION: "Earn up to $200 per referral while supporting Gracelyn's mission."
+CORRECT:   "Every vulnerable child deserves an incredible teacher. Gracelyn is
+            working to make that possible, and we want you to be part of it.
+            When someone you refer succeeds, we honor your contribution with
+            a referral fee."
+
+=============================================================
+RULE 4: AMBASSADOR AS PARTICIPANT, NOT RECRUITER
+=============================================================
+
+Ambassadors share their story and their referral link. They do not recruit,
+solicit, or sell. Language that positions the ambassador as a recruiter,
+agent, marketer, or salesperson is incorrect.
+
+Ambassadors follow strict ethical practices. They do not provide admissions
+counseling. They do not guarantee outcomes. They do not claim to represent
+Gracelyn University officially.
+
+VIOLATION: "Recruit educators to Gracelyn and start earning."
+CORRECT:   "Share Gracelyn with the educators in your life who need it."
+
+VIOLATION: "The more educators you sign up, the more you earn."
+CORRECT:   "Every educator you share Gracelyn with is a step toward
+            the mission we both believe in."
+
+=============================================================
+RULE 5: NO ADMISSIONS COUNSELING IN AMBASSADOR CONTENT
+=============================================================
+
+Content written for ambassadors to share must never advise on program
+selection, admissions requirements, eligibility, enrollment outcomes,
+or career outcomes. Ambassadors share their story and direct interested
+educators to Gracelyn. They do not advise.
+
+Content must never promise specific career outcomes, salary increases,
+promotions, certifications, or employment guarantees.
+
+VIOLATION: "Tell your colleagues that MTEL is the best program for
+            anyone wanting to move into leadership."
+CORRECT:   "Share your link and let interested educators explore what
+            Gracelyn offers."
+
+=============================================================
+RULE 6: PRESCRIBED CONTENT ONLY FOR AMBASSADOR SHARING
+=============================================================
+
+Content that ambassadors share with their networks must come only from
+the approved asset library in WorkDrive 02. Ambassadors may not modify
+official messaging. Content generated for ambassadors to share is marked
+as prescribed and locked.
+
+Content generated by Gracelyn for sending to ambassadors (emails from
+Gracelyn to the ambassador) is not prescribed in this sense and can be
+personalized to the ambassador's role, milestone, and motivation.
+
+=============================================================
+RULE 7: REFERRAL FEE ELIGIBILITY LANGUAGE IS PRECISE
+=============================================================
+
+When mentioning the referral fee and when it is paid, the language must
+be exact. Imprecise language creates incorrect expectations.
+
+Exact language required:
+"Your referral fee is paid after the educator you referred has been
+actively enrolled for four consecutive months."
+
+Never say:
+- "when they enroll" (enrollment alone does not trigger the fee)
+- "after they complete a course" (course completion is not the trigger)
+- "once they start" (starting alone does not trigger the fee)
+- "automatically" (payment requires coordinator confirmation)
+
+=============================================================
+RULE 8: MOTIVATION-MATCHED FRAMING ONCE CONFIRMED
+=============================================================
+
+Once an ambassador's motivation tag is confirmed through onboarding
+discovery questions or A/B engagement data, all content must be framed
+to match that motivation.
+
+Professional Growth ambassadors: Lead with educator development,
+credentials, and professional impact. Mission is present but secondary.
+
+Mission Impact ambassadors: Lead with children, community, and the
+difference a great teacher makes. Professional development is secondary.
+
+Kingdom Calling ambassadors: Lead with calling, purpose, and faith-rooted
+language. Avoid overly secular professional framing.
+
+Recognition ambassadors: Lead with acknowledgment of their existing
+contributions. The ambassador program honors what they are already doing.
+
+Pride and Gratitude ambassadors (alumni and current students): Lead
+with the transformation they experienced. The ask is to share what they
+found with someone who needs it.
+
+Unknown (default): Use Mission Impact framing until motivation is confirmed.
+
+=============================================================
+RULE 9: VIP CONTENT IS PERSONAL, NOT TEMPLATE
+=============================================================
+
+Content sent to VIP ambassadors must feel personal. Claude API must use
+the prospect or ambassador's specific details: their name, their role,
+their audience type, their organization, or specific aspects of their
+work where available from the prospect profile in Zoho CRM.
+
+Generic template-feeling content sent to VIP contacts is a failure.
+If specific details are not available, do not fabricate them. Keep the
+content mission-focused and warm without false personalization.
+
+=============================================================
+RULE 10: SUPPORT CONTENT IS CLEAR AND ACCURATE
+=============================================================
+
+Content generated for the ambassador support knowledge base and portal
+chat must be factually accurate about program rules, referral fee
+structure, eligibility, and payment. Do not speculate. Do not approximate.
+If the answer is not certain, direct the ambassador to contact the
+support coordinator.
+
+The most important accuracy rules for support content:
+- Referral fee amounts: $100 undergraduate, $200 graduate
+- Eligibility: four consecutive months of active enrollment
+- Self-referrals: prohibited
+- Household referrals: prohibited
+- Admissions counseling: ambassadors are not permitted to do this
+
+=============================================================
+END OF AMBASSADOR COPY RULES
+=============================================================
