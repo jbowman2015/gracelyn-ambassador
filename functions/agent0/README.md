@@ -68,12 +68,14 @@ against Zoho's fields metadata (`verifyFields`), surfacing any divergence to the
 admin instead of failing silently. It reuses the metadata-helper pattern from
 `functions/agent5A/zoho.js`.
 
-> **Setup gap (confirmed live 2026-07-07):** the org has **no `Prospects`
-> module**, and neither `Ambassador_Leads` nor `Ambassadors` carries the VIP
-> prospect scoring fields (`VIP_Prospect`, `Role_Category`, `Motivation_Tag`,
-> `Social_Profile_URL`, `Mission_Alignment_Score`, …). The module + fields must
-> be created and `PROSPECTS_MODULE_API_NAME` set before a live run. Agent 5A is
-> the gate for this; Agent 0 alerts on it at Step 4.
+> **Setup gap (confirmed live 2026-07-07):** the Prospects module is the existing
+> **`Ambassador_Leads`** custom module, but it does **not** yet carry Agent 0's VIP
+> prospect scoring fields (`VIP_Prospect`, `VIP_Prospect_Score`,
+> `VIP_Prospect_Pipeline_Stage`, `Role_Category`, `Motivation_Tag`,
+> `Social_Profile_URL`, `Mission_Alignment_Score`, `Org_Influence_Score`, …). Those
+> fields must be created on `Ambassador_Leads` and `PROSPECTS_MODULE_API_NAME` set
+> to `Ambassador_Leads` before a live run. Agent 5A is the gate for this; Agent 0
+> verifies the fields live and alerts Jessica at Step 4.
 
 ## Environment variables
 
