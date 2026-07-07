@@ -13,7 +13,7 @@
  *     the human cross-check reconciled in functions/agent5A/manifest.js; Agent 0
  *     resolves the module api_name live at run time and verifies these field
  *     names against Zoho's fields metadata (see zoho.js). A divergence is
- *     surfaced to Parmeet, never papered over.
+ *     surfaced to Jessica, never papered over.
  *   - ENV-VAR names are the canonical strings from agent5A/manifest.js. Where the
  *     Agent 0 design doc used a different spelling, the doc name is accepted as a
  *     read-only ALIAS (see ENV.get) so nothing silently breaks, but the canonical

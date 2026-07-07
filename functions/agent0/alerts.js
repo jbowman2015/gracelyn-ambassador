@@ -22,7 +22,7 @@ const { fireWebhook } = require('./webhooks');
  * @param {string} a.date        "YYYY-MM-DD"
  * @param {string} [a.prospect]  affected prospect name or N/A
  * @param {string} a.detail      specific error message
- * @param {string} a.action      what Parmeet needs to do
+ * @param {string} a.action      what Jessica needs to do
  */
 function formatAlert(a) {
   const subject = `[Agent 0 Alert] ${a.errorType} — ${a.date}`;

@@ -130,7 +130,7 @@ async function resolveModuleApiName({ label, envVar }) {
 
 /**
  * Cross-check that every field name Agent 0 intends to write exists in Zoho.
- * Returns { missing: [...] } — the caller surfaces missing names to Parmeet.
+ * Returns { missing: [...] } — the caller surfaces missing names to Jessica.
  */
 async function verifyFields(moduleApiName, fieldApiNames) {
   const fields = await fetchFields(moduleApiName);

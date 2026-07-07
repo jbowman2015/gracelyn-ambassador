@@ -108,7 +108,7 @@ async function readFileByName(folderId, filename) {
 /**
  * Read the two required brand assets from Folder 08 (Step 2). Returns
  * { voiceGuidelines, missionStatement }. Throws if either is missing so the
- * caller can halt and alert Parmeet.
+ * caller can halt and alert Jessica.
  */
 async function readBrandAssets(folder08Id, assetNames) {
   const [voiceGuidelines, missionStatement] = await Promise.all([
