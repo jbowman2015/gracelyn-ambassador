@@ -98,12 +98,16 @@ const AMBASSADORS_MODULE = { label: 'Ambassadors', envVar: 'AMBASSADORS_MODULE_A
 // Fields Agent 0 writes on a Prospect upsert (Step 10). Kept in sync with
 // agent5A/manifest.js CRM_FIELDS.prospects.
 //
-// Reconciled live against the Ambassador_Leads module (2026-07-07): the module
-// already carries a first-name field named `Name` (display label "First Name")
-// and a company field named `Company_Name`, so Agent 0 maps to those rather than
-// creating duplicate `First_Name` / `Organization` fields. `Outreach_Status` is
-// still pending confirmation against the module's existing `Status` picklist; the
-// remaining VIP-scoring fields below are net-new and must be created before a run.
+// Reconciled live against the Ambassador_Leads module (2026-07-07). Two fields map
+// to existing columns instead of duplicating: `First_Name` -> `Name` (display label
+// "First Name") and `Organization` -> `Company_Name`. The other 13 were created live
+// on Ambassador_Leads this date; api_names below match what Zoho generated. Note the
+// VIP pipeline field was created with the label "VIP Pipeline Stage" (the 27-char
+// "VIP Prospect Pipeline Stage" exceeded the field-label limit), so its api_name is
+// `VIP_Pipeline_Stage`. `Outreach_Status` is now its own dedicated picklist field
+// (values: Standard, VIP Pipeline). `Role_Category` was created as text (two role
+// values exceeded the 25-char picklist-option limit); the Claude assessment prompt
+// still constrains the written values to the controlled role vocabulary.
 const PROSPECT_FIELDS = {
   dedupKey: 'Social_Profile_URL',
   firstName: 'Name',              // existing field (label "First Name"); not First_Name
@@ -120,7 +124,7 @@ const PROSPECT_FIELDS = {
   orgInfluenceScore: 'Org_Influence_Score',
   vipProspect: 'VIP_Prospect',
   vipProspectScore: 'VIP_Prospect_Score',
-  vipPipelineStage: 'VIP_Prospect_Pipeline_Stage',
+  vipPipelineStage: 'VIP_Pipeline_Stage',   // created label "VIP Pipeline Stage"
   prospectDeclinedDate: 'Prospect_Declined_Date',
 };
 

@@ -68,21 +68,20 @@ against Zoho's fields metadata (`verifyFields`), surfacing any divergence to the
 admin instead of failing silently. It reuses the metadata-helper pattern from
 `functions/agent5A/zoho.js`.
 
-> **Setup gap (reconciled live 2026-07-07):** the Prospects module is the existing
-> **`Ambassador_Leads`** custom module (40 fields). Reconciling Agent 0's 17 fields
-> against it:
-> - **Map to existing (no new field):** `First_Name` → **`Name`** (label "First Name");
->   `Organization` → **`Company_Name`**. `manifest.js` maps to these to avoid duplicate
->   name/company columns. `Outreach_Status` → likely the existing **`Status`** picklist —
->   *pending confirmation*.
-> - **Net-new, must be created (12):** `Social_Profile_URL` (URL, dedup key),
->   `Channel_Source`, `Contact_Found`, `Gap_Type`, `Role_Category`, `Motivation_Tag`,
->   `Mission_Alignment_Score`, `Org_Influence_Score`, `VIP_Prospect`, `VIP_Prospect_Score`,
->   `VIP_Prospect_Pipeline_Stage`, `Prospect_Declined_Date`.
+> **CRM reconciliation (completed live 2026-07-07):** the Prospects module is the
+> existing **`Ambassador_Leads`** custom module. Agent 0's fields were reconciled and
+> the missing ones created live:
+> - **Mapped to existing (no new field):** `First_Name` → **`Name`** (label "First
+>   Name"); `Organization` → **`Company_Name`**. `manifest.js` maps to these to avoid
+>   duplicate name/company columns.
+> - **Created on `Ambassador_Leads` (13):** `Social_Profile_URL` (URL, dedup key),
+>   `Channel_Source`, `Contact_Found`, `Gap_Type`, `Role_Category` (text),
+>   `Motivation_Tag`, `Mission_Alignment_Score`, `Org_Influence_Score`, `VIP_Prospect`,
+>   `VIP_Prospect_Score`, **`VIP_Pipeline_Stage`** (label "VIP Pipeline Stage"),
+>   `Prospect_Declined_Date`, and `Outreach_Status` (picklist: Standard, VIP Pipeline).
 >
-> These 12 must be created on `Ambassador_Leads` and `PROSPECTS_MODULE_API_NAME` set to
-> `Ambassador_Leads` before a live run (spec awaiting approval before creation). Agent 5A
-> is the gate for this; Agent 0 verifies the fields live and alerts Jessica at Step 4.
+> Before a live run, set `PROSPECTS_MODULE_API_NAME` to `Ambassador_Leads`. Agent 5A is
+> the gate for this; Agent 0 verifies the fields live and alerts Jessica at Step 4.
 
 ## Environment variables
 
