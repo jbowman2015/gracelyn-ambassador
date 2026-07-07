@@ -1,0 +1,113 @@
+# Agent 1A — Deploy Notes
+
+**Status: Week 1 build complete. NOT deployed.** Per the Week 2 gate in
+CLAUDE.md, this function is written, tested, and staged in `catalyst.json`
+targets but has not been run through `catalyst deploy`. Deployment happens in
+Week 2 once Agent 5A returns a `GO` verdict.
+
+## Live CRM changes made during this build (2026-07-07)
+
+Per `ClaudeCode_Zoho_API_Names_Instruction`, Agent 1A's dependencies on the
+`Ambassador_Leads` module (the live `Prospects` module — see manifest.js §1)
+were reconciled against Zoho directly, not assumed from the design doc. Two
+live changes were required and applied via the Zoho CRM Module Connector:
+
+### 1. Six new fields created on `Ambassador_Leads`
+
+| Field label | api_name | data_type | Zoho field id |
+|---|---|---|---|
+| Sequence Email 1 Sent | `Sequence_Email_1_Sent` | boolean | 4849477000258350002 |
+| Sequence Email 1 Sent Date | `Sequence_Email_1_Sent_Date` | date | 4849477000258350011 |
+| Sequence Email 2 Sent | `Sequence_Email_2_Sent` | boolean | 4849477000258350020 |
+| Sequence Email 2 Sent Date | `Sequence_Email_2_Sent_Date` | date | 4849477000258350028 |
+| Recruiting Source | `Recruiting_Source` | text(100) | 4849477000258350036 |
+| Recruiting Channel | `Recruiting_Channel` | text(100) | 4849477000258350044 |
+
+None of these existed before this build. Confirmed live via
+`GET /crm/v6/settings/fields?module=Ambassador_Leads` after creation — all six
+return with the expected `api_name`/`data_type`.
+
+### 2. `Outreach_Status` picklist extended (not forked)
+
+Agent 0 had already set up `Outreach_Status` (field id
+`4849477000258319129`) with two values: `Standard` and `VIP Pipeline`. The
+design doc's lifecycle values (`Identified`, `Outreach Sent`, `Follow-Up
+Sent`, `Unresponsive`, `Applied`) did not exist. Rather than create a second,
+overlapping status field — which would recreate the exact silent-failure risk
+CLAUDE.md warns about — the existing picklist was extended with four new
+values via `updateField`:
+
+- `Outreach Sent`
+- `Follow-Up Sent`
+- `Unresponsive`
+- `Applied`
+
+`Standard` now serves double duty: it is both Agent 0's "not VIP" signal and
+Agent 1A's "new prospect ready for outreach" state (the doc's `Identified`).
+See `manifest.js` divergence note #6 for the full reasoning. Confirmed live —
+`Outreach_Status` now returns all 7 values (`-None-`, `Standard`,
+`VIP Pipeline`, `Outreach Sent`, `Follow-Up Sent`, `Unresponsive`, `Applied`).
+
+**No other agent's fields were touched.** `First_Name`→`Name` and
+`Organization`→`Company_Name` reuse Agent 0's pre-existing fields; no
+duplicates were created.
+
+## Required environment variables
+
+Full list with severities and notes: `manifest.js` → `ENV_VARS`. Summary:
+
+- **AI**: `ANTHROPIC_API_KEY` (canonical — not `CLAUDE_API_KEY`)
+- **Zoho CRM OAuth**: `ZOHO_CRM_CLIENT_ID/SECRET/REFRESH_TOKEN`
+- **Zoho Mail OAuth**: `ZOHO_MAIL_CLIENT_ID/SECRET/REFRESH_TOKEN` (canonical —
+  design doc v1's `AMBASSADOR_MAIL_CLIENT_ID/SECRET/REFRESH_TOKEN` are
+  aliases, do not use), plus `AMBASSADOR_MAIL_ACCOUNT_ID` and
+  `AMBASSADOR_MAIL_FROM_ADDRESS` (mailbox identity, not OAuth — kept as-is)
+- **Zoho WorkDrive OAuth**: `ZOHO_WORKDRIVE_CLIENT_ID/SECRET/REFRESH_TOKEN`,
+  `WORKDRIVE_FOLDER_08_ID`
+- **CRM module resolution**: `PROSPECTS_MODULE_API_NAME` (confirmed →
+  `Ambassador_Leads`), `PARA_DB_MODULE_NAME` + `PARA_DB_TEST_SEGMENT_SIZE`
+  (not yet confirmed in Zoho — warn, not blocking), `STUDENT_ALUMNI_MODULE` +
+  `STUDENT_AMBASSADOR_STATUS_FIELD` (same, not yet confirmed)
+- **Templates**: 12 vars (`AGENT1A_SEQ{1,2}_{PARA,PROSPECT,STUDENT}_{SUBJECT,BODY}`)
+  — Parmeet writes the copy per the design doc's rules (mission before fee,
+  exact referral amounts, three-layer structure); Agent 1A never writes copy.
+- **Make.com** (warn — Week 2): `MAKE_AGENT1A_WEBHOOK_URL`,
+  `MAKE_AGENT1A_FROM_1D_WEBHOOK_URL`, `MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL`
+- **Alerts**: `PARMEET_ALERT_EMAIL`, `SUPPORT_COORDINATOR_EMAIL` (canonical —
+  design doc v1's `COORDINATOR_ALERT_EMAIL` is an alias, do not use)
+
+Secrets are never committed. Set them in `catalyst-config.json`
+`env_variables` locally at deploy time, run `catalyst deploy`, then
+`git checkout catalyst-config.json` so they never land in the repo.
+
+## Still open before Week 2 deploy (not blocking this build)
+
+1. **Para DB and Student/Alumni modules are not yet confirmed in Zoho**
+   (Master Reference Sheet §4, both ⬜). Parmeet has not loaded the
+   paraprofessional test segment or created/confirmed the student/alumni
+   module. Agent 1A resolves both live at runtime and gracefully skips that
+   population (`skippedPopulations` in the run summary) rather than aborting
+   — this is expected at Week 1, not a bug. Once those modules exist, rerun
+   the reconciliation in `reconcile.js` (`resolveModules`) to confirm they
+   resolve, and add their field specs to `manifest.js` before relying on
+   those populations.
+2. **Email templates are not yet written.** All 12 `AGENT1A_SEQ*` env vars
+   are currently unset. `templates.selectTemplate()` returns empty
+   subject/body until Parmeet writes them; `sendSequenceEmail()` will report
+   `sent: false` with reason "Template env vars ... not set" until then —
+   this fails loudly per contact, it does not silently no-op.
+3. **Make.com scenarios not built** (Scenario 1 trigger, Scenario 2 daily
+   follow-up/unresponsive schedule, Scenario 3 coordinator summary). See
+   design doc §6. `MAKE_*` vars stay `warn` severity until built.
+4. **Title→Role_Title mapping** (manifest.js divergence #5) should be
+   confirmed with Parmeet — `Title` was a pre-existing field on
+   `Ambassador_Leads`, not one Agent 0 created for this purpose.
+5. **Run Agent 5A** after all of the above to get a `GO` verdict before
+   `catalyst deploy`.
+
+## Local test
+
+```bash
+cd functions/agent1A
+node __tests__/agent1a.test.js   # no network, no deps, no secrets — 40 cases
+```

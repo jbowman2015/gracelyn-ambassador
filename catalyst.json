@@ -3,6 +3,7 @@
     "source": "functions",
     "targets": [
       "agent5A",
+      "agent1A",
       "cliqSummaryFunction"
     ]
   }
