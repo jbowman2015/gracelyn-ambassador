@@ -68,14 +68,21 @@ against Zoho's fields metadata (`verifyFields`), surfacing any divergence to the
 admin instead of failing silently. It reuses the metadata-helper pattern from
 `functions/agent5A/zoho.js`.
 
-> **Setup gap (confirmed live 2026-07-07):** the Prospects module is the existing
-> **`Ambassador_Leads`** custom module, but it does **not** yet carry Agent 0's VIP
-> prospect scoring fields (`VIP_Prospect`, `VIP_Prospect_Score`,
-> `VIP_Prospect_Pipeline_Stage`, `Role_Category`, `Motivation_Tag`,
-> `Social_Profile_URL`, `Mission_Alignment_Score`, `Org_Influence_Score`, …). Those
-> fields must be created on `Ambassador_Leads` and `PROSPECTS_MODULE_API_NAME` set
-> to `Ambassador_Leads` before a live run. Agent 5A is the gate for this; Agent 0
-> verifies the fields live and alerts Jessica at Step 4.
+> **Setup gap (reconciled live 2026-07-07):** the Prospects module is the existing
+> **`Ambassador_Leads`** custom module (40 fields). Reconciling Agent 0's 17 fields
+> against it:
+> - **Map to existing (no new field):** `First_Name` → **`Name`** (label "First Name");
+>   `Organization` → **`Company_Name`**. `manifest.js` maps to these to avoid duplicate
+>   name/company columns. `Outreach_Status` → likely the existing **`Status`** picklist —
+>   *pending confirmation*.
+> - **Net-new, must be created (12):** `Social_Profile_URL` (URL, dedup key),
+>   `Channel_Source`, `Contact_Found`, `Gap_Type`, `Role_Category`, `Motivation_Tag`,
+>   `Mission_Alignment_Score`, `Org_Influence_Score`, `VIP_Prospect`, `VIP_Prospect_Score`,
+>   `VIP_Prospect_Pipeline_Stage`, `Prospect_Declined_Date`.
+>
+> These 12 must be created on `Ambassador_Leads` and `PROSPECTS_MODULE_API_NAME` set to
+> `Ambassador_Leads` before a live run (spec awaiting approval before creation). Agent 5A
+> is the gate for this; Agent 0 verifies the fields live and alerts Jessica at Step 4.
 
 ## Environment variables
 

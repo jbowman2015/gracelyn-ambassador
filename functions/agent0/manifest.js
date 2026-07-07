@@ -97,12 +97,19 @@ const AMBASSADORS_MODULE = { label: 'Ambassadors', envVar: 'AMBASSADORS_MODULE_A
 
 // Fields Agent 0 writes on a Prospect upsert (Step 10). Kept in sync with
 // agent5A/manifest.js CRM_FIELDS.prospects.
+//
+// Reconciled live against the Ambassador_Leads module (2026-07-07): the module
+// already carries a first-name field named `Name` (display label "First Name")
+// and a company field named `Company_Name`, so Agent 0 maps to those rather than
+// creating duplicate `First_Name` / `Organization` fields. `Outreach_Status` is
+// still pending confirmation against the module's existing `Status` picklist; the
+// remaining VIP-scoring fields below are net-new and must be created before a run.
 const PROSPECT_FIELDS = {
   dedupKey: 'Social_Profile_URL',
-  firstName: 'First_Name',
+  firstName: 'Name',              // existing field (label "First Name"); not First_Name
   lastName: 'Last_Name',
   email: 'Email',
-  organization: 'Organization',
+  organization: 'Company_Name',   // existing field; not Organization
   channelSource: 'Channel_Source',
   outreachStatus: 'Outreach_Status',
   contactFound: 'Contact_Found',
