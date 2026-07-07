@@ -1,5 +1,16 @@
 # CLAUDE.md — Gracelyn University Ambassador Scaling Program
 
+## ⚠️ Reading docs — do NOT bulk-read `docs/`
+The full `docs/` tree is ~175k tokens. Reading it all at once will fill the
+context window in a single session. **Build one agent per session, and read only
+that agent's minimal doc set:**
+- `docs/design/Gracelyn_Agent_<N>_*.docx` — that agent's spec (the `.docx` files
+  are actually plain UTF-8 text; read them directly, they are not binary Word docs)
+- `docs/planning/Ambassador_Master_Reference_Sheet.md` — field/env/module names
+- `docs/planning/ClaudeCode_Zoho_API_Names_Instruction.md` — the CRM-names rule
+- Only pull `Gracelyn_Ambassador_System_Architecture_v3` or another agent's doc if
+  a specific cross-agent coordination point requires it — never the whole folder.
+
 ## What this project is
 An automated AI agent system to scale the Gracelyn University Ambassador Program
 toward 100,000 ambassadors. **11 Catalyst functions** ("agents") handle the full
