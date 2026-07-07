@@ -39,6 +39,30 @@ and payouts — with minimal manual staff intervention. Target go-live: **July 1
 
 Each agent is built against its design doc in `docs/design/` and reviewed before deploy.
 
+## ⚙️ Keep Zoho Projects updated as you work (required)
+This build is tracked as tasks in Zoho Projects (portal `gracelynuniversity`,
+project `1776658000000715069`). **As you work each task, push status + a comment
+to Zoho Projects** using the helper in `scripts/` — do not leave the board stale:
+
+- **When you start** a task → set it `inprogress` with a short comment on what you're doing.
+- **When you finish** → set it `completed` with a comment describing what was done.
+
+```bash
+node scripts/zoho-projects-update.js --task "Agent 0" --status inprogress \
+  --comment "Started Agent 0 — writing prospect profiling + VIP scoring."
+node scripts/zoho-projects-update.js --task "Agent 0" --status completed \
+  --comment "Agent 0 written, tested (N passing), and reviewed against the design doc."
+node scripts/zoho-projects-update.js --list   # see all tasks + current status
+```
+
+`--task` matches on a fragment of the task name; statuses: `open | inprogress |
+completed | onhold`. Requires the `ZOHO_*` OAuth env vars. The nightly 10 PM CST
+Cliq summary (`cliqSummaryFunction`) reflects these status changes automatically.
+
+> ⚠️ Not yet live-verified: confirm the status-update + comment write path works
+> on one task early (it currently only has read access confirmed). If a write
+> errors, paste the error back and fix before relying on it.
+
 ## AI strategy (differs from the Student Success project)
 This system **does** use external AI: **Anthropic Claude** across agents and
 **OpenAI** for the Ambassador Support portal assistant (Agent 5). Model for Claude
