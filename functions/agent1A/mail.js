@@ -63,10 +63,9 @@ function buildMailPayload(fromAddr, toAddr, subject, content) {
   };
 }
 
-async function sendRecruitingEmail(toAddress, subject, body) {
+async function sendMail(fromAddr, toAddress, subject, body) {
   const token = await getMailToken();
   const accountId = process.env.AMBASSADOR_MAIL_ACCOUNT_ID;
-  const fromAddr = process.env.AMBASSADOR_MAIL_FROM_ADDRESS;
   const payload = JSON.stringify(buildMailPayload(fromAddr, toAddress, subject, body));
   const res = await request({
     hostname: MAIL_API_HOST,
@@ -84,4 +83,17 @@ async function sendRecruitingEmail(toAddress, subject, body) {
   return res.body;
 }
 
-module.exports = { getMailToken, buildMailPayload, sendRecruitingEmail };
+async function sendRecruitingEmail(toAddress, subject, body) {
+  return sendMail(process.env.AMBASSADOR_MAIL_FROM_ADDRESS, toAddress, subject, body);
+}
+
+/**
+ * Sends an operational alert to Parmeet (design doc §7.1 format — see
+ * alerts.js). Reuses the same ambassadors@gracelyn.edu account; alerts are
+ * a distinct concern from recruiting sends but there's no separate mailbox.
+ */
+async function sendAlertEmail(subject, body) {
+  return sendMail(process.env.AMBASSADOR_MAIL_FROM_ADDRESS, process.env.PARMEET_ALERT_EMAIL, subject, body);
+}
+
+module.exports = { getMailToken, buildMailPayload, sendRecruitingEmail, sendAlertEmail };

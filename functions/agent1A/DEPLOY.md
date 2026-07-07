@@ -80,17 +80,34 @@ Secrets are never committed. Set them in `catalyst-config.json`
 `env_variables` locally at deploy time, run `catalyst deploy`, then
 `git checkout catalyst-config.json` so they never land in the repo.
 
+## Error handling coverage (design doc §7)
+
+Implemented: OAuth token refresh abort, retry-once-after-30s on CRM
+search/get/update and mail send (`retry.js`, `wait.js`), consecutive-failure
+alerting at >10 Claude personalization failures and >20 mail failures
+(`alerts.js`), a pre-flight field-existence check before any query/write
+(`reconcile.checkProspectFields`, called every run), a direct Parmeet alert
+for missing brand assets and for contacts needing manual CRM update (both
+non-aborting conditions a bare HTTP status wouldn't surface to Make.com), and
+the coordinator run-summary webhook POST with its own retry-once and
+delivery-failure alert (`webhook.js`). Self-audited and fixed 2026-07-07 —
+these were gaps in the initial build that passing tests didn't catch because
+the original tests only covered what was built, not everything the doc
+required.
+
 ## Still open before Week 2 deploy (not blocking this build)
 
-1. **Para DB and Student/Alumni modules are not yet confirmed in Zoho**
-   (Master Reference Sheet §4, both ⬜). Parmeet has not loaded the
-   paraprofessional test segment or created/confirmed the student/alumni
-   module. Agent 1A resolves both live at runtime and gracefully skips that
-   population (`skippedPopulations` in the run summary) rather than aborting
-   — this is expected at Week 1, not a bug. Once those modules exist, rerun
-   the reconciliation in `reconcile.js` (`resolveModules`) to confirm they
-   resolve, and add their field specs to `manifest.js` before relying on
-   those populations.
+1. **Para DB and Student/Alumni querying is not implemented**, not just
+   skipped. Neither module is confirmed in Zoho (Master Reference Sheet §4,
+   both ⬜) so `criteria.paraDbCriteria()`/`studentAlumniCriteria()` exist as
+   pure functions but `orchestrate.js` never calls them — there is no
+   query/send loop for those populations yet, and therefore no
+   `PARA_DB_TEST_SEGMENT_SIZE` cap enforcement either. `test_segment_active`
+   in the run summary is hardcoded `false` for this reason — it would be
+   dishonest to report a cap that isn't in effect. Once those modules are
+   confirmed, this needs real implementation (a query loop per population
+   mirroring the Prospects one, plus the segment-size slice), not just a
+   `skippedPopulations` flip.
 2. **Email templates are not yet written.** All 12 `AGENT1A_SEQ*` env vars
    are currently unset. `templates.selectTemplate()` returns empty
    subject/body until Parmeet writes them; `sendSequenceEmail()` will report
@@ -102,12 +119,16 @@ Secrets are never committed. Set them in `catalyst-config.json`
 4. **Title→Role_Title mapping** (manifest.js divergence #5) should be
    confirmed with Parmeet — `Title` was a pre-existing field on
    `Ambassador_Leads`, not one Agent 0 created for this purpose.
-5. **Run Agent 5A** after all of the above to get a `GO` verdict before
+5. **Alert email verbosity**: all non-aborting alerts currently reuse the
+   ambassadors@gracelyn.edu mailbox (`mail.sendAlertEmail`) since there's no
+   separate ops mailbox defined anywhere in the docs. Confirm with Parmeet
+   this is acceptable or if alerts should route elsewhere.
+6. **Run Agent 5A** after all of the above to get a `GO` verdict before
    `catalyst deploy`.
 
 ## Local test
 
 ```bash
 cd functions/agent1A
-node __tests__/agent1a.test.js   # no network, no deps, no secrets — 40 cases
+node __tests__/agent1a.test.js   # no network, no deps, no secrets — 57 cases
 ```

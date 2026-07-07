@@ -17,6 +17,9 @@ const templates = require('../templates');
 const runSummary = require('../run-summary');
 const mail = require('../mail');
 const reconcile = require('../reconcile');
+const alerts = require('../alerts');
+const { withRetryOnce } = require('../retry');
+const { postRunSummary } = require('../webhook');
 const zohoMeta = require('../zoho'); // for monkeypatching in reconcile tests
 const { runAgent1A } = require('../orchestrate');
 
@@ -225,6 +228,99 @@ test('mail: buildMailPayload is always plain text, never HTML (CRITICAL RULE)', 
   assert.strictEqual(payload.fromAddress, 'ambassadors@gracelyn.edu');
 });
 
+// ─── retry.js ───────────────────────────────────────────────────────────────
+
+test('retry: withRetryOnce returns immediately on first success without waiting', async () => {
+  let waitCalls = 0;
+  const result = await withRetryOnce(async () => 'ok', async () => { waitCalls++; }, 30000);
+  assert.strictEqual(result, 'ok');
+  assert.strictEqual(waitCalls, 0);
+});
+
+test('retry: withRetryOnce waits once then succeeds on the second attempt', async () => {
+  let attempts = 0;
+  let waitedMs = null;
+  const fn = async () => { attempts++; if (attempts === 1) throw new Error('transient'); return 'ok'; };
+  const result = await withRetryOnce(fn, async (ms) => { waitedMs = ms; }, 30000);
+  assert.strictEqual(result, 'ok');
+  assert.strictEqual(attempts, 2);
+  assert.strictEqual(waitedMs, 30000);
+});
+
+test('retry: withRetryOnce throws after both attempts fail, tagging retriedOnce', async () => {
+  let attempts = 0;
+  const fn = async () => { attempts++; throw new Error('still down'); };
+  await assert.rejects(
+    withRetryOnce(fn, async () => {}, 30000),
+    (err) => { assert.strictEqual(attempts, 2); assert.strictEqual(err.retriedOnce, true); return true; }
+  );
+});
+
+// ─── alerts.js ──────────────────────────────────────────────────────────────
+
+test('alerts: buildAlertEmail matches the design doc §7.1 format', () => {
+  const { subject: subj, body } = alerts.buildAlertEmail({
+    failureType: 'Test Failure', runDate: '2026-07-20T09:00:00Z', triggerType: 'agent0_complete',
+    failedStep: 'Step 5', errorDetails: 'boom', emailsSentBeforeFailure: 3,
+    contactsNeedingManualUpdate: ['111', '222'], recommendedAction: 'Do the thing.',
+  });
+  assert.strictEqual(subj, '[AGENT 1A ERROR] Test Failure - 2026-07-20T09:00:00Z');
+  assert.ok(body.includes('Agent: Database and Email Agent (Agent 1A)'));
+  assert.ok(body.includes('Trigger Type: agent0_complete'));
+  assert.ok(body.includes('Contacts Needing Manual CRM Update: 111, 222'));
+  assert.ok(body.includes('Recommended Action: Do the thing.'));
+});
+
+test('alerts: buildAlertEmail reports "None" when no contacts need manual update', () => {
+  const { body } = alerts.buildAlertEmail({
+    failureType: 'X', runDate: 'd', triggerType: 't', failedStep: 's', errorDetails: 'e',
+    emailsSentBeforeFailure: 0, contactsNeedingManualUpdate: [], recommendedAction: 'r',
+  });
+  assert.ok(body.includes('Contacts Needing Manual CRM Update: None'));
+});
+
+test('alerts: thresholds match design doc §7 exactly (>10 Claude, >20 mail)', () => {
+  assert.strictEqual(alerts.CONSECUTIVE_CLAUDE_FAILURE_THRESHOLD, 10);
+  assert.strictEqual(alerts.CONSECUTIVE_MAIL_FAILURE_THRESHOLD, 20);
+});
+
+// ─── webhook.js ─────────────────────────────────────────────────────────────
+
+test('webhook: postRunSummary delivers on first attempt without retry', async () => {
+  process.env.MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL = 'https://hooks.example.com/agent1a';
+  let calls = 0;
+  const fakePostJson = async () => { calls++; return { status: 200, body: '{}' }; };
+  const result = await postRunSummary({ foo: 'bar' }, async () => {}, fakePostJson);
+  assert.strictEqual(result.delivered, true);
+  assert.strictEqual(calls, 1);
+  delete process.env.MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL;
+});
+
+test('webhook: postRunSummary retries once on a non-2xx response, then succeeds', async () => {
+  process.env.MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL = 'https://hooks.example.com/agent1a';
+  let calls = 0;
+  const fakePostJson = async () => { calls++; return calls === 1 ? { status: 500, body: 'err' } : { status: 200, body: '{}' }; };
+  const result = await postRunSummary({ foo: 'bar' }, async () => {}, fakePostJson);
+  assert.strictEqual(result.delivered, true);
+  assert.strictEqual(calls, 2);
+  delete process.env.MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL;
+});
+
+test('webhook: postRunSummary reports not-delivered after both attempts fail', async () => {
+  process.env.MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL = 'https://hooks.example.com/agent1a';
+  const fakePostJson = async () => ({ status: 500, body: 'err' });
+  const result = await postRunSummary({ foo: 'bar' }, async () => {}, fakePostJson);
+  assert.strictEqual(result.delivered, false);
+  delete process.env.MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL;
+});
+
+test('webhook: postRunSummary reports not-delivered without throwing when URL is unset', async () => {
+  delete process.env.MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL;
+  const result = await postRunSummary({ foo: 'bar' });
+  assert.strictEqual(result.delivered, false);
+  assert.ok(/not set/.test(result.reason));
+});
+
 // ─── reconcile.js ───────────────────────────────────────────────────────────
 
 test('reconcile: resolveModules resolves Prospects to Ambassador_Leads and flags env divergence', async () => {
@@ -266,7 +362,7 @@ test('reconcile: checkProspectFields distinguishes missing-existing from missing
 // ─── index.js orchestration (full runs with injected fakes) ────────────────
 
 function makeFakeDeps(overrides = {}) {
-  const state = { crmUpdates: [], mailsSent: [] };
+  const state = { crmUpdates: [], mailsSent: [], alertsSent: [], webhookCalls: [], waitCalls: 0 };
   const deps = {
     zoho: {
       getCrmToken: async () => 'crm-token',
@@ -277,6 +373,7 @@ function makeFakeDeps(overrides = {}) {
     mail: {
       getMailToken: async () => 'mail-token',
       sendRecruitingEmail: async (to, subj, body) => { state.mailsSent.push({ to, subj, body }); },
+      sendAlertEmail: async (subj, body) => { state.alertsSent.push({ subj, body }); },
     },
     workdrive: {
       getWorkdriveToken: async () => 'wd-token',
@@ -287,7 +384,12 @@ function makeFakeDeps(overrides = {}) {
     },
     reconcile: {
       resolveModules: async () => ({ resolved: { prospects: 'Ambassador_Leads' }, unresolved: [], divergences: [] }),
+      checkProspectFields: async () => ({ ok: true, missingExisting: [], missingNew: [] }),
     },
+    webhook: {
+      postRunSummary: async (summary) => { state.webhookCalls.push(summary); return { delivered: true }; },
+    },
+    wait: async () => { state.waitCalls += 1; },
   };
   for (const k of Object.keys(overrides)) Object.assign(deps[k], overrides[k]);
   return { deps, state };
@@ -344,6 +446,96 @@ test('index: agent0_complete happy path sends email 1, updates CRM immediately w
   assert.strictEqual(state.crmUpdates[0].record.Recruiting_Source, 'Agent 1A');
   assert.strictEqual(result.body.summary.emails_sent, 1);
   assert.deepStrictEqual(result.body.skippedPopulations.sort(), ['paraDb', 'studentAlumni']);
+  // test_segment_active is honestly false — Para DB querying isn't wired up yet, so no cap is ever enforced.
+  assert.strictEqual(result.body.summary.test_segment_active, false);
+  // Step 8: the run summary actually gets POSTed to the coordinator webhook, not just returned.
+  assert.strictEqual(result.body.summaryWebhookDelivered, true);
+  assert.strictEqual(state.webhookCalls.length, 1);
+  assert.strictEqual(state.webhookCalls[0].emails_sent, 1);
+}));
+
+test('index: aborts run when a required Prospects field is missing (pre-flight check)', () => withTemplateEnv(async () => {
+  const { deps } = makeFakeDeps({
+    reconcile: { checkProspectFields: async () => ({ ok: false, missingExisting: ['VIP_Prospect'], missingNew: ['Recruiting_Source'] }) },
+  });
+  const result = await runAgent1A({ trigger_type: 'agent0_complete', triggered_at: '2026-07-20T09:00:00-06:00' }, deps, TODAY);
+  assert.strictEqual(result.statusCode, 502);
+  assert.deepStrictEqual(result.body.missingExistingFields, ['VIP_Prospect']);
+  assert.deepStrictEqual(result.body.missingNewFields, ['Recruiting_Source']);
+}));
+
+test('index: retries a failed CRM search once (30s delay) and succeeds on the second attempt', () => withTemplateEnv(async () => {
+  let attempts = 0;
+  const { deps, state } = makeFakeDeps({
+    zoho: {
+      crmSearch: async () => {
+        attempts++;
+        if (attempts === 1) throw new Error('transient CRM timeout');
+        return [{ id: '999', Name: 'Riley', Email: 'riley@example.com' }];
+      },
+    },
+  });
+  const result = await runAgent1A({ trigger_type: 'agent0_complete', triggered_at: '2026-07-20T09:00:00-06:00' }, deps, TODAY);
+  assert.strictEqual(result.statusCode, 200);
+  assert.strictEqual(attempts, 2);
+  assert.strictEqual(state.waitCalls, 1);
+  assert.strictEqual(state.mailsSent.length, 1);
+}));
+
+test('index: aborts after a CRM search fails twice in a row (retry exhausted)', () => withTemplateEnv(async () => {
+  const { deps, state } = makeFakeDeps({
+    zoho: { crmSearch: async () => { throw new Error('CRM is down'); } },
+  });
+  const result = await runAgent1A({ trigger_type: 'agent0_complete', triggered_at: '2026-07-20T09:00:00-06:00' }, deps, TODAY);
+  assert.strictEqual(result.statusCode, 502);
+  assert.ok(/retry/.test(result.body.error));
+  assert.strictEqual(state.waitCalls, 1);
+}));
+
+test('index: alerts Parmeet when a brand asset file is missing, even though the run still succeeds', () => withTemplateEnv(async () => {
+  const { deps, state } = makeFakeDeps({
+    zoho: { crmSearch: async () => [] },
+    workdrive: { readAllBrandAssets: async () => ({ assets: {}, missing: ['ambassador_copy_rules.txt'] }) },
+  });
+  const result = await runAgent1A({ trigger_type: 'agent0_complete', triggered_at: '2026-07-20T09:00:00-06:00' }, deps, TODAY);
+  assert.strictEqual(result.statusCode, 200);
+  assert.strictEqual(state.alertsSent.length, 1);
+  assert.ok(state.alertsSent[0].body.includes('ambassador_copy_rules.txt'));
+}));
+
+test('index: alerts Parmeet after more than 10 consecutive Claude personalization failures', () => withTemplateEnv(async () => {
+  // makeFakeDeps' default personalize fake returns { personalized: false } — 11 contacts all "fail".
+  const contacts = Array.from({ length: 11 }, (_, i) => ({ id: `p${i}`, Name: `Contact${i}`, Email: `c${i}@example.com` }));
+  const { deps, state } = makeFakeDeps({ zoho: { crmSearch: async () => contacts } });
+  const result = await runAgent1A({ trigger_type: 'agent0_complete', triggered_at: '2026-07-20T09:00:00-06:00' }, deps, TODAY);
+  assert.strictEqual(result.statusCode, 200);
+  assert.strictEqual(state.mailsSent.length, 11);
+  assert.ok(state.alertsSent.some((a) => /consecutive Claude/.test(a.body)));
+}));
+
+test('index: alerts Parmeet after more than 20 consecutive mail send failures', () => withTemplateEnv(async () => {
+  const contacts = Array.from({ length: 21 }, (_, i) => ({ id: `m${i}`, Name: `Contact${i}`, Email: `c${i}@example.com` }));
+  const { deps, state } = makeFakeDeps({
+    zoho: { crmSearch: async () => contacts },
+    mail: { sendRecruitingEmail: async () => { throw new Error('account suspended'); } },
+  });
+  const result = await runAgent1A({ trigger_type: 'agent0_complete', triggered_at: '2026-07-20T09:00:00-06:00' }, deps, TODAY);
+  assert.strictEqual(result.statusCode, 200);
+  assert.strictEqual(result.body.summary.emails_failed, 21);
+  assert.ok(state.alertsSent.some((a) => /consecutive mail/.test(a.body)));
+}));
+
+test('index: alerts Parmeet with the full summary when the run-summary webhook delivery fails', () => withTemplateEnv(async () => {
+  const { deps, state } = makeFakeDeps({
+    zoho: { crmSearch: async () => [] },
+    webhook: { postRunSummary: async () => ({ delivered: false, reason: 'DNS failure' }) },
+  });
+  const result = await runAgent1A({ trigger_type: 'agent0_complete', triggered_at: '2026-07-20T09:00:00-06:00' }, deps, TODAY);
+  assert.strictEqual(result.statusCode, 200);
+  assert.strictEqual(result.body.summaryWebhookDelivered, false);
+  assert.strictEqual(state.alertsSent.length, 1);
+  assert.ok(/Webhook Delivery Failed/.test(state.alertsSent[0].subj));
+  assert.ok(state.alertsSent[0].body.includes('DNS failure'));
 }));
 
 test('index: followup_schedule sends email 2 with the 7-day-mark criteria', () => withTemplateEnv(async () => {
@@ -394,7 +586,7 @@ test('index: lead_capture_new_contact sends immediately without waiting for Mond
   assert.strictEqual(state.mailsSent[0].to, 'alex@example.com');
 }));
 
-test('index: mail send failure is recorded per-contact and does not abort the run (Partial status)', () => withTemplateEnv(async () => {
+test('index: mail send failure retries once, is recorded per-contact, and does not abort the run (Partial status)', () => withTemplateEnv(async () => {
   const { deps, state } = makeFakeDeps({
     zoho: { crmSearch: async () => [{ id: '444', Name: 'Casey', Email: 'casey@example.com' }] },
     mail: { sendRecruitingEmail: async () => { throw new Error('mailbox full'); } },
@@ -404,10 +596,11 @@ test('index: mail send failure is recorded per-contact and does not abort the ru
   assert.strictEqual(result.body.summary.run_status, 'Partial');
   assert.strictEqual(result.body.summary.emails_failed, 1);
   assert.strictEqual(state.crmUpdates.length, 0, 'no CRM update should happen when the send itself failed');
+  assert.strictEqual(state.waitCalls, 1, 'mail send should have retried once before being logged as failed');
 }));
 
-test('index: CRM update failure after a successful send is logged but the send still counts (email already went out)', () => withTemplateEnv(async () => {
-  const { deps } = makeFakeDeps({
+test('index: CRM update failure after a successful send is logged, alerted, but the send still counts (email already went out)', () => withTemplateEnv(async () => {
+  const { deps, state } = makeFakeDeps({
     zoho: {
       crmSearch: async () => [{ id: '555', Name: 'Jordan', Email: 'jordan@example.com' }],
       crmUpdateRecord: async () => { throw new Error('CRM timeout'); },
@@ -417,6 +610,8 @@ test('index: CRM update failure after a successful send is logged but the send s
   assert.strictEqual(result.statusCode, 200);
   assert.strictEqual(result.body.summary.emails_sent, 1);
   assert.strictEqual(result.body.summary.crm_update_failures.length, 1);
+  assert.strictEqual(state.waitCalls, 1, 'CRM update should have retried once before being logged as failed');
+  assert.ok(state.alertsSent.some((a) => a.body.includes('555') && /manual/.test(a.body)));
 }));
 
 // ─── run ─────────────────────────────────────────────────────────────────────
