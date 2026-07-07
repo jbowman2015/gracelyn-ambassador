@@ -1,0 +1,13 @@
+{
+  "name": "agent0-research-intelligence",
+  "version": "1.0.0",
+  "description": "Ambassador Scaling Program — Agent 0 Research & Intelligence (prospect profiling, VIP Prospect Pipeline, briefings, gap reporting)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node __tests__/agent0.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "zcatalyst-sdk-node": "latest"
+  }
+}
