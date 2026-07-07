@@ -70,6 +70,28 @@ naming conflicts: `ANTHROPIC_API_KEY` (not `CLAUDE_API_KEY`),
 - `docs/planning/` — project plan, infrastructure runbook, master reference sheet, API-names rule.
 - `docs/brand/` — voice/copy/motivation/program-description brand assets.
 
+## Keep Zoho Projects updated as you work (required)
+Every build session must reflect its progress in Zoho Projects so the nightly
+Cliq summary (10 PM CST job) shows live state. When you **start** a task, mark it
+`inprogress` with a short comment; when you **finish**, mark it `completed` with a
+comment. Use the CLI wrapper (matches the task by name fragment, updates status,
+and adds the comment in one call):
+```bash
+# starting a task
+node scripts/zoho-projects-update.js --task "Agent 0" --status inprogress \
+  --comment "Started build — pulling live CRM field names from Zoho metadata"
+# finishing a task
+node scripts/zoho-projects-update.js --task "Agent 0" --status completed \
+  --comment "Built + local test passing; deploy-targeted in catalyst.json"
+node scripts/zoho-projects-update.js --list   # show all tasks + current status
+```
+- Statuses: `open` | `inprogress` | `completed` | `onhold` (portal/project IDs and
+  status IDs are baked into `scripts/zoho-projects-helper.js`).
+- Requires `ZOHO_CLIENT_ID`, `ZOHO_CLIENT_SECRET`, `ZOHO_REFRESH_TOKEN` in the env.
+- ⚠️ The Zoho Projects **write path** (status + comment) still needs a one-time live
+  verification — only read access has been confirmed so far. Run `--list` first; if
+  the write fails, surface it rather than assuming the update landed.
+
 ## Running & deploying
 ```bash
 cd functions/<agent> && npm install && catalyst functions:serve   # local
