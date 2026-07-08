@@ -78,14 +78,17 @@ The source documents use conflicting names for several credentials. **Pick the c
 | `WORKDRIVE_FOLDER_03_ID` | 03 Ambassador Welcome Kits | | ⬜ |
 | `WORKDRIVE_FOLDER_04_ID` | 04 Content Calendar Assets | | ⬜ |
 | `WORKDRIVE_FOLDER_05_ID` | 05 Story Files | | ⬜ |
-| `WORKDRIVE_FOLDER_06_ID` | 06 Lead Magnets | | ⬜ |
+| `WORKDRIVE_FOLDER_06_ID` | 06 Lead Magnets | `unrxha083e89a4c5c4f6ba2f471ca281877ba` | ✅ |
 | — | 06 / k12-educator | | ⬜ |
 | — | 06 / early-childhood | | ⬜ |
 | — | 06 / faith-community | | ⬜ |
 | — | 06 / youth-serving | | ⬜ |
 | `WORKDRIVE_FOLDER_07_ID` | 07 Analytics and Reports | | ⬜ |
-| `WORKDRIVE_FOLDER_08_ID` | 08 Brand Assets | | ⬜ |
-| `WORKDRIVE_FOLDER_09_ID` | 09 VIP Prospect Briefings | | ⬜ |
+| `WORKDRIVE_FOLDER_08_ID` | 08 Brand Assets | `unrxh7fa66c36a3874908a1f280237e52a815` | ✅ |
+| `WORKDRIVE_FOLDER_09_ID` | 09 VIP Prospect Briefings | `unrxhde78f41305d1413f9e841948efecc3ae` | ✅ |
+
+Folders 06, 08, 09 live at WorkDrive → General → Operations → Ambassador Scaling Project
+(parent folder `unrxhcee68ae9c260486e81ed8aee8db218e2`, created 2026-07-08).
 
 ---
 
