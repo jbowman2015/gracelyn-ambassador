@@ -191,6 +191,7 @@ test('new prospect: create with all Step 5a fields, email sent, handoff fired', 
   const rec = calls.creates[0];
   assert.strictEqual(rec[M.PROSPECT_FIELDS.email], 'taylor@example.com');
   assert.strictEqual(rec[M.PROSPECT_FIELDS.audienceTrack], M.AUDIENCE_TRACKS.k12);
+  assert.strictEqual(rec[M.PROSPECT_FIELDS.state], 'TX');
   assert.strictEqual(rec[M.PROSPECT_FIELDS.outreachStatus], 'Standard');
   assert.strictEqual(rec[M.PROSPECT_FIELDS.recruitingSource], 'Agent 1D');
   assert.strictEqual(rec[M.PROSPECT_FIELDS.recruitingChannel], 'lm_k12_selfcare');

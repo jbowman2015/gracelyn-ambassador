@@ -39,14 +39,11 @@ Environment variables the `agent1D` function needs. Secrets are placeholders
    `Role_Category`. `Lead_Magnets_Downloaded` is textarea (small/2000 chars);
    `UTM_Source`/`UTM_Campaign` are text (100 chars). See `manifest.js`
    divergence notes #5 and #8.
-4. ⚠️ **Open decision needed:** the design doc's `state` form field has no
-   plain-text home on Ambassador_Leads. The only state-like field is
-   `Location_State_Province` — a global dependent picklist (3900+ values
-   across every country). A raw value like `"TX"` won't match any option.
-   Agent 1D currently parses/validates `state` but does **not** write it to
-   CRM (see `manifest.js` divergence #6). Decide: (a) add a plain free-text
-   State field, or (b) map form state values onto the picklist's option set —
-   then wire the write back into `pipeline.js` Step 5a.
+4. ✅ `Lead_State` created live on Ambassador_Leads 2026-07-08 — a plain text
+   field (50 chars), not the existing `Location_State_Province` global
+   dependent picklist (3900+ values across every country, which a raw value
+   like `"TX"` would never match). Agent 1D writes `submission.state` here
+   as-is, whatever the form sends. See `manifest.js` divergence #6.
 5. `ambassadors@gracelyn.edu` verified and authorized for Zoho Mail API sending.
 
 ## How to set them + deploy

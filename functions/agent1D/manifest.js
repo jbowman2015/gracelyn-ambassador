@@ -40,17 +40,15 @@
  *    small/2000 chars), `UTM_Source` and `UTM_Campaign` (text, 100 chars).
  *    api_names came back exactly as expected; verifyFields() still checks
  *    them live on every run rather than trusting this comment.
- * 6. `State` (plain form field, Section 4 Step 5a) does NOT map to a simple
- *    text field. The only state-like field live on Ambassador_Leads is
- *    `Location_State_Province` — a global dependent picklist (3900+ values,
- *    every country's provinces/states) presumably paired with a Country
- *    field. A raw form value like "TX" will not match any option and a
- *    picklist write with no matching value will error. THIS FIELD IS NOT
- *    YET WRITTEN by Agent 1D — `submission.state` is parsed and validated
- *    but deliberately left out of the CRM write in pipeline.js until Parmeet
- *    decides whether to (a) add a plain free-text State field, or (b) map
- *    the form's state values to this picklist's option set. Flagged to the
- *    user 2026-07-08; do not wire this up without that decision.
+ * 6. `State` (plain form field, Section 4 Step 5a) does NOT map to
+ *    `Location_State_Province` — that's a global dependent picklist (3900+
+ *    values across every country, presumably paired with a Country field)
+ *    and a raw value like "TX" would never match an option. Rather than
+ *    build a 50-state lookup onto a picklist meant for something else,
+ *    created a dedicated `Lead_State` text field (50 chars) live 2026-07-08
+ *    — decided over the picklist-mapping alternative 2026-07-08. `submission.state`
+ *    now writes straight through, whatever the form sends (abbreviation or
+ *    full name) — no controlled vocabulary to maintain.
  * 7. `Recruiting_Channel` (existing, created by Agent 1A) stores the
  *    lead_magnet_id value for a 1D-sourced lead — same field, same shape.
  * 8. `Audience_Track` was created as Text, not Picklist. The design doc's
@@ -123,9 +121,7 @@ const PROSPECT_FIELDS = {
   email: 'Email',
   roleCategory: 'Role_Category',
   audienceTrack: 'Audience_Track',           // confirmed live 2026-07-08 (text, see divergence #8)
-  // No `state` entry: Location_State_Province is a global dependent picklist,
-  // not a plain field — see divergence #6. Not written until Parmeet decides
-  // the mapping. submission.state is still parsed/validated, just not sent to CRM.
+  state: 'Lead_State',                        // new dedicated field, confirmed live 2026-07-08 (see divergence #6)
   leadMagnetsDownloaded: 'Lead_Magnets_Downloaded', // confirmed live 2026-07-08
   outreachStatus: 'Outreach_Status',
   recruitingSource: 'Recruiting_Source',     // existing (Agent 1A); text, not picklist
