@@ -41,12 +41,13 @@ the existing `Prospect_Declined_Date` field — see `manifest.js` and
 ## CRM reconciliation
 
 Per `ClaudeCode_Zoho_API_Names_Instruction`, nothing is hardcoded from the
-design doc. `reconcile.js` resolves the Prospects module and confirms its
-fields live against Zoho on every run — the same pattern Agent 5A/1A use.
-See `manifest.js` for the full list of design-doc-to-live-Zoho divergences
-discovered during this build, and `DEPLOY.md` for the CRM field/picklist
-changes made live on 2026-07-08 (including a real gap: the `Social Post Log`
-module does not exist yet, so Agent 1B degrades gracefully around it).
+design doc. `reconcile.js` resolves the Prospects and Social Post Log
+modules and confirms fields live against Zoho on every run — the same
+pattern Agent 5A/1A use. See `manifest.js` for the full list of
+design-doc-to-live-Zoho divergences discovered during this build, and
+`DEPLOY.md` for the CRM field/picklist/module changes made live on
+2026-07-08 (including creating the `Social_Post_Logs` module, which did not
+exist at the start of this build).
 
 ## Files
 
@@ -124,7 +125,7 @@ suppression), warm-follow alert capping, and Stage 4 → Converted.
 ## Deploy
 
 Not yet deployed — see `DEPLOY.md` for the Week 2 gate, the live CRM changes
-already applied, the design-doc §9 error handling now implemented and wired
-into the real run path, and what's still genuinely open (Social Post Log
-module, several third-party API shape assumptions, inferred Make.com webhook
-names).
+already applied (including creating the `Social_Post_Logs` module), the
+design-doc §9 error handling now implemented and wired into the real run
+path, and what's still genuinely open (tracked as a Zoho Projects subtask):
+several third-party API shape assumptions and inferred Make.com webhook names.
