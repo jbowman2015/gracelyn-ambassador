@@ -73,11 +73,11 @@ The source documents use conflicting names for several credentials. **Pick the c
 
 | Variable | Folder | ID | Status |
 |---|---|---|---|
-| `WORKDRIVE_FOLDER_01_ID` | 01 Applications | | ⬜ |
-| `WORKDRIVE_FOLDER_02_ID` | 02 Approved Social Content | | ⬜ |
-| `WORKDRIVE_FOLDER_03_ID` | 03 Ambassador Welcome Kits | | ⬜ |
-| `WORKDRIVE_FOLDER_04_ID` | 04 Content Calendar Assets | | ⬜ |
-| `WORKDRIVE_FOLDER_05_ID` | 05 Story Files | | ⬜ |
+| `WORKDRIVE_FOLDER_01_ID` | 01 Applications | `unrxh653f5e303ed149c3817d5aba432a5dee` | ✅ |
+| `WORKDRIVE_FOLDER_02_ID` | 02 Approved Social Content | `unrxh6db6782ab5c942e5888f3ae852f9db77` | ✅ |
+| `WORKDRIVE_FOLDER_03_ID` | 03 Ambassador Welcome Kits | `unrxh44c35ddd817845bbbd90e0b23ad7dd8f` | ✅ |
+| `WORKDRIVE_FOLDER_04_ID` | 04 Content Calendar Assets | `unrxh9abb44ede108493dabf39d170dcfc872` | ✅ |
+| `WORKDRIVE_FOLDER_05_ID` | 05 Story Files | `unrxhf7b490a6610c4a33bcb333bf64381a29` | ✅ |
 | `WORKDRIVE_FOLDER_06_ID` | 06 Lead Magnets | `unrxha083e89a4c5c4f6ba2f471ca281877ba` | ✅ |
 | — | 06 / k12-educator | `unrxh5135bf06592c4c8c984d96fea5ef2aff` | ✅ |
 | — | 06 / early-childhood | `unrxh3de6fa6bf4934870ad72ad50cfd5e76a` | ✅ |
