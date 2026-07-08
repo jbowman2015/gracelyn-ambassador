@@ -1,0 +1,13 @@
+{
+  "name": "agent1d-lead-capture",
+  "version": "1.0.0",
+  "description": "Ambassador Scaling Program — Agent 1D Lead Capture (form processing, lead magnet delivery, CRM seeding, Agent 1A handoff)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node __tests__/agent1d.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "zcatalyst-sdk-node": "latest"
+  }
+}
