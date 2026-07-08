@@ -114,4 +114,9 @@ After deploy, configure Job Scheduling in the Catalyst Console per each agent's 
 ## Current status
 - ✅ Agent 5A (validation gate) — built, tested, deploy-targeted
 - ✅ cliqSummaryFunction — daily Zoho Projects → Cliq summary (10 PM CST job)
-- ⬜ Agents 0, 1A–1D, 2, 3, 4, 5, 6 — to build against `docs/design/`
+- ✅ Agent 0 (Research & Intelligence) — built, tested, 13 CRM fields created live on `Ambassador_Leads`
+- ⬜ Agents 1A–1D, 2, 3, 4, 5, 6 — to build against `docs/design/`
+
+> **Building the next agent?** Use `docs/planning/Agent_Build_Playbook.md` — it has the
+> order/status checklist, the shared "Standard Build Rules", and a ready-to-paste session
+> prompt for each remaining agent. One agent per session.
