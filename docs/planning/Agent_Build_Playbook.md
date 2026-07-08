@@ -63,6 +63,13 @@ prompt tells the session to read **§ Standard Build Rules** (this file) + that 
 8. **Zoho Projects** (portal `745686712`, project `1776658000000715069`): mark the agent's
    task `inprogress` at start and `completed` at end, each with a short comment — via the
    Zoho Projects MCP if connected, else `scripts/zoho-projects-update.js`.
+   - **CRM field-build tasks.** Whenever a session creates or reconciles CRM fields on a
+     module, it must also update the matching **"Start CRM field build — <module>"** task:
+     add a comment listing what was mapped/created, and set status `inprogress` while any
+     field for that module is still outstanding, `completed` once the module's full set
+     exists. (Complete-status id `1776658000000363039`.) Reconciled 2026-07-07:
+     Prospects/`Ambassador_Leads` (+20) and Ambassadors (+39) tasks are **completed**;
+     Support Tickets stays open — that module does not yet exist (only Cases/Solutions).
 9. **Git:** branch from `main` using the name in the agent entry; commit + push; open a PR
    to `main`; merge once tests are green (squash). Then check the box in this file.
 
