@@ -48,21 +48,18 @@
  *    new boolean field on Ambassador_Leads, 2026-07-08 (field id
  *    4849477000258337026) — scoped to Agent 1B only, following the same
  *    live-creation-then-document pattern Agent 1A used for its six fields.
- * 7. `SOCIAL_POST_LOG_MODULE_API_NAME` — the Master Reference Sheet §4 lists
- *    this module as "(new)" and unconfirmed (⬜). Confirmed live 2026-07-08:
- *    it does NOT exist in the org (GET /crm/v6/settings/modules has no
- *    Social Post Log / Social_Post_Log module). Unlike the missing fields
- *    above, creating a brand-new custom module is a bigger, less-reversible
- *    action than adding a field to an existing module, and — unlike
- *    High_Engagement_Flag or the Outreach_Status picklist value — was not
- *    pre-authorized for this build. Agent 1B resolves it live like every
- *    other module and DEGRADES GRACEFULLY if unresolved, the same pattern
- *    Agent 1A used for the unconfirmed Para DB / Student-Alumni modules:
- *    the post cycle still posts (the primary function) and logs/alerts that
- *    compliance logging was skipped, rather than blocking posting or silently
- *    creating org structure Agent 4's own developer hasn't specified fields
- *    for yet. This is a real Week 1 gap, not a design choice to gloss over —
- *    see DEPLOY.md "Still open."
+ * 7. `SOCIAL_POST_LOG_MODULE_API_NAME` — the Master Reference Sheet §4 listed
+ *    this module as "(new)" and unconfirmed (⬜); confirmed on 2026-07-08 it
+ *    did not yet exist in the org. Created live the same day, explicitly
+ *    authorized for this build (unlike the Week 1 default of resolve-live-
+ *    and-degrade used for Agent 1A's Para DB / Student-Alumni modules).
+ *    Zoho auto-generated the plural api_name `Social_Post_Logs` from the
+ *    singular label "Social Post Log" — do not hardcode the singular form.
+ *    See DEPLOY.md for the field list and ids. `reconcile.resolveModules()`
+ *    still resolves it live every run (never hardcoded) and the post cycle
+ *    still degrades gracefully if it's ever unresolved (renamed, deleted,
+ *    a transient metadata-fetch failure) — posting is never blocked by a
+ *    compliance-log problem.
  * 8. WorkDrive folder env vars: the doc uses `WORKDRIVE_FOLDER_02/07/08/09`
  *    (§12, no `_ID` suffix). Agent 0's manifest.js already established the
  *    canonical convention `WORKDRIVE_FOLDER_0N_ID` (with the doc's un-suffixed
@@ -136,7 +133,7 @@ const ENV_VARS = [
   { name: 'PROSPECTS_MODULE_API_NAME', severity: 'critical', group: 'CRM',
     note: 'Confirmed live 2026-07-08: resolves to Ambassador_Leads (same module Agent 0/1A use). Still resolved live at runtime, never hardcoded.' },
   { name: 'SOCIAL_POST_LOG_MODULE_API_NAME', severity: 'warn', group: 'CRM',
-    note: 'NOT confirmed in Zoho as of this build (Master Reference Sheet §4, ⬜) — module does not exist live. Post cycle degrades: posts still go out, the per-platform CRM log write is skipped + alerted + included in run summary. See manifest.js divergence #7 and DEPLOY.md.' },
+    note: 'Confirmed live 2026-07-08: resolves to Social_Post_Logs (created this build — see manifest.js divergence #7 and DEPLOY.md). Kept "warn"/resolve-live rather than hardcoded so a rename or transient metadata failure degrades (skip + alert) instead of blocking posting.' },
 
   // Mission keyword matching (§5.1) — Parmeet-maintained, comma-separated.
   { name: 'MISSION_KEYWORDS', severity: 'critical', group: 'Policy',
@@ -165,8 +162,8 @@ const ENV_VARS = [
 const CRM_MODULES = [
   { envVar: 'PROSPECTS_MODULE_API_NAME', label: 'Ambassador_Leads', key: 'prospects', severity: 'critical',
     note: 'Design doc calls this "Prospects"; the live/only module is Ambassador_Leads (Agent 0\'s module, shared with Agent 1A).' },
-  { envVar: 'SOCIAL_POST_LOG_MODULE_API_NAME', label: 'Social Post Log', key: 'socialPostLog', severity: 'warn',
-    note: 'Not confirmed live as of this build (2026-07-08). Post cycle degrades if unresolved — see manifest.js divergence #7.' },
+  { envVar: 'SOCIAL_POST_LOG_MODULE_API_NAME', label: 'Social_Post_Logs', key: 'socialPostLog', severity: 'warn',
+    note: 'Created live 2026-07-08 — api_name is the plural "Social_Post_Logs" (Zoho auto-generated from the "Social Post Log" label). Post cycle still degrades gracefully if ever unresolved — see manifest.js divergence #7.' },
 ];
 
 // ─── CRM fields Agent 1B reads/writes on Ambassador_Leads (Prospects) ─────────

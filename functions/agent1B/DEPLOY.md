@@ -9,8 +9,8 @@ Week 2 once Agent 5A returns a `GO` verdict.
 
 Per `ClaudeCode_Zoho_API_Names_Instruction`, Agent 1B's dependencies on the
 `Ambassador_Leads` module (the live `Prospects` module — see manifest.js §1)
-were reconciled against Zoho directly, not assumed from the design doc. Two
-live changes were required and applied via the Zoho CRM Module Connector:
+were reconciled against Zoho directly, not assumed from the design doc.
+Changes were applied via the Zoho CRM Module Connector:
 
 ### 1. New field created on `Ambassador_Leads`
 
@@ -33,17 +33,38 @@ Confirmed live — `Outreach_Status` now returns all 8 values (`-None-`,
 `Standard`, `VIP Pipeline`, `Outreach Sent`, `Follow-Up Sent`, `Unresponsive`,
 `Applied`, `Converted`). No other agent's fields were touched.
 
-### 3. `Social Post Log` module — confirmed NOT to exist (not created)
+### 3. `Social Post Log` module created
 
-`GET /crm/v6/settings/modules` was checked directly: there is no
-`Social_Post_Log` (or similarly-named) custom module in the org. The Master
-Reference Sheet §4 already listed this as unconfirmed (⬜). Unlike the field
-change above, creating a brand-new custom module is a bigger, less-reversible
-action that was not pre-authorized for this build (field creation and
-picklist extension on an *existing* module were), so it was **not** created
-here. Agent 1B resolves `SOCIAL_POST_LOG_MODULE_API_NAME` live every run and
-degrades gracefully if unresolved — see "Still open" #1 below. This mirrors
-how Agent 1A treated the unconfirmed Para DB / Student-Alumni modules.
+`GET /crm/v6/settings/modules` initially confirmed no such module existed —
+the Master Reference Sheet §4 already listed it as unconfirmed (⬜). Explicitly
+authorized and created live via `ZohoCRM_createModules`:
+
+- **Module**: singular label "Social Post Log", plural "Social Post Logs",
+  org-based access, profiles Administrator + Standard (module id
+  `4849477000258275044`). Zoho auto-generated the **plural** api_name —
+  **`Social_Post_Logs`**, not the singular form — this is the value
+  `SOCIAL_POST_LOG_MODULE_API_NAME` must resolve to (or is auto-discovered
+  live by `reconcile.resolveModules()` if the env var is unset).
+- **Display field**: autonumber, prefix `SPL-`, e.g. `SPL-1`.
+- **Fields** (all confirmed via `GET /crm/v6/settings/fields?module=Social_Post_Logs`
+  — every api_name matches what `sequencing.buildSocialPostLogRecord()`
+  already wrote, no code changes were needed):
+
+| Field label | api_name | data_type | Zoho field id |
+|---|---|---|---|
+| Platform | `Platform` | picklist (linkedin/facebook/instagram) | 4849477000258336020 |
+| Post ID | `Post_ID` | text(100) | 4849477000258336032 |
+| Caption Text | `Caption_Text` | textarea (large) | 4849477000258336041 |
+| Asset Filename | `Asset_Filename` | text(255) | 4849477000258336049 |
+| Posted At | `Posted_At` | datetime | 4849477000258336057 |
+| Status | `Status` | picklist (success/failed) | 4849477000258336066 |
+
+Agent 1B still resolves this module live every run via
+`reconcile.resolveModules()` rather than hardcoding the api_name (per
+`ClaudeCode_Zoho_API_Names_Instruction`), and the post cycle still degrades
+gracefully (skip + alert, posting unaffected) if it's ever unresolved —
+this is defensive resilience against a future rename/deletion, not an
+admission the module is missing today.
 
 ## Required environment variables
 
@@ -59,7 +80,8 @@ Full list with severities and notes: `manifest.js` → `ENV_VARS`. Summary:
 - **Ayrshare**: `AYRSHARE_API_KEY` (static key, critical)
 - **Community monitoring**: `FACEBOOK_READ_TOKEN`, `LINKEDIN_READ_TOKEN` (warn, read-only)
 - **CRM module resolution**: `PROSPECTS_MODULE_API_NAME` (confirmed →
-  `Ambassador_Leads`), `SOCIAL_POST_LOG_MODULE_API_NAME` (warn — see above)
+  `Ambassador_Leads`), `SOCIAL_POST_LOG_MODULE_API_NAME` (confirmed →
+  `Social_Post_Logs`, warn severity — see above)
 - **Policy**: `MISSION_KEYWORDS` (critical — Parmeet-maintained, comma-separated)
 - **Make.com** (warn — Week 2): `MAKE_VIP_WARM_FOLLOW_WEBHOOK`,
   `MAKE_LOW_CONTENT_WEBHOOK`, `MAKE_AGENT1B_RUN_SUMMARY_WEBHOOK` (inferred
@@ -106,25 +128,23 @@ Also implemented, beyond the literal §9 table:
 - **Run summary webhook delivery failure** gets its own ops alert with the
   full summary payload, mirroring Agent 1A's `MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL`
   pattern (§8 Scenario 5 here).
-- **Social Post Log module unresolved** (see "Live CRM changes" #3 above)
-  degrades — posting still happens, the compliance-log write is skipped and
-  alerted — rather than silently dropping the gap or blocking real posts.
+- **Social Post Log module** now exists live (see "Live CRM changes" #3
+  above) — the post cycle writes one record per platform every run;
+  the resolve-live-and-degrade path only matters as defensive resilience now.
 
 ## Still open before Week 2 deploy (not blocking this build)
 
-1. **Social Post Log CRM module does not exist.** Confirm with Parmeet
-   whether to create it (and its field schema) before Week 2, or wait for
-   Agent 4's developer to specify the compliance fields it needs first.
-   Until then, every post-cycle run alerts that this write is skipped —
-   confirm that alert volume is acceptable, or silence it once the gap is
-   tracked elsewhere.
-2. **Ayrshare response shape is an assumption.** `ayrshare.js`'s
+Tracked as a Zoho Projects subtask under the Agent 1B task (Week 1 — Build
+tasklist) — see that subtask for live status; summarized here for repo
+readers:
+
+1. **Ayrshare response shape is an assumption.** `ayrshare.js`'s
    `parsePostResponse` expects a `posts: [{platform, status, id, errors}]`
    array and `platformOptions` for per-platform captions in the request. This
    was not verified against a real Ayrshare account/API version — confirm
    before Week 2 (`parsePostResponse` is the single place to adjust if the
    real shape differs).
-3. **Facebook/LinkedIn community search and profile-post endpoints are
+2. **Facebook/LinkedIn community search and profile-post endpoints are
    unconfirmed.** The design doc names the read-only tokens and their
    purpose but not an endpoint/query schema (unlike Ayrshare/Zoho CRM, which
    are conventional and already used elsewhere in this codebase).
@@ -132,16 +152,16 @@ Also implemented, beyond the literal §9 table:
    (`normalizeCandidate`/`fetchRecentPostsForProfile` are the isolation
    points) — needs a real integration test against Parmeet's actual
    Graph API app / LinkedIn access before Week 2.
-4. **Zoho Social engagement endpoint is unconfirmed** for the same reason —
+3. **Zoho Social engagement endpoint is unconfirmed** for the same reason —
    see `zoho-social.js`'s `normalizeEngager`.
-5. **`MAKE_AGENT1B_RUN_SUMMARY_WEBHOOK` and `MAKE_AGENT1B_ALERT_WEBHOOK` are
+4. **`MAKE_AGENT1B_RUN_SUMMARY_WEBHOOK` and `MAKE_AGENT1B_ALERT_WEBHOOK` are
    inferred env var names, not in the design doc.** §8 lists a Scenario 5
    (Run Summary) and §6/§9 require Parmeet alerts for token-refresh/brand-
    asset/post-failure/Claude-parse conditions, but §12's env var table has no
    corresponding webhook URL for either — a real gap in the design doc, not
    an oversight in this build. Confirm the exact names/Make.com scenario
    config with Parmeet before Week 2 (see manifest.js for the full reasoning).
-6. **§5.1 Stage 1 detection uses the live `VIP_Pipeline_Stage` CRM field, not
+5. **§5.1 Stage 1 detection uses the live `VIP_Pipeline_Stage` CRM field, not
    a literal parse of Folder 09 briefing text**, despite the design doc's
    wording ("Agent 1B checks Folder 09... to identify which accounts are in
    Stage 1"). Agent 0's actual briefing generator (`functions/agent0/pipeline.js`
@@ -154,27 +174,27 @@ Also implemented, beyond the literal §9 table:
    but is not used to derive the Stage 1 list. Confirm this approach is
    acceptable, or coordinate with the Agent 0 developer on a structured
    briefing format if literal Folder 09 parsing is required.
-7. **Ayrshare `mediaUrl` relies on WorkDrive's file `permalink` attribute
+6. **Ayrshare `mediaUrl` relies on WorkDrive's file `permalink` attribute
    being public.** Ayrshare needs a publicly reachable image URL; this build
    passes through whatever `permalink` WorkDrive's file-list API returns
    without confirming it is actually public (vs. requiring the same OAuth
    token to view). Verify during the integration test (§10.2).
-8. **Caption generation passes only the asset filename as "asset
+7. **Caption generation passes only the asset filename as "asset
    description"** to Claude (design doc §7.1's prompt takes copy rules +
    voice guidelines + the template/asset, but doesn't specify how an image
    asset's *content* should be described in text). Consider having Parmeet
    supply a short caption/alt-text per asset in Folder 02 if captions need to
    reference the image's actual content more specifically.
-9. **`criteria.estimateRoleCategory`** is a simple keyword heuristic over the
+8. **`criteria.estimateRoleCategory`** is a simple keyword heuristic over the
    community name a prospect was discovered in, not a classifier — the
    design doc only asks for a "best estimate from profile context." Sanity
    check the mapping with Parmeet.
-10. **The warm-follow "CRM task" is created entirely by Make.com Scenario 3**,
-    not by this code — Agent 1B only POSTs the alert payload
-    (`sequencing.buildWarmFollowAlertPayload`). Confirm Scenario 3 actually
-    creates a Zoho Projects/CRM **Task** record type (not a generic activity
-    or note) assigned to the VIP Relationship Manager, per design doc §5.1.
-11. **Run Agent 5A** after all of the above to get a `GO` verdict before
+9. **The warm-follow "CRM task" is created entirely by Make.com Scenario 3**,
+   not by this code — Agent 1B only POSTs the alert payload
+   (`sequencing.buildWarmFollowAlertPayload`). Confirm Scenario 3 actually
+   creates a Zoho Projects/CRM **Task** record type (not a generic activity
+   or note) assigned to the VIP Relationship Manager, per design doc §5.1.
+10. **Run Agent 5A** after all of the above to get a `GO` verdict before
     `catalyst deploy`.
 
 ## Local test

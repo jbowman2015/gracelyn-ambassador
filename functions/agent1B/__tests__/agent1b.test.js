@@ -337,7 +337,7 @@ function makeFakeDeps(overrides = {}) {
       fetchRecentEngagers: async () => [],
     },
     reconcile: {
-      resolveModules: async () => ({ resolved: { prospects: 'Ambassador_Leads', socialPostLog: 'Social_Post_Log' }, unresolved: [], divergences: [] }),
+      resolveModules: async () => ({ resolved: { prospects: 'Ambassador_Leads', socialPostLog: 'Social_Post_Logs' }, unresolved: [], divergences: [] }),
       checkProspectFields: async () => ({ ok: true, missingExisting: [], missingNew: [] }),
     },
     webhook: {
