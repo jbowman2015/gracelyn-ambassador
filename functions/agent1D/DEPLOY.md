@@ -32,14 +32,21 @@ Environment variables the `agent1D` function needs. Secrets are placeholders
 2. One Zoho Form per audience track, each with hidden fields `lead_magnet_id`,
    `utm_source`, `utm_campaign` and visible fields `first_name`, `email`,
    `role_category`, `state`.
-3. `Audience_Track` picklist field added to Ambassador_Leads (values: `K12
-   Educator`, `Early Childhood`, `Faith Community`, `Youth Serving
-   Professional`, `Unknown`) — **not yet confirmed live as of this build.**
-4. `Lead_Magnets_Downloaded`, `UTM_Source`, `UTM_Campaign` fields added to
-   Ambassador_Leads — **not yet confirmed live as of this build.** Agent 5A's
-   manifest already anticipates all three on the `prospects` field list; run
-   Agent 5A (or `zoho.verifyFields` inside this function) to confirm before
-   relying on production writes.
+3. ✅ `Audience_Track`, `Lead_Magnets_Downloaded`, `UTM_Source`, `UTM_Campaign`
+   created live on Ambassador_Leads 2026-07-08. `Audience_Track` is **text**,
+   not picklist — "Youth Serving Professional" (26 chars) exceeds Zoho's
+   25-char picklist-option limit, the same wall Agent 0 hit with
+   `Role_Category`. `Lead_Magnets_Downloaded` is textarea (small/2000 chars);
+   `UTM_Source`/`UTM_Campaign` are text (100 chars). See `manifest.js`
+   divergence notes #5 and #8.
+4. ⚠️ **Open decision needed:** the design doc's `state` form field has no
+   plain-text home on Ambassador_Leads. The only state-like field is
+   `Location_State_Province` — a global dependent picklist (3900+ values
+   across every country). A raw value like `"TX"` won't match any option.
+   Agent 1D currently parses/validates `state` but does **not** write it to
+   CRM (see `manifest.js` divergence #6). Decide: (a) add a plain free-text
+   State field, or (b) map form state values onto the picklist's option set —
+   then wire the write back into `pipeline.js` Step 5a.
 5. `ambassadors@gracelyn.edu` verified and authorized for Zoho Mail API sending.
 
 ## How to set them + deploy

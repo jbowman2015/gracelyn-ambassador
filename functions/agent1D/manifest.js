@@ -34,16 +34,31 @@
  *    Agent 1A's weekly query (this agent's own handoff webhook still fires
  *    immediately regardless — see orchestrate.js Step 8).
  * 5. `Audience_Track`, `Lead_Magnets_Downloaded`, `UTM_Source`, `UTM_Campaign`
- *    are NEW fields this design doc introduces (Section 9 Parmeet pre-build
- *    task: add the Audience_Track picklist before development begins). They
- *    are not yet confirmed live as of this build — verifyFields() surfaces
- *    (not silently swallows) any of these missing at runtime, same pattern
- *    as Agent 0's Step 4.
- * 6. `State` (plain form field, Section 4 Step 5a) is assumed to map to a
- *    live text field named `State` on Ambassador_Leads. Not yet confirmed;
- *    also surfaced by verifyFields() if missing.
+ *    were NEW fields this design doc introduced (Section 9 Parmeet pre-build
+ *    task). Created live on Ambassador_Leads 2026-07-08: `Audience_Track`
+ *    (text, not picklist — see #8), `Lead_Magnets_Downloaded` (textarea,
+ *    small/2000 chars), `UTM_Source` and `UTM_Campaign` (text, 100 chars).
+ *    api_names came back exactly as expected; verifyFields() still checks
+ *    them live on every run rather than trusting this comment.
+ * 6. `State` (plain form field, Section 4 Step 5a) does NOT map to a simple
+ *    text field. The only state-like field live on Ambassador_Leads is
+ *    `Location_State_Province` — a global dependent picklist (3900+ values,
+ *    every country's provinces/states) presumably paired with a Country
+ *    field. A raw form value like "TX" will not match any option and a
+ *    picklist write with no matching value will error. THIS FIELD IS NOT
+ *    YET WRITTEN by Agent 1D — `submission.state` is parsed and validated
+ *    but deliberately left out of the CRM write in pipeline.js until Parmeet
+ *    decides whether to (a) add a plain free-text State field, or (b) map
+ *    the form's state values to this picklist's option set. Flagged to the
+ *    user 2026-07-08; do not wire this up without that decision.
  * 7. `Recruiting_Channel` (existing, created by Agent 1A) stores the
  *    lead_magnet_id value for a 1D-sourced lead — same field, same shape.
+ * 8. `Audience_Track` was created as Text, not Picklist. The design doc's
+ *    "Youth Serving Professional" value is 26 characters — over Zoho's
+ *    25-character picklist-option limit — the same wall Agent 0 hit with
+ *    `Role_Category` (also text for the same reason). Agent 1D's code only
+ *    ever writes one of the 5 controlled values (routing.js), so this is
+ *    functionally identical to a constrained picklist.
  */
 
 // ─── Environment variables ────────────────────────────────────────────────────
@@ -107,14 +122,16 @@ const PROSPECT_FIELDS = {
   firstName: 'Name',                        // live field; doc calls it First_Name
   email: 'Email',
   roleCategory: 'Role_Category',
-  audienceTrack: 'Audience_Track',           // NEW — Parmeet pre-build task
-  state: 'State',
-  leadMagnetsDownloaded: 'Lead_Magnets_Downloaded', // NEW
+  audienceTrack: 'Audience_Track',           // confirmed live 2026-07-08 (text, see divergence #8)
+  // No `state` entry: Location_State_Province is a global dependent picklist,
+  // not a plain field — see divergence #6. Not written until Parmeet decides
+  // the mapping. submission.state is still parsed/validated, just not sent to CRM.
+  leadMagnetsDownloaded: 'Lead_Magnets_Downloaded', // confirmed live 2026-07-08
   outreachStatus: 'Outreach_Status',
   recruitingSource: 'Recruiting_Source',     // existing (Agent 1A); text, not picklist
   recruitingChannel: 'Recruiting_Channel',   // existing (Agent 1A)
-  utmSource: 'UTM_Source',                   // NEW
-  utmCampaign: 'UTM_Campaign',               // NEW
+  utmSource: 'UTM_Source',                   // confirmed live 2026-07-08
+  utmCampaign: 'UTM_Campaign',               // confirmed live 2026-07-08
   contactFound: 'Contact_Found',
 };
 

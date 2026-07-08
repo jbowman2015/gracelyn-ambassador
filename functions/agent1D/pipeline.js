@@ -152,7 +152,8 @@ async function processSubmission(payload, opts = {}) {
         [F.email]: submission.email,
         [F.roleCategory]: submission.roleCategory,
         [F.audienceTrack]: audienceTrack,
-        [F.state]: submission.state,
+        // submission.state is parsed/validated but not sent — Location_State_Province
+        // is a global dependent picklist, not a plain field (manifest.js divergence #6).
         [F.leadMagnetsDownloaded]: submission.leadMagnetId,
         [F.outreachStatus]: M.OUTREACH_STATUS_NEW_LEAD_VALUE,
         [F.recruitingSource]: M.RECRUITING_SOURCE_VALUE,
