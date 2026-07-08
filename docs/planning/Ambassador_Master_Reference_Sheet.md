@@ -79,11 +79,11 @@ The source documents use conflicting names for several credentials. **Pick the c
 | `WORKDRIVE_FOLDER_04_ID` | 04 Content Calendar Assets | | ⬜ |
 | `WORKDRIVE_FOLDER_05_ID` | 05 Story Files | | ⬜ |
 | `WORKDRIVE_FOLDER_06_ID` | 06 Lead Magnets | `unrxha083e89a4c5c4f6ba2f471ca281877ba` | ✅ |
-| — | 06 / k12-educator | | ⬜ |
-| — | 06 / early-childhood | | ⬜ |
-| — | 06 / faith-community | | ⬜ |
-| — | 06 / youth-serving | | ⬜ |
-| `WORKDRIVE_FOLDER_07_ID` | 07 Analytics and Reports | | ⬜ |
+| — | 06 / k12-educator | `unrxh5135bf06592c4c8c984d96fea5ef2aff` | ✅ |
+| — | 06 / early-childhood | `unrxh3de6fa6bf4934870ad72ad50cfd5e76a` | ✅ |
+| — | 06 / faith-community | `unrxhe2fafc74f0be4939ad46f539f7c2d1c7` | ✅ |
+| — | 06 / youth-serving | `unrxh351bad2a57bb49e1bafd64ff4f29f70d` | ✅ |
+| `WORKDRIVE_FOLDER_07_ID` | 07 Analytics and Reports | `unrxh155ff62f74eb4018b0038fad6ee0437e` | ✅ |
 | `WORKDRIVE_FOLDER_08_ID` | 08 Brand Assets | `unrxh7fa66c36a3874908a1f280237e52a815` | ✅ |
 | `WORKDRIVE_FOLDER_09_ID` | 09 VIP Prospect Briefings | `unrxhde78f41305d1413f9e841948efecc3ae` | ✅ |
 
