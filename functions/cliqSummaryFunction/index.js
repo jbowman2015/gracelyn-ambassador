@@ -19,6 +19,8 @@ const express  = require('express');
 const https    = require('https');
 const qs       = require('querystring');
 
+const { buildSummary } = require('./summary');
+
 const app = express();
 app.use(express.json());
 
@@ -84,109 +86,6 @@ async function getAllTasks(token) {
     if (res.body.tasks) tasks.push(...res.body.tasks);
   }
   return tasks;
-}
-
-// ─── Date helpers (America/Chicago aware) ─────────────────────────────────────
-
-const CT = 'America/Chicago';
-
-// "YYYY-MM-DD" for a given epoch (ms) in Central time
-function ctDateStr(epochMs) {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: CT, year: 'numeric', month: '2-digit', day: '2-digit',
-  }).formatToParts(new Date(epochMs));
-  const get = (t) => parts.find((p) => p.type === t).value;
-  return `${get('year')}-${get('month')}-${get('day')}`;
-}
-
-// ─── Summary builder ──────────────────────────────────────────────────────────
-
-function buildSummary(tasks) {
-  const now      = Date.now();
-  const todayStr = ctDateStr(now);
-  const tmrwStr  = ctDateStr(now + 24 * 60 * 60 * 1000);
-  const today    = new Date().toLocaleDateString('en-US', { timeZone: CT, weekday: 'long', month: 'long', day: 'numeric' });
-
-  const byStatus = { completed: [], inprogress: [], open: [], onhold: [], overdue: [] };
-
-  for (const t of tasks) {
-    const s = (t.status?.name || '').toLowerCase().replace(/\s/g, '');
-    const done = t.completed === true || t.status?.type === 'closed' || s.includes('complete');
-    if (done)                        byStatus.completed.push(t);
-    else if (s.includes('progress')) byStatus.inprogress.push(t);
-    else if (s.includes('hold'))     byStatus.onhold.push(t);
-    else if (t.end_date_long && t.end_date_long < now) byStatus.overdue.push(t);
-    else                             byStatus.open.push(t);
-  }
-
-  // Completed today — finished tasks last updated on today's Central-time date
-  const completedToday = byStatus.completed.filter(
-    (t) => t.last_updated_time_long && ctDateStr(t.last_updated_time_long) === todayStr
-  );
-
-  // Next steps for tomorrow — unfinished work starting or due tomorrow,
-  // falling back to the soonest-due unfinished tasks if nothing is dated tomorrow.
-  const active = [...byStatus.overdue, ...byStatus.inprogress, ...byStatus.open, ...byStatus.onhold];
-  const dueOrStartCT = (t) => {
-    const days = [];
-    if (t.end_date_long)   days.push(ctDateStr(t.end_date_long));
-    if (t.start_date_long) days.push(ctDateStr(t.start_date_long));
-    return days;
-  };
-  let tomorrow = active.filter((t) => dueOrStartCT(t).includes(tmrwStr));
-  if (!tomorrow.length) {
-    tomorrow = active
-      .filter((t) => t.end_date_long)
-      .sort((a, b) => a.end_date_long - b.end_date_long)
-      .slice(0, 5);
-  }
-
-  const pct = tasks.length ? Math.round((byStatus.completed.length / tasks.length) * 100) : 0;
-  const bar = '█'.repeat(Math.round(pct / 10)) + '░'.repeat(10 - Math.round(pct / 10));
-
-  const line = (t) => {
-    const due = t.end_date ? ` _(due ${t.end_date})_` : '';
-    return `  • ${t.name}${due}\n`;
-  };
-
-  let msg = `📋 *Ambassador Scaling Project — Daily Update*\n`;
-  msg += `${today}\n`;
-  msg += `─────────────────────────────\n`;
-  msg += `Progress: ${bar} ${pct}% (${byStatus.completed.length}/${tasks.length} tasks complete)\n\n`;
-
-  // ── What got done today ──
-  msg += `✅ *Completed Today (${completedToday.length})*\n`;
-  if (completedToday.length) {
-    completedToday.forEach((t) => { msg += `  • ${t.name}\n`; });
-  } else {
-    msg += `  • No tasks marked complete today\n`;
-  }
-  msg += '\n';
-
-  if (byStatus.overdue.length) {
-    msg += `🔴 *Overdue (${byStatus.overdue.length})*\n`;
-    byStatus.overdue.forEach((t) => { msg += line(t); });
-    msg += '\n';
-  }
-  if (byStatus.inprogress.length) {
-    msg += `🟡 *In Progress (${byStatus.inprogress.length})*\n`;
-    byStatus.inprogress.forEach((t) => { msg += line(t); });
-    msg += '\n';
-  }
-
-  // ── What's next: tomorrow's steps ──
-  msg += `➡️ *Next Steps — Tomorrow (${tomorrow.length})*\n`;
-  if (tomorrow.length) {
-    tomorrow.forEach((t) => { msg += line(t); });
-  } else {
-    msg += `  • Nothing scheduled — all caught up\n`;
-  }
-  msg += '\n';
-
-  msg += `─────────────────────────────\n`;
-  msg += `📊 ${byStatus.completed.length} done · ${byStatus.inprogress.length} in progress · ${byStatus.open.length + byStatus.onhold.length} not started · ${byStatus.overdue.length} overdue\n`;
-  msg += `🎯 Go-live: July 18, 2026`;
-  return msg;
 }
 
 // ─── Post to Cliq ─────────────────────────────────────────────────────────────
