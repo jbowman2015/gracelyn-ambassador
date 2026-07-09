@@ -88,6 +88,16 @@ naming conflicts: `ANTHROPIC_API_KEY` (not `CLAUDE_API_KEY`),
 2. Nine Support Tickets SLA field API names — identical between Agent 4 and Agent 5.
 3. `escalation_timestamp` webhook string == `Escalation_Timestamp` CRM value, exactly.
 
+## ⚠️ Deploying — `env_variables` REPLACES, does not merge (read each function's DEPLOY.md)
+`catalyst-config.json`'s `env_variables` block is pushed on every `catalyst deploy`
+and **overwrites** whatever is currently set in Catalyst — it is not a merge. The
+committed, safe-to-push state is `{}`. Deploying while it's still `{}` **wipes the
+real secrets** and breaks the function silently (this already happened once — the
+nightly Cliq summary went down with a Zoho `invalid_client` error after a deploy
+ran with a scrubbed config). Before running `catalyst deploy` for any function,
+read that function's `DEPLOY.md` and follow its fill-in → deploy → verify →
+scrub sequence exactly. Never skip the verification curl in step 3.
+
 ## Conventions
 - Every Catalyst function is Advanced I/O: `index.js` exports an Express `app`,
   with a `catalyst-config.json` (`type: advancedio`, `stack: node18`) + `package.json`.
