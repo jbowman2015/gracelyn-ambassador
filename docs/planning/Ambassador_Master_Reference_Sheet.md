@@ -71,24 +71,24 @@ The source documents use conflicting names for several credentials. **Pick the c
 
 ## 2. WorkDrive folder IDs (capture by hand)
 
-| Variable | Folder | ID | Status |
-|---|---|---|---|
-| `WORKDRIVE_FOLDER_01_ID` | 01 Applications | `unrxh653f5e303ed149c3817d5aba432a5dee` | ✅ |
-| `WORKDRIVE_FOLDER_02_ID` | 02 Approved Social Content | `unrxh6db6782ab5c942e5888f3ae852f9db77` | ✅ |
-| `WORKDRIVE_FOLDER_03_ID` | 03 Ambassador Welcome Kits | `unrxh44c35ddd817845bbbd90e0b23ad7dd8f` | ✅ |
-| `WORKDRIVE_FOLDER_04_ID` | 04 Content Calendar Assets | `unrxh9abb44ede108493dabf39d170dcfc872` | ✅ |
-| `WORKDRIVE_FOLDER_05_ID` | 05 Story Files | `unrxhf7b490a6610c4a33bcb333bf64381a29` | ✅ |
-| `WORKDRIVE_FOLDER_06_ID` | 06 Lead Magnets | `unrxha083e89a4c5c4f6ba2f471ca281877ba` | ✅ |
-| — | 06 / k12-educator | `unrxh5135bf06592c4c8c984d96fea5ef2aff` | ✅ |
-| — | 06 / early-childhood | `unrxh3de6fa6bf4934870ad72ad50cfd5e76a` | ✅ |
-| — | 06 / faith-community | `unrxhe2fafc74f0be4939ad46f539f7c2d1c7` | ✅ |
-| — | 06 / youth-serving | `unrxh351bad2a57bb49e1bafd64ff4f29f70d` | ✅ |
-| `WORKDRIVE_FOLDER_07_ID` | 07 Analytics and Reports | `unrxh155ff62f74eb4018b0038fad6ee0437e` | ✅ |
-| `WORKDRIVE_FOLDER_08_ID` | 08 Brand Assets | `unrxh7fa66c36a3874908a1f280237e52a815` | ✅ |
-| `WORKDRIVE_FOLDER_09_ID` | 09 VIP Prospect Briefings | `unrxhde78f41305d1413f9e841948efecc3ae` | ✅ |
+| Variable | Folder | ID | Link | Status |
+|---|---|---|---|---|
+| `WORKDRIVE_FOLDER_01_ID` | 01 Applications | `unrxh653f5e303ed149c3817d5aba432a5dee` | https://workdrive.zoho.com/folder/unrxh653f5e303ed149c3817d5aba432a5dee | ✅ |
+| `WORKDRIVE_FOLDER_02_ID` | 02 Approved Social Content | `unrxh6db6782ab5c942e5888f3ae852f9db77` | https://workdrive.zoho.com/folder/unrxh6db6782ab5c942e5888f3ae852f9db77 | ✅ |
+| `WORKDRIVE_FOLDER_03_ID` | 03 Ambassador Welcome Kits | `unrxh44c35ddd817845bbbd90e0b23ad7dd8f` | https://workdrive.zoho.com/folder/unrxh44c35ddd817845bbbd90e0b23ad7dd8f | ✅ |
+| `WORKDRIVE_FOLDER_04_ID` | 04 Content Calendar Assets | `unrxh9abb44ede108493dabf39d170dcfc872` | https://workdrive.zoho.com/folder/unrxh9abb44ede108493dabf39d170dcfc872 | ✅ |
+| `WORKDRIVE_FOLDER_05_ID` | 05 Story Files | `unrxhf7b490a6610c4a33bcb333bf64381a29` | https://workdrive.zoho.com/folder/unrxhf7b490a6610c4a33bcb333bf64381a29 | ✅ |
+| `WORKDRIVE_FOLDER_06_ID` | 06 Lead Magnets | `unrxha083e89a4c5c4f6ba2f471ca281877ba` | https://workdrive.zoho.com/folder/unrxha083e89a4c5c4f6ba2f471ca281877ba | ✅ |
+| — | 06 / k12-educator | `unrxh5135bf06592c4c8c984d96fea5ef2aff` | https://workdrive.zoho.com/folder/unrxh5135bf06592c4c8c984d96fea5ef2aff | ✅ |
+| — | 06 / early-childhood | `unrxh3de6fa6bf4934870ad72ad50cfd5e76a` | https://workdrive.zoho.com/folder/unrxh3de6fa6bf4934870ad72ad50cfd5e76a | ✅ |
+| — | 06 / faith-community | `unrxhe2fafc74f0be4939ad46f539f7c2d1c7` | https://workdrive.zoho.com/folder/unrxhe2fafc74f0be4939ad46f539f7c2d1c7 | ✅ |
+| — | 06 / youth-serving | `unrxh351bad2a57bb49e1bafd64ff4f29f70d` | https://workdrive.zoho.com/folder/unrxh351bad2a57bb49e1bafd64ff4f29f70d | ✅ |
+| `WORKDRIVE_FOLDER_07_ID` | 07 Analytics and Reports | `unrxh155ff62f74eb4018b0038fad6ee0437e` | https://workdrive.zoho.com/folder/unrxh155ff62f74eb4018b0038fad6ee0437e | ✅ |
+| `WORKDRIVE_FOLDER_08_ID` | 08 Brand Assets | `unrxh7fa66c36a3874908a1f280237e52a815` | https://workdrive.zoho.com/folder/unrxh7fa66c36a3874908a1f280237e52a815 | ✅ |
+| `WORKDRIVE_FOLDER_09_ID` | 09 VIP Prospect Briefings | `unrxhde78f41305d1413f9e841948efecc3ae` | https://workdrive.zoho.com/folder/unrxhde78f41305d1413f9e841948efecc3ae | ✅ |
 
 Folders 06, 08, 09 live at WorkDrive → General → Operations → Ambassador Scaling Project
-(parent folder `unrxhcee68ae9c260486e81ed8aee8db218e2`, created 2026-07-08).
+(parent folder `unrxhcee68ae9c260486e81ed8aee8db218e2`, https://workdrive.zoho.com/folder/unrxhcee68ae9c260486e81ed8aee8db218e2, created 2026-07-08).
 
 ---
 
