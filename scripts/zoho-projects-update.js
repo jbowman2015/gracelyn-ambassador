@@ -8,7 +8,9 @@
  *     --status "inprogress" \
  *     --comment "Started writing validation function — checking CRM field metadata API"
  *
- * Statuses: open | inprogress | completed | onhold
+ * Statuses: open | inprogress | inreview | completed
+  (completed maps to this project's "Tested and Deployed - Monitoring" status —
+  there is no separate plain "Completed" status in this Zoho Projects workflow)
  *
  * Called automatically by Claude Code whenever a task milestone is reached.
  */
@@ -49,7 +51,7 @@ async function main() {
     process.exit(1);
   }
   if (!args.status) {
-    console.error('--status is required: open | inprogress | completed | onhold');
+    console.error('--status is required: open | inprogress | inreview | completed');
     process.exit(1);
   }
 

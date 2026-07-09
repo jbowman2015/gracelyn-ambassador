@@ -111,12 +111,17 @@ async function findTask(nameFragment) {
 
 // ─── Status update ────────────────────────────────────────────────────────────
 
-// Zoho Projects status IDs for this project — fetched once and reused
+// This project uses a CUSTOM status workflow, not Zoho's generic four statuses.
+// IDs confirmed live from actual task data on 2026-07-09 (there is no plain
+// "Completed"/"Closed" status in use yet — "Tested and Deployed - Monitoring"
+// is this project's done-state). If Zoho Projects reports an unrecognized
+// status name back, re-derive IDs from a fresh task fetch rather than guessing.
 const STATUS_MAP = {
-  'open':        { name: 'Open',        id: '1776658000000016068' },
-  'inprogress':  { name: 'In Progress', id: '1776658000000016070' },
-  'completed':   { name: 'Completed',   id: '1776658000000016072' },
-  'onhold':      { name: 'On Hold',     id: '1776658000000016074' },
+  'open':        { name: 'Open',                            id: '1776658000000016068' },
+  'inprogress':  { name: 'In Progress',                      id: '1776658000000031001' },
+  'inreview':    { name: 'In Review',                        id: '1776658000000031003' },
+  'completed':   { name: 'Tested and Deployed - Monitoring', id: '1776658000006156006' },
+  'deployed':    { name: 'Tested and Deployed - Monitoring', id: '1776658000006156006' },
 };
 
 function resolveStatus(input) {
@@ -132,12 +137,12 @@ function resolveStatus(input) {
 /**
  * Update a task's status.
  * @param {string} taskId   — Zoho task id_string
- * @param {string} status   — 'open' | 'inprogress' | 'completed' | 'onhold'
+ * @param {string} status   — 'open' | 'inprogress' | 'inreview' | 'completed'
  */
 async function updateTaskStatus(taskId, status) {
   const token = await getToken();
   const s = resolveStatus(status);
-  if (!s) throw new Error(`Unknown status: ${status}. Use: open, inprogress, completed, onhold`);
+  if (!s) throw new Error(`Unknown status: ${status}. Use: open, inprogress, inreview, completed`);
   const res = await httpsRequest({
     hostname: 'projectsapi.zoho.com',
     path: `/restapi/portal/${PORTAL_ID}/projects/${PROJECT_ID}/tasks/${taskId}/`,
@@ -146,7 +151,14 @@ async function updateTaskStatus(taskId, status) {
       Authorization: `Zoho-oauthtoken ${token}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-  }, querystring.stringify({ status_id: s.id }));
+    // IMPORTANT: the param is `custom_status`, NOT `status_id`. Zoho silently
+    // ignores an unrecognized param and 200s without changing anything — this
+    // caused a status update to appear to succeed while doing nothing.
+  }, querystring.stringify({ custom_status: s.id }));
+  const updated = res.body && res.body.tasks && res.body.tasks[0];
+  if (updated && updated.status && updated.status.name !== s.name) {
+    throw new Error(`Status update did not take: expected "${s.name}", Zoho reports "${updated.status.name}". A workflow/blueprint rule may be blocking this transition.`);
+  }
   return res.body;
 }
 
