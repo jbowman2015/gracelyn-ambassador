@@ -45,8 +45,9 @@ alias spellings still accepted). Full program-wide list: `.env.example`.
 1. Catalyst Console → project **Ambassador-Scaling-Project** → Configurations →
    Environment Variables → add the values above.
 2. From the repo: `cd functions/agent1C && npm install`
-3. `catalyst deploy` (deploys the targets in `catalyst.json`: `agent5A`, `agent0`,
-   `agent1C`, `cliqSummaryFunction`).
+3. `catalyst deploy` (deploys every target listed in `catalyst.json` —
+   confirm the current list before running; it now also includes `agent2`
+   and `agent3` alongside `agent5A`, `agent0`, `agent1C`, `cliqSummaryFunction`).
 
 **Alternative — `catalyst-config.json`** (per `CLAUDE.md`): put the values in this
 function's `catalyst-config.json` `env_variables` **locally**, `catalyst deploy`, then

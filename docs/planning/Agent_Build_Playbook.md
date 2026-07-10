@@ -8,7 +8,7 @@ build session starts without re-deriving context. **One agent per session.**
 - [x] **Agent 0** — Research & Intelligence *(on `main`)*
 - [ ] **Agent 1A** — Database Email
 - [x] **Agent 1B** — Social Outreach *(on `main`)*
-- [ ] **Agent 1C** — Paid Advertising
+- [x] **Agent 1C** — Paid Advertising
 - [ ] **Agent 1D** — Lead Capture
 - [x] **Agent 2** — Onboarding *(most complex)*
 - [x] **Agent 3** — Engagement
