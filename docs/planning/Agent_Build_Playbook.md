@@ -13,7 +13,7 @@ build session starts without re-deriving context. **One agent per session.**
 - [x] **Agent 2** — Onboarding *(most complex)*
 - [x] **Agent 3** — Engagement
 - [x] **Agent 4** — Compliance Oversight
-- [ ] **Agent 5** — Ambassador Support
+- [x] **Agent 5** — Ambassador Support
 - [x] **Agent 6** — Story Content Intake
 
 All remaining agents depend on **Agent 0** (now on `main`), not on each other — so after

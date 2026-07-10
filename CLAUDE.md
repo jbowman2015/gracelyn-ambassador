@@ -128,10 +128,11 @@ After deploy, configure Job Scheduling in the Catalyst Console per each agent's 
 - ✅ Agent 3 (Engagement) — built, tested, 16 CRM fields created live on `Ambassadors` (sprint + engagement + VIP tier)
 - ✅ Agent 2 (Onboarding) — built, tested, 23 CRM fields created live on `Ambassadors` (compliance/win-back/auto-approve/VIP)
 - ✅ Agent 4 (Compliance Oversight) — built, tested, `Support_Tickets` module + 12 fields created live (HARD STOP #1 resolved; Coordination #2/#3 confirmed zero-divergence)
+- ✅ Agent 5 (Ambassador Support) — built, tested; concurrent build with Agent 4 — found `Support_Tickets` and all 9 SLA fields already created live by that session, matching Agent 5's expected field names exactly (no divergence, no duplicate fields created)
 - ✅ Agent 6 (Story Content Intake) — built, tested; daily buffer-monitoring Catalyst job only (story intake itself is a native Zoho Flow, not deployed code)
 - ✅ Agent 1B (Social Outreach) — built, tested, 1 new CRM field (`High_Engagement_Flag`) + `Social_Post_Logs` module created live on `Ambassador_Leads`
 - ✅ Agent 1C (Paid Advertising) — built, tested, kill switch verified; Ad Campaign Log module still needs to be created live by Parmeet before go-live
-- ⬜ Agents 1A, 1D, 5 — to build against `docs/design/`
+- ⬜ Agents 1A, 1D — to build against `docs/design/`
 
 > **Building the next agent?** Use `docs/planning/Agent_Build_Playbook.md` — it has the
 > order/status checklist, the shared "Standard Build Rules", and a ready-to-paste session

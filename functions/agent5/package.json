@@ -1,0 +1,13 @@
+{
+  "name": "agent5-ambassador-support",
+  "version": "1.0.0",
+  "description": "Ambassador Scaling Program — Agent 5 Ambassador Support (portal chat, OpenAI knowledge base, tiered escalation routing)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node __tests__/agent5.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "zcatalyst-sdk-node": "latest"
+  }
+}
