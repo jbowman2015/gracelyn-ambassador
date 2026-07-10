@@ -14,7 +14,7 @@ build session starts without re-deriving context. **One agent per session.**
 - [x] **Agent 3** — Engagement
 - [ ] **Agent 4** — Compliance Oversight
 - [ ] **Agent 5** — Ambassador Support
-- [ ] **Agent 6** — Story Content Intake
+- [x] **Agent 6** — Story Content Intake
 
 All remaining agents depend on **Agent 0** (now on `main`), not on each other — so after
 Agent 0 they can be built in any order (the order above is just a sensible default). Merge
