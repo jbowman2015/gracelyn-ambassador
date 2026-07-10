@@ -7,14 +7,14 @@ build session starts without re-deriving context. **One agent per session.**
 - [x] **Agent 5A** — Setup Validation (go/no-go gate)
 - [x] **Agent 0** — Research & Intelligence *(on `main`)*
 - [ ] **Agent 1A** — Database Email
-- [ ] **Agent 1B** — Social Outreach
-- [ ] **Agent 1C** — Paid Advertising
+- [x] **Agent 1B** — Social Outreach *(on `main`)*
+- [x] **Agent 1C** — Paid Advertising
 - [ ] **Agent 1D** — Lead Capture
 - [x] **Agent 2** — Onboarding *(most complex)*
 - [x] **Agent 3** — Engagement
 - [ ] **Agent 4** — Compliance Oversight
 - [x] **Agent 5** — Ambassador Support
-- [ ] **Agent 6** — Story Content Intake
+- [x] **Agent 6** — Story Content Intake
 
 All remaining agents depend on **Agent 0** (now on `main`), not on each other — so after
 Agent 0 they can be built in any order (the order above is just a sensible default). Merge

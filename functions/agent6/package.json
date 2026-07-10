@@ -1,0 +1,13 @@
+{
+  "name": "agent6-story-content-intake",
+  "version": "1.0.0",
+  "description": "Ambassador Scaling Program — Agent 6 Story Content Intake (daily WorkDrive Folder 05 buffer monitoring; story intake itself runs as a native Zoho Flow)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node __tests__/agent6.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "zcatalyst-sdk-node": "latest"
+  }
+}

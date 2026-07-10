@@ -4,9 +4,12 @@
     "targets": [
       "agent5A",
       "agent0",
+      "agent1B",
       "agent2",
       "agent3",
       "agent5",
+      "agent6",
+      "agent1C",
       "cliqSummaryFunction"
     ]
   }
