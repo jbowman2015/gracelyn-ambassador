@@ -10,7 +10,7 @@ build session starts without re-deriving context. **One agent per session.**
 - [ ] **Agent 1B** — Social Outreach
 - [ ] **Agent 1C** — Paid Advertising
 - [ ] **Agent 1D** — Lead Capture
-- [ ] **Agent 2** — Onboarding *(most complex)*
+- [x] **Agent 2** — Onboarding *(most complex)*
 - [x] **Agent 3** — Engagement
 - [ ] **Agent 4** — Compliance Oversight
 - [ ] **Agent 5** — Ambassador Support
