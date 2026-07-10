@@ -12,7 +12,7 @@ build session starts without re-deriving context. **One agent per session.**
 - [ ] **Agent 1D** — Lead Capture
 - [x] **Agent 2** — Onboarding *(most complex)*
 - [x] **Agent 3** — Engagement
-- [ ] **Agent 4** — Compliance Oversight
+- [x] **Agent 4** — Compliance Oversight
 - [ ] **Agent 5** — Ambassador Support
 - [x] **Agent 6** — Story Content Intake
 
