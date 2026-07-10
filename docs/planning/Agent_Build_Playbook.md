@@ -11,7 +11,7 @@ build session starts without re-deriving context. **One agent per session.**
 - [ ] **Agent 1C** — Paid Advertising
 - [ ] **Agent 1D** — Lead Capture
 - [ ] **Agent 2** — Onboarding *(most complex)*
-- [ ] **Agent 3** — Engagement
+- [x] **Agent 3** — Engagement
 - [ ] **Agent 4** — Compliance Oversight
 - [ ] **Agent 5** — Ambassador Support
 - [ ] **Agent 6** — Story Content Intake
@@ -143,6 +143,15 @@ prompt tells the session to read **§ Standard Build Rules** (this file) + that 
 - **Function/branch:** `agent6` · `claude/agent-6-story-intake`
 - **Notes:** Feeds Agent 3. **Coordination #1:** the `ROLE_CATEGORY` header it writes on the 2nd
   line of every story file must match the label Agent 3 reads — keep them identical.
+  **Confirmed 2026-07-10 by the Agent 3 session:** the literal header is
+  `ROLE_CATEGORY: <value>` (uppercase, underscore, colon-space) as the file's exact
+  2nd line — see `functions/agent3/manifest.js` `ROLE_CATEGORY_HEADER` /
+  `ROLE_CATEGORY_ANY` and `functions/agent3/story.js` `parseRoleCategory`. Value must
+  be one of the six controlled role categories (K12 Educator, Early Childhood, Faith
+  Community, Youth Serving Professional, Mission Aligned Influencer, Gracelyn
+  Community) or the literal `Any` for a category-agnostic story. Filenames must match
+  `Story_YYYY-MM-DD.txt` in WorkDrive Folder 05 — Agent 3's selection sorts on this
+  filename date.
 - **Zoho task fragment:** `Agent 6`.
 
 ---
