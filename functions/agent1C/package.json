@@ -1,0 +1,13 @@
+{
+  "name": "agent1c-paid-advertising",
+  "version": "1.0.0",
+  "description": "Ambassador Scaling Program — Agent 1C Paid Advertising (Meta/Google campaign spend monitoring, kill switch, weekly performance and audience review)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node __tests__/agent1C.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "zcatalyst-sdk-node": "latest"
+  }
+}
