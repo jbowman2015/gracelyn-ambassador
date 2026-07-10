@@ -186,9 +186,18 @@ const CRM_FIELDS = {
       { api: 'Motivation_Discovery_Response', type: 'textarea' },
       { api: 'Ambassador_Role_Category', type: 'picklist' },
       { api: 'Audience_Track', type: 'picklist' },
+      // Agent 3 (v2.1 sprint) fields — reconciled live 2026-07-10 on the `Ambassadors`
+      // module. Two diverge from the design-doc name because the 25-char field-label
+      // limit forced a shorter label, and Zoho generates api_name from that label:
+      //   Activation_Sprint_Start_Date -> Sprint_Start_Date
+      //   Alternative_Track_Entry_Date -> Alt_Track_Entry_Date
+      // See functions/agent3/manifest.js AMBASSADOR_FIELDS for the canonical map.
+      { api: 'Activation_Sprint_Week', type: 'number' },
+      { api: 'Sprint_Start_Date', type: 'date' },
+      { api: 'Sprint_Referral_Submitted', type: 'boolean' },
       { api: 'Last_Engagement_Date', type: 'date' },
       { api: 'Engagement_Track', type: 'picklist' },
-      { api: 'Alternative_Track_Entry_Date', type: 'date' },
+      { api: 'Alt_Track_Entry_Date', type: 'date' },
       { api: 'Alternative_Track_Month', type: 'number' },
       { api: 'Days_Since_Last_Referral', type: 'number' },
       { api: 'Content_Week_Position', type: 'number' },

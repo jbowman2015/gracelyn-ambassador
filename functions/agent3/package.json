@@ -1,0 +1,13 @@
+{
+  "name": "agent3-engagement",
+  "version": "1.0.0",
+  "description": "Ambassador Scaling Program — Agent 3 Engagement (30-Day Activation Sprint, weekly engagement cycle, story selection by role category, dynamic VIP tiers)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node __tests__/agent3.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "zcatalyst-sdk-node": "latest"
+  }
+}
