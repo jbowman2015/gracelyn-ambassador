@@ -129,16 +129,22 @@ Confirm each **from Zoho** (`GET /crm/v6/settings/modules`) — do not assume th
 ## 5. Policy thresholds (Dr. Flippen confirms)
 
 ⭐ = the 5 most sensitive (Zoho task JP1-T320, "Confirm 5 sensitive policy environment
-variables"). All five starred rows are currently **proposed** values only, not yet
-confirmed — get explicit sign-off before treating any of them as final. `MISSION_KEYWORDS`'s
-proposed list comes from `docs/design/Gracelyn_Agent_1B_Social_Outreach_v2.md` (owned by
-Parmeet, not Dr. Flippen — she updates it directly without a code change).
+variables"). `MISSION_KEYWORDS`'s proposed list comes from
+`docs/design/Gracelyn_Agent_1B_Social_Outreach_v2.md` (owned by Parmeet, not Dr. Flippen —
+she updates it directly without a code change).
+
+**#1 confirmed 2026-07-13:** the program already auto-approves ambassadors once they sign
+compliance documents and complete training — there is no MANUAL phase to start in.
+`APPROVAL_MODE=AUTO` from day one. That makes **#2 not applicable**: the 800/1,000 counts
+only mattered as the trigger for a MANUAL→AUTO switch that isn't happening (there's nothing to
+flip). Still confirmed/recorded below since Agent 2's threshold-alert flow references them, but
+they no longer gate anything. Remaining open: **#3, #4, #5**.
 
 | Env variable | Value | Status |
 |---|---|---|
-| ⭐ `APPROVAL_MODE` | MANUAL (flip to AUTO at 1,000) | Proposed — pending sign-off |
-| `ACTIVE_AMBASSADOR_THRESHOLD_ALERT` | 800 | Proposed — pending sign-off |
-| ⭐ `ACTIVE_AMBASSADOR_THRESHOLD_AUTO` | 1,000 | Proposed — pending sign-off |
+| ⭐ `APPROVAL_MODE` | **AUTO** | ✅ Confirmed 2026-07-13 — current real-world process (auto-approve after compliance docs signed + training complete) |
+| `ACTIVE_AMBASSADOR_THRESHOLD_ALERT` | 800 | N/A — no MANUAL phase to alert toward; kept for Agent 2's milestone alert only |
+| ⭐ `ACTIVE_AMBASSADOR_THRESHOLD_AUTO` | 1,000 | N/A — moot, program starts in AUTO (see #1) |
 | ⭐ `NON_REFERRAL_DAYS_THRESHOLD` | 90 | Proposed — pending sign-off |
 | ⭐ `DORMANT_DAYS_THRESHOLD` | 30 | Proposed — pending sign-off |
 | `VIP_HIGH_PCT_SMALL` / `VIP_STD_PCT_SMALL` | 2.5% / 5% | Proposed — pending sign-off |

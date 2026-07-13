@@ -129,9 +129,9 @@ const FORM_VARS = [
 // ─── Policy thresholds (Dr. Flippen confirms) ─────────────────────────────────
 // expected: the fixed value from the design docs (null = Dr. Flippen defines, presence-only).
 const POLICY_VARS = [
-  { name: 'APPROVAL_MODE',                     expected: 'MANUAL', severity: 'critical' },
-  { name: 'ACTIVE_AMBASSADOR_THRESHOLD_ALERT', expected: '800',    severity: 'critical' },
-  { name: 'ACTIVE_AMBASSADOR_THRESHOLD_AUTO',  expected: '1000',   severity: 'critical' },
+  { name: 'APPROVAL_MODE',                     expected: 'AUTO',   severity: 'critical' },
+  { name: 'ACTIVE_AMBASSADOR_THRESHOLD_ALERT', expected: '800',    severity: 'warn' },
+  { name: 'ACTIVE_AMBASSADOR_THRESHOLD_AUTO',  expected: '1000',   severity: 'warn' },
   { name: 'NON_REFERRAL_DAYS_THRESHOLD',       expected: '90',     severity: 'critical' },
   { name: 'DORMANT_DAYS_THRESHOLD',            expected: '30',     severity: 'critical' },
   { name: 'VIP_HIGH_PCT_SMALL',                expected: '2.5',    severity: 'warn' },

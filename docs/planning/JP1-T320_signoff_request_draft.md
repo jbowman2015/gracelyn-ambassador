@@ -1,23 +1,23 @@
-Subject: Sign-off needed — 5 policy values before Ambassador Scaling go-live (JP1-T320)
+Subject: Sign-off needed — 3 policy values before Ambassador Scaling go-live (JP1-T320)
 
 Dr. Flippen, Parmeet —
 
-Five environment variables control ambassador-facing behavior across the program and can't
-ship with developer-guessed defaults. I've proposed values below (pulled from the design
-docs) — I need an explicit yes/adjust on each before we lock them in and deploy.
+Quick update first: APPROVAL_MODE is resolved — since we already auto-approve ambassadors
+once they sign compliance documents and complete training, there's no MANUAL phase to start
+in, so this launches as APPROVAL_MODE=AUTO from day one. That also makes the 1,000-ambassador
+threshold moot (it only mattered as a MANUAL→AUTO switch trigger, and there's no switch to
+make). Both are updated in the repo and the Zoho board.
 
-**For Dr. Flippen — 4 program-policy thresholds:**
+Three environment variables still need your sign-off before they can ship:
+
+**For Dr. Flippen — 2 program-policy thresholds:**
 
 | # | Variable | Proposed value | What it controls |
 |---|---|---|---|
-| 1 | `APPROVAL_MODE` | **MANUAL** initially, flips to AUTO once we hit 1,000 active ambassadors | Whether Agent 2 auto-approves new ambassador applications or a human reviews each one |
-| 2 | `ACTIVE_AMBASSADOR_THRESHOLD_AUTO` | **1,000** | The active-ambassador count that triggers the MANUAL → AUTO switch above |
 | 3 | `NON_REFERRAL_DAYS_THRESHOLD` | **90 days** | How long an ambassador can go without a referral before Agent 3 moves them to the "Alternative" engagement track |
 | 4 | `DORMANT_DAYS_THRESHOLD` | **30 days** | How long with no activity before Agent 3 flags an ambassador dormant and starts re-engagement |
 
-Reply with "approved" or tell me what to change for each. (There's also an
-`ACTIVE_AMBASSADOR_THRESHOLD_ALERT` = 800 — the "we're approaching the switch" warning — using
-the same proposed-value pattern; flag if you want that one called out separately too.)
+Reply with "approved" or tell me what to change for each.
 
 **For Parmeet — 1 keyword list you'll own and can update anytime without a code change:**
 
