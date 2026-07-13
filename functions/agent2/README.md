@@ -110,7 +110,8 @@ Canonical names (aliases accepted for design-doc spellings):
 - **Zoho CRM:** `ZOHO_CRM_*` trio
 - **Zoho Mail:** `ZOHO_MAIL_*` trio + `ZOHO_MAIL_ACCOUNT_ID` (not in the design
   doc's env table — required by the Zoho Mail send API; flag for Parmeet) +
-  `ZOHO_MAIL_FROM_ADDRESS` (default `ambassadors@gracelyn.edu`)
+  `AMBASSADOR_MAIL_FROM_ADDRESS` (default `ambassadors@gracelyn.edu` — canonical
+  name shared with Agent 3, JP1-T349)
 - **Zoho WorkDrive:** `ZOHO_WORKDRIVE_*` trio, `WORKDRIVE_FOLDER_03_ID` (welcome
   kits), `WORKDRIVE_FOLDER_08_ID` (brand voice for VIP personalization)
 - **WordPress:** `WORDPRESS_API_BASE_URL` (alias `WORDPRESS_SITE_URL`),

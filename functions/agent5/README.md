@@ -80,7 +80,7 @@ for the full table and the three pre-deploy hard stops.
   `OPENAI_POLL_MAX_ATTEMPTS` (15)
 - **Zoho CRM:** `ZOHO_CRM_*` trio
 - **Zoho Mail:** `ZOHO_MAIL_*` trio + `ZOHO_MAIL_ACCOUNT_ID` (not in the design
-  doc's env table) + `ZOHO_MAIL_FROM_ADDRESS` — fallback escalation email only
+  doc's env table) + `AMBASSADOR_MAIL_FROM_ADDRESS` — fallback escalation email only
 - **Zoho WorkDrive:** `ZOHO_WORKDRIVE_*` trio, `WORKDRIVE_FOLDER_08_ID`
 - **WordPress:** `WORDPRESS_API_BASE_URL` (alias `WORDPRESS_SITE_URL`),
   `WP_ADMIN_USER` (alias `WORDPRESS_APP_USERNAME`), `WP_ADMIN_APP_PASSWORD`

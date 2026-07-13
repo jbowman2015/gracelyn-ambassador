@@ -35,7 +35,7 @@ Do not deploy live traffic until Parmeet has confirmed:
 | `ZOHO_MAIL_CLIENT_SECRET` | `<secret>` | **Required.** |
 | `ZOHO_MAIL_REFRESH_TOKEN` | `<secret>` | **Required.** |
 | `ZOHO_MAIL_ACCOUNT_ID` | `<secret>` | **Required.** Not in the design doc's env table — the Zoho Mail send API needs it (same gap Agent 2 flagged). |
-| `ZOHO_MAIL_FROM_ADDRESS` | `ambassadors@gracelyn.edu` | Default. |
+| `AMBASSADOR_MAIL_FROM_ADDRESS` | `ambassadors@gracelyn.edu` | Default. Canonical name shared with Agent 2 + Agent 3 (JP1-T349) — not `ZOHO_MAIL_FROM_ADDRESS`. |
 | `ZOHO_WORKDRIVE_CLIENT_ID` | `<secret>` | WorkDrive OAuth. **Required.** |
 | `ZOHO_WORKDRIVE_CLIENT_SECRET` | `<secret>` | **Required.** |
 | `ZOHO_WORKDRIVE_REFRESH_TOKEN` | `<secret>` | **Required.** |

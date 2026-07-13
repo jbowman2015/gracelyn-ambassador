@@ -44,7 +44,8 @@ const ENV_SPEC = [
   { key: 'ZOHO_MAIL_REFRESH_TOKEN', required: true, group: 'Zoho' },
   { key: 'ZOHO_MAIL_ACCOUNT_ID', required: true, group: 'Zoho',
     note: 'Not in the design doc\'s env table but required by the Zoho Mail send API (POST /api/accounts/{id}/messages). Added during build; flag for Parmeet.' },
-  { key: 'ZOHO_MAIL_FROM_ADDRESS', required: false, group: 'Zoho', note: 'Default ambassadors@gracelyn.edu.' },
+  { key: 'AMBASSADOR_MAIL_FROM_ADDRESS', required: false, group: 'Zoho',
+    note: 'Default ambassadors@gracelyn.edu. Canonical name shared with Agent 3 (JP1-T349) — do NOT use ZOHO_MAIL_FROM_ADDRESS.' },
 
   // Zoho WorkDrive OAuth trio (welcome kit share links; brand voice for VIP copy).
   { key: 'ZOHO_WORKDRIVE_CLIENT_ID', required: true, group: 'Zoho' },

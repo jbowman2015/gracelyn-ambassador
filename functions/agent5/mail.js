@@ -60,7 +60,7 @@ function resetToken() { _token = null; }
 async function sendMail({ to, subject, content }) {
   const accountId = M.getEnv('ZOHO_MAIL_ACCOUNT_ID');
   if (!accountId) throw new Error('ZOHO_MAIL_ACCOUNT_ID is not set');
-  const fromAddress = M.getEnv('ZOHO_MAIL_FROM_ADDRESS') || DEFAULT_FROM;
+  const fromAddress = M.getEnv('AMBASSADOR_MAIL_FROM_ADDRESS') || DEFAULT_FROM;
 
   const token = await getMailToken();
   const payload = JSON.stringify({

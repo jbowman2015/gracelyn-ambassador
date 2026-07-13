@@ -17,6 +17,9 @@
  *   META_ADS_ACCESS_TOKEN        (not META_ACCESS_TOKEN)
  *   Ad spend: SPLIT per-platform — META_DAILY_SPEND_THRESHOLD + GOOGLE_DAILY_SPEND_THRESHOLD
  *             (AGENT1C_DAILY_SPEND_THRESHOLD accepted as an optional combined alias)
+ *   AMBASSADOR_MAIL_FROM_ADDRESS (not ZOHO_MAIL_FROM_ADDRESS — the alias Agent 2
+ *                                 and Agent 5 each independently used; resolved
+ *                                 2026-07-13, JP1-T349)
  *
  * Severity: 'critical' checks block launch (go/no-go). 'warn' checks are surfaced
  * but do not fail the gate. 'info' is advisory.
@@ -44,6 +47,8 @@ const ENV_VARS = [
   { name: 'ZOHO_MAIL_CLIENT_ID',       severity: 'critical', group: 'Zoho' },
   { name: 'ZOHO_MAIL_CLIENT_SECRET',   severity: 'critical', group: 'Zoho' },
   { name: 'ZOHO_MAIL_REFRESH_TOKEN',   severity: 'critical', group: 'Zoho' },
+  { name: 'AMBASSADOR_MAIL_FROM_ADDRESS', severity: 'warn', group: 'Zoho',
+    note: 'Canonical. Do NOT use ZOHO_MAIL_FROM_ADDRESS (JP1-T349). Shared by Agent 2, Agent 3 + Agent 5.' },
   { name: 'ZOHO_WORKDRIVE_CLIENT_ID',     severity: 'critical', group: 'Zoho' },
   { name: 'ZOHO_WORKDRIVE_CLIENT_SECRET', severity: 'critical', group: 'Zoho' },
   { name: 'ZOHO_WORKDRIVE_REFRESH_TOKEN', severity: 'critical', group: 'Zoho' },
