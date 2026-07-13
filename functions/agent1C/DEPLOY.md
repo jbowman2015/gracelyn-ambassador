@@ -26,7 +26,7 @@ financial authority — obtain them from Parmeet, never generate your own.
 | `META_DAILY_SPEND_THRESHOLD` | `<USD>` | Dr. Flippen sets. **Required.** Hard cap. |
 | `GOOGLE_DAILY_SPEND_THRESHOLD` | `<USD>` | Dr. Flippen sets. **Required.** Hard cap. |
 | `PROSPECTS_MODULE_API_NAME` | `Ambassador_Leads` | ✅ Confirmed live by Agent 0 (2026-07-07). |
-| `AD_CAMPAIGN_LOG_MODULE_API_NAME` | `<confirm live>` | **Required.** Parmeet creates this module during pre-build; confirm the api_name via `resolveModuleApiName` before first run. |
+| `AD_CAMPAIGN_LOG_MODULE_API_NAME` | `Ad_Campaign_Logs` | ✅ Created live 2026-07-13 (25 fields, matches `manifest.js` `LOG_FIELDS` exactly — zero divergence). Note: Zoho auto-generated the **plural** api_name from the module label — it is `Ad_Campaign_Logs`, not `Ad_Campaign_Log`. |
 | `MAKE_SPEND_ALERT_WEBHOOK_URL` | `<url>` | Scenario 1 — daily spend alert. |
 | `MAKE_KILL_SWITCH_ALERT_WEBHOOK_URL` | `<url>` | Scenario 3 — kill switch fired. |
 | `MAKE_ADMIN_ALERT_WEBHOOK_URL` | `<url>` | Optional — delivers §7.1 admin alert emails. |

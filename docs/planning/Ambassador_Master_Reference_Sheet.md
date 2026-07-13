@@ -117,7 +117,7 @@ Confirm each **from Zoho** (`GET /crm/v6/settings/modules`) — do not assume th
 | `SUPPORT_TICKETS_MODULE_API_NAME` | Support Tickets (new) | | ⬜ |
 | `REFERRALS_MODULE_API_NAME` | Referrals (renamed from Commissions) | | ⬜ |
 | `ACTIVITY_LOG_MODULE_API_NAME` | Ambassador Activity Log (new) | | ⬜ |
-| `AD_CAMPAIGN_LOG_MODULE_API_NAME` | Ad Campaign Log (new) | | ⬜ |
+| `AD_CAMPAIGN_LOG_MODULE_API_NAME` | Ad Campaign Log (new) | `Ad_Campaign_Logs` | ✅ Confirmed 2026-07-13 |
 | `SOCIAL_POST_LOG_MODULE_API_NAME` | Social Post Log (new) | | ⬜ |
 | `PARA_DB_MODULE_NAME` | Paraprofessional DB | | ⬜ |
 | `STUDENT_ALUMNI_MODULE` | Student / Alumni | | ⬜ |

@@ -18,7 +18,7 @@ never commit real values** (see repo convention in `CLAUDE.md` and `.env.example
 | `REFERRALS_MODULE_API_NAME` | `Referrals` | ✅ Confirmed live. |
 | `SUPPORT_TICKETS_MODULE_API_NAME` | `Support_Tickets` | ✅ Created live this session (see CRM reconciliation below — **HARD STOP #1 resolved**). |
 | `ACTIVITY_LOG_MODULE_API_NAME` | *(leave blank)* | This module does not exist. `Escalated_To_Human` is read from `Ambassadors` instead — see reconciliation notes. |
-| `AD_CAMPAIGN_LOG_MODULE_API_NAME` | *(leave blank until Agent 1C is built)* | Module doesn't exist yet. Checkpoint's "Ad spend alert" section reports "not yet available" until this resolves. |
+| `AD_CAMPAIGN_LOG_MODULE_API_NAME` | `Ad_Campaign_Logs` | ✅ Created live 2026-07-13 for Agent 1C (see `functions/agent1C/DEPLOY.md`). Agent 4 doesn't read any Ad Campaign Log fields directly today — this just lets `checkpoint.js`'s "Ad spend alert" section stop reporting "not yet available" once Agent 1C is deployed and writing to it. |
 | `SLA_TIER2_FIRST_RESPONSE_HOURS` | `24` | Default. Parmeet-adjustable. |
 | `SLA_VIP_FIRST_RESPONSE_HOURS` | `4` | Default (Tier 3 + VIP Priority). |
 | `SLA_TIER2_RESOLUTION_HOURS` | `72` | Default. |
