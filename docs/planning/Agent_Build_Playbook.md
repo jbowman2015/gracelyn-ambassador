@@ -9,7 +9,7 @@ build session starts without re-deriving context. **One agent per session.**
 - [x] **Agent 1A** — Database Email *(on `main`)*
 - [x] **Agent 1B** — Social Outreach *(on `main`)*
 - [x] **Agent 1C** — Paid Advertising
-- [ ] **Agent 1D** — Lead Capture
+- [x] **Agent 1D** — Lead Capture *(on `main`)*
 - [x] **Agent 2** — Onboarding *(most complex)*
 - [x] **Agent 3** — Engagement
 - [x] **Agent 4** — Compliance Oversight
@@ -101,8 +101,12 @@ prompt tells the session to read **§ Standard Build Rules** (this file) + that 
 ### Agent 1D — Lead Capture
 - **Doc:** `docs/design/Gracelyn_Agent_1D_Lead_Capture_v2.md`
 - **Function/branch:** `agent1D` · `claude/agent-1D-lead-capture`
-- **Notes:** Inbound lead capture (Zoho Forms → `Ambassador_Leads`). Dedup against the same
-  `Social_Profile_URL` key Agent 0 uses.
+- **Notes:** Inbound lead capture (Zoho Forms → `Ambassador_Leads`). Dedups on **`Email`**, not
+  `Social_Profile_URL` — corrected 2026-07-13. The lead capture form never collects a social
+  profile URL (design doc §4 Step 1 payload: `first_name, email, role_category, state,
+  lead_magnet_id, utm_source, utm_campaign`); every Social_Profile_URL would be blank, so that
+  key can't distinguish submitters. Design doc §4 Step 5 is explicit: search Ambassador_Leads by
+  email. See `functions/agent1D/manifest.js` `PROSPECT_FIELDS.dedupKey`.
 - **Zoho task fragment:** `Agents 1A` (shared task; tag `Agents 1A-1D`).
 
 ### Agent 2 — Onboarding *(most complex)*

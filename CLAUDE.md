@@ -132,7 +132,13 @@ After deploy, configure Job Scheduling in the Catalyst Console per each agent's 
 - ✅ Agent 6 (Story Content Intake) — built, tested; daily buffer-monitoring Catalyst job only (story intake itself is a native Zoho Flow, not deployed code)
 - ✅ Agent 1B (Social Outreach) — built, tested, 1 new CRM field (`High_Engagement_Flag`) + `Social_Post_Logs` module created live on `Ambassador_Leads`
 - ✅ Agent 1C (Paid Advertising) — built, tested, kill switch verified; Ad Campaign Log module still needs to be created live by Parmeet before go-live
-- ⬜ Agents 1A, 1D — to build against `docs/design/`
+- ✅ Agent 1A (Database Email) — built, tested, re-reconciled at merge time (17 fields, no drift)
+- ✅ Agent 1D (Lead Capture) — built, tested, 5 new CRM fields created live on `Ambassador_Leads`
+  (`Audience_Track`, `Lead_Magnets_Downloaded`, `UTM_Source`, `UTM_Campaign`, `Lead_State`); dedups
+  on `Email` (not `Social_Profile_URL` — see `docs/planning/Agent_Build_Playbook.md` Agent 1D entry)
+
+**All 11 agents are now on `main`.** Remaining work is Week 2: deploy + Job Scheduling per each
+`DEPLOY.md`, plus the Make.com/Zoho Forms/WorkDrive configuration each design doc calls for.
 
 > **Building the next agent?** Use `docs/planning/Agent_Build_Playbook.md` — it has the
 > order/status checklist, the shared "Standard Build Rules", and a ready-to-paste session
