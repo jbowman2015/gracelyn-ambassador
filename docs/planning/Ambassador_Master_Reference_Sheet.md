@@ -128,25 +128,30 @@ Confirm each **from Zoho** (`GET /crm/v6/settings/modules`) — do not assume th
 
 ## 5. Policy thresholds (Dr. Flippen confirms)
 
-| Env variable | Value |
-|---|---|
-| `APPROVAL_MODE` | MANUAL (flip to AUTO at 1,000) |
-| `ACTIVE_AMBASSADOR_THRESHOLD_ALERT` | 800 |
-| `ACTIVE_AMBASSADOR_THRESHOLD_AUTO` | 1,000 |
-| `NON_REFERRAL_DAYS_THRESHOLD` | 90 |
-| `DORMANT_DAYS_THRESHOLD` | 30 |
-| `VIP_HIGH_PCT_SMALL` / `VIP_STD_PCT_SMALL` | 2.5% / 5% |
-| `VIP_HIGH_PCT_LARGE` / `VIP_STD_PCT_LARGE` | 0.5% / 2.5% |
-| `VIP_POPULATION_THRESHOLD` | 10,000 |
-| `VIP_AUDIT_TOLERANCE_PCT` | 10% |
-| `STORY_BUFFER_MINIMUM` | 4 |
-| `WEEKLY_BATCH_SIZE` | 100 |
-| `MISSION_KEYWORDS` | Dr. Flippen defines |
-| `SLA_TIER2_FIRST_RESPONSE_HOURS` | 24 |
-| `SLA_VIP_FIRST_RESPONSE_HOURS` | 4 |
-| `SLA_TIER2_RESOLUTION_HOURS` | 72 |
-| `SLA_VIP_RESOLUTION_HOURS` | 24 |
-| `AGENT1C_DAILY_SPEND_THRESHOLD` | Dr. Flippen sets (see spend-threshold note in §1) |
+⭐ = the 5 most sensitive (Zoho task JP1-T320, "Confirm 5 sensitive policy environment
+variables"). The four starred rows with a value are currently this doc's **proposed**
+defaults, not yet Dr. Flippen–confirmed — get explicit sign-off before treating them as final.
+`MISSION_KEYWORDS` has no proposed default; it's still unresolved.
+
+| Env variable | Value | Status |
+|---|---|---|
+| ⭐ `APPROVAL_MODE` | MANUAL (flip to AUTO at 1,000) | Proposed — pending sign-off |
+| `ACTIVE_AMBASSADOR_THRESHOLD_ALERT` | 800 | Proposed — pending sign-off |
+| ⭐ `ACTIVE_AMBASSADOR_THRESHOLD_AUTO` | 1,000 | Proposed — pending sign-off |
+| ⭐ `NON_REFERRAL_DAYS_THRESHOLD` | 90 | Proposed — pending sign-off |
+| ⭐ `DORMANT_DAYS_THRESHOLD` | 30 | Proposed — pending sign-off |
+| `VIP_HIGH_PCT_SMALL` / `VIP_STD_PCT_SMALL` | 2.5% / 5% | Proposed — pending sign-off |
+| `VIP_HIGH_PCT_LARGE` / `VIP_STD_PCT_LARGE` | 0.5% / 2.5% | Proposed — pending sign-off |
+| `VIP_POPULATION_THRESHOLD` | 10,000 | Proposed — pending sign-off |
+| `VIP_AUDIT_TOLERANCE_PCT` | 10% | Proposed — pending sign-off |
+| `STORY_BUFFER_MINIMUM` | 4 | Proposed — pending sign-off |
+| `WEEKLY_BATCH_SIZE` | 100 | Proposed — pending sign-off |
+| ⭐ `MISSION_KEYWORDS` | — | ⬜ **Unresolved** — no proposed default; Parmeet/Dr. Flippen must define the keyword list |
+| `SLA_TIER2_FIRST_RESPONSE_HOURS` | 24 | Proposed — pending sign-off |
+| `SLA_VIP_FIRST_RESPONSE_HOURS` | 4 | Proposed — pending sign-off |
+| `SLA_TIER2_RESOLUTION_HOURS` | 72 | Proposed — pending sign-off |
+| `SLA_VIP_RESOLUTION_HOURS` | 24 | Proposed — pending sign-off |
+| `AGENT1C_DAILY_SPEND_THRESHOLD` | Dr. Flippen sets (see spend-threshold note in §1) | ⬜ Unresolved |
 
 Dr. Flippen sign-off: ______________________  Date: __________
 
