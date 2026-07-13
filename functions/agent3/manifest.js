@@ -78,6 +78,8 @@ const ENV_SPEC = [
   // Make.com webhooks.
   { key: 'MAKE_AGENT3_WEBHOOK_URL', required: false, group: 'Make.com', note: 'Referral stage-change trigger source.' },
   { key: 'MAKE_AGENT3_ERROR_WEBHOOK', required: false, group: 'Make.com', note: 'Optional delivery for Parmeet alert emails.' },
+  { key: 'MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK', required: false, group: 'Make.com',
+    note: "Fired by monthlyVipRecalculation on completion (population/scoredCount/upgradedCount). Routes via Make.com Scenario 3 to Agent 4 /vip-audit (design §5, Agent 4 HARD STOP #3) — same URL value as functions/agent4/manifest.js' informational note of the same key." },
 
   // Alert + role routing.
   { key: 'PARMEET_ALERT_EMAIL', required: true, group: 'Alerts', note: 'Canonical (matches agent5A/manifest.js). Receives all Agent 3 error alerts.' },

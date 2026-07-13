@@ -116,7 +116,7 @@ const ENV_SPEC = [
   { key: 'MAKE_AGENT4_SLA_BREACH_WEBHOOK', required: false, group: 'Make.com', note: 'Scenario 4.' },
   { key: 'MAKE_AGENT4_COMPLIANCE_WEBHOOK', required: false, group: 'Make.com', note: 'Scenario 5.' },
   { key: 'MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK', required: false, group: 'Make.com',
-    note: 'Informational only — Agent 3 fires this to Make.com Scenario 3, which then POSTs /vip-audit here. HARD STOP #3.' },
+    note: 'Informational only — this function does not read it directly. Agent 3 now fires it live (2026-07-13, see functions/agent3/monthly.js), Make.com Scenario 3 routes it to POST /vip-audit here. Only the Make.com scenario itself remains unbuilt — see functions/agent3/DEPLOY.md.' },
 
   // Alert + role routing.
   { key: 'SUPPORT_COORDINATOR_EMAIL', aliases: ['COORDINATOR_EMAIL'], required: true, group: 'Alerts',

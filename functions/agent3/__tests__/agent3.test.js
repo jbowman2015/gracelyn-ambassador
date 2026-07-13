@@ -273,7 +273,8 @@ function baseEnv() {
   process.env.WORKDRIVE_FOLDER_08_ID = 'f08';
 }
 function clearEnv() {
-  ['PARMEET_ALERT_EMAIL', 'VIP_MANAGER_EMAIL', 'WORKDRIVE_FOLDER_05_ID', 'WORKDRIVE_FOLDER_08_ID', 'SPRINT_GRADUATION_DAYS']
+  ['PARMEET_ALERT_EMAIL', 'VIP_MANAGER_EMAIL', 'WORKDRIVE_FOLDER_05_ID', 'WORKDRIVE_FOLDER_08_ID', 'SPRINT_GRADUATION_DAYS',
+    'MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK']
     .forEach((k) => delete process.env[k]);
 }
 
@@ -520,6 +521,51 @@ test('VIP recalculation upgrades trigger a welcome email; downgrades do not', as
   const vip1 = ambassadors.find((a) => a.id === 'vip1');
   assert.strictEqual(vip1.VIP_Tier, 'High VIP');
   assert.ok(mail.sent.some((m) => m.to === vip1.Email));
+  clearEnv();
+});
+
+test('VIP recalculation fires the Agent 4 completion webhook with population/scoredCount/upgradedCount', async () => {
+  baseEnv();
+  process.env.MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK = 'https://hook.make.com/recalc-complete';
+  const monthly = require('../monthly');
+  const ambassadors = [
+    baseAmbassador({ id: 'vip1', Engagement_Track: 'Standard', Sprint_Start_Date: '2024-01-01', VIP_Tier: 'Not VIP' }),
+    baseAmbassador({ id: 'vip2', Engagement_Track: 'Standard', Sprint_Start_Date: '2024-01-01', VIP_Tier: 'Not VIP' }),
+  ];
+  const zoho = makeFakeZoho(ambassadors, []);
+  const mail = makeFakeMail();
+  const claude = makeFakeClaude();
+  const alerts = makeFakeAlerts();
+  const webhookCalls = [];
+  const fireWebhook = async (url, payload) => { webhookCalls.push({ url, payload }); return { ok: true, status: 200, attempts: 1 }; };
+  const summary = await monthly.monthlyVipRecalculation({
+    deps: { zoho, mail, claude, alerts, fireWebhook, now: () => new Date('2026-07-13T06:30:00Z') },
+  });
+  assert.strictEqual(webhookCalls.length, 1);
+  assert.strictEqual(webhookCalls[0].url, 'https://hook.make.com/recalc-complete');
+  assert.strictEqual(webhookCalls[0].payload.type, 'vip_recalculation_complete');
+  assert.strictEqual(webhookCalls[0].payload.population, 2);
+  assert.strictEqual(webhookCalls[0].payload.scoredCount, summary.scored);
+  assert.strictEqual(webhookCalls[0].payload.upgradedCount, summary.upgraded);
+  assert.strictEqual(summary.recalcCompleteWebhook.ok, true);
+  clearEnv();
+});
+
+test('VIP recalculation never fires or fails on the completion webhook when unset', async () => {
+  baseEnv();
+  const monthly = require('../monthly');
+  const ambassadors = [baseAmbassador({ id: 'vip1', Engagement_Track: 'Standard', Sprint_Start_Date: '2024-01-01' })];
+  const zoho = makeFakeZoho(ambassadors, []);
+  const mail = makeFakeMail();
+  const claude = makeFakeClaude();
+  const alerts = makeFakeAlerts();
+  let called = false;
+  const fireWebhook = async () => { called = true; return { ok: true, status: 200, attempts: 1 }; };
+  const summary = await monthly.monthlyVipRecalculation({
+    deps: { zoho, mail, claude, alerts, fireWebhook, now: () => new Date('2026-07-13T06:30:00Z') },
+  });
+  assert.strictEqual(called, false);
+  assert.strictEqual(summary.recalcCompleteWebhook, null);
   clearEnv();
 });
 

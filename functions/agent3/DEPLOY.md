@@ -29,6 +29,7 @@ never commit real values** (see repo convention in `CLAUDE.md` and `.env.example
 | `WEEKLY_BATCH_SIZE` | `100` | Default. |
 | `MAKE_AGENT3_WEBHOOK_URL` | `<url>` | Referral stage-change trigger source (Scenario 5). Optional. |
 | `MAKE_AGENT3_ERROR_WEBHOOK` | `<url>` | Optional — POSTs Parmeet alert emails for delivery. Falls back to sending via Zoho Mail directly. |
+| `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` | `<url>` | Fired by `monthlyVipRecalculation` on completion (`{ type: 'vip_recalculation_complete', date, population, scoredCount, upgradedCount }`). Feeds Agent 4's post-recalculation audit (Agent 4 HARD STOP #3) via a Make.com scenario — see "Make.com Scenario 3" below. Optional: recalculation still runs and updates VIP tiers with this unset, it just skips notifying Agent 4. |
 | `PARMEET_ALERT_EMAIL` | `<email>` | Receives all Agent 3 error alerts. **Required.** |
 | `VIP_MANAGER_EMAIL` | `<email>` | High VIP personal outreach CRM tasks assigned here. **Required.** |
 
@@ -55,6 +56,20 @@ agent reads.
 `Ambassador_Role_Category`, `Motivation_Tag`, and `VIP_Prospect_Origin` are
 Agent 2's fields and do not exist yet (Agent 2 is unbuilt). Agent 3 reads them
 defensively — empty/false rather than halting — until Agent 2 creates them.
+
+## Make.com Scenario 3 (Agent 4's numbering) — Post-Recalculation Audit
+
+`monthlyVipRecalculation` now fires `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` on
+completion (added 2026-07-13, resolving the code-side half of Agent 4 HARD
+STOP #3). Build the receiving Make.com scenario:
+1. **Webhooks: Custom Webhook** → copy URL → this is
+   `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` (set on Agent 3).
+2. **HTTP: Make a Request** → POST → `<Agent 4 Catalyst function URL>/vip-audit`
+   → Body: pass the incoming webhook body through as-is (`{ population,
+   scoredCount, upgradedCount, date, type }` — `functions/agent4/vipAudit.js`
+   reads exactly these keys).
+3. No email step needed here — `runVipRecalculationAudit` sends its own
+   Parmeet alert (pass/anomaly) via Agent 4's own alerting.
 
 ## How to set them + deploy
 

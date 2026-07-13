@@ -15,6 +15,7 @@ const prompts = require('./prompts');
 const scoring = require('./scoring');
 const referrals = require('./referrals');
 const { moduleAndVerify } = require('./sprint');
+const { fireWebhook } = require('./webhooks');
 
 const defaultZoho = require('./zoho');
 const defaultMail = require('./mail');
@@ -28,6 +29,7 @@ function resolveDeps(input) {
     mail: d.mail || defaultMail,
     claude: d.claude || defaultClaude,
     alerts: d.alerts || defaultAlerts,
+    fireWebhook: d.fireWebhook || fireWebhook,
     now: (d.now && d.now()) || new Date(),
   };
 }
@@ -121,7 +123,7 @@ async function monthlyVipRecalculation(input = {}) {
   const { zoho, mail, claude, alerts, now } = deps;
   const today = dates.dateStr(now);
   const ctx = { runType: 'scheduled', date: today, timeCst: dates.timeCst(now), deps: input.deps };
-  const summary = { scored: 0, upgraded: 0, halted: null, errors: [] };
+  const summary = { scored: 0, upgraded: 0, population: 0, halted: null, errors: [], recalcCompleteWebhook: null };
 
   let moduleApi;
   try {
@@ -145,6 +147,7 @@ async function monthlyVipRecalculation(input = {}) {
     catch (err2) { summary.halted = `population query: ${err2.message}`; return summary; }
   }
   records = records.filter((r) => r[F.engagementTrack]);
+  summary.population = records.length;
 
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000).toISOString();
   const engagementRates = input.engagementRates || new Map();
@@ -203,6 +206,29 @@ async function monthlyVipRecalculation(input = {}) {
       } catch (err) {
         summary.errors.push(`VIP upgrade email generation failed for ${amb.id}: ${err.message}`);
       }
+    }
+  }
+
+  // Design §5: signal Agent 4's post-recalculation audit via Make.com Scenario 3
+  // (functions/agent4/vipAudit.js reads population/scoredCount/upgradedCount from
+  // this payload — welcomeMessagesSent/outreachTasksCreated are not available yet
+  // at this point in the run, so Agent 4's audit treats those two checks as "not
+  // independently verifiable" rather than a failure when omitted). Never blocks
+  // or fails the recalculation itself — fireWebhook never throws and no-ops when
+  // MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK is unset.
+  const recalcWebhookUrl = M.getEnv('MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK');
+  if (recalcWebhookUrl) {
+    const result = await deps.fireWebhook(recalcWebhookUrl, {
+      type: 'vip_recalculation_complete', date: today,
+      population: summary.population, scoredCount: summary.scored, upgradedCount: summary.upgraded,
+    }, { deps: input.deps });
+    summary.recalcCompleteWebhook = result;
+    if (!result.ok) {
+      await alerts.sendAlert({
+        errorType: 'VIP recalculation completion webhook failed', detail: result.error || `HTTP ${result.status}`,
+        action: "Agent 4's post-recalculation audit will not run automatically. Trigger /vip-audit manually.",
+        runType: ctx.runType, date: ctx.date, timeCst: ctx.timeCst,
+      }, { deps: input.deps });
     }
   }
 

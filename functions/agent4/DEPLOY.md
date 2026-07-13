@@ -33,7 +33,7 @@ never commit real values** (see repo convention in `CLAUDE.md` and `.env.example
 | `VIP_HIGH_PCT_LARGE` / `VIP_STD_PCT_LARGE` | `0.5` / `2.5` | Default. Same as Agent 3. |
 | `MAKE_AGENT4_SLA_BREACH_WEBHOOK` | `<url>` | Scenario 4. Optional — falls back to direct coordinator email. |
 | `MAKE_AGENT4_COMPLIANCE_WEBHOOK` | `<url>` | Scenario 5. Optional — falls back to direct coordinator email. |
-| `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` | `<url>` | Informational — Agent 3 fires this to Make.com Scenario 3, which POSTs `/vip-audit` here. **HARD STOP #3 — URL not yet confirmed.** No code in this function reads this var directly. |
+| `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` | `<url>` | Informational — Agent 3 now fires this live on completion (2026-07-13). Make.com Scenario 3 (not yet built — see `functions/agent3/DEPLOY.md`) routes it to POST `/vip-audit` here. No code in this function reads this var directly. |
 | `SUPPORT_COORDINATOR_EMAIL` | `<email>` | Canonical (alias: `COORDINATOR_EMAIL`, the design doc's name). **Required.** |
 | `PARMEET_ALERT_EMAIL` | `<email>` | **Required.** |
 | `VIP_MANAGER_EMAIL` | `<email>` | **Required.** CC'd on VIP breach escalations. |
@@ -81,9 +81,11 @@ against the real API — verified via a dry run with injected deps, matching
 the request shape the setup session's MCP calls used successfully). Only the
 deployed function's own OAuth self-client remains — see the section below.
 
-**HARD STOP item (3)** — Agent 3's recalculation-completion webhook URL —
-still **not** confirmed. Degrades gracefully: see the `/vip-audit` route
-notes above.
+**HARD STOP item (3)** — partially resolved 2026-07-13. Agent 3's code now
+fires the completion webhook (`functions/agent3/monthly.js`); only the
+Make.com Scenario 3 routing it to `/vip-audit` here remains unbuilt (exact
+steps in `functions/agent3/DEPLOY.md`). Degrades gracefully either way — see
+the `/vip-audit` route notes above.
 
 ## Generating the Analytics self-client (still needed before deploy)
 
