@@ -101,7 +101,8 @@ const ENV_VARS = [
 const MAKE_WEBHOOK_VARS = [
   'MAKE_AGENT0_COMPLETE_WEBHOOK_URL', 'MAKE_AGENT0_ONDEMAND_WEBHOOK_URL',
   'MAKE_VIP_NOTIFY_WEBHOOK_URL', 'MAKE_AGENT1A_WEBHOOK_URL',
-  'MAKE_AGENT1A_FROM_1D_WEBHOOK_URL', 'MAKE_AGENT1B_WEBHOOK_URL',
+  'MAKE_AGENT1A_FROM_1D_WEBHOOK_URL', 'MAKE_COORDINATOR_SUMMARY_WEBHOOK_URL',
+  'MAKE_AGENT1B_WEBHOOK_URL',
   'MAKE_AGENT1C_WEBHOOK_URL', 'MAKE_AGENT1D_WEBHOOK_URL', 'MAKE_AGENT3_WEBHOOK_URL',
   'MAKE_VIP_MANAGER_NOTIFY_WEBHOOK_URL', 'MAKE_COORDINATOR_QUEUE_WEBHOOK_URL',
   'MAKE_SPEND_ALERT_WEBHOOK_URL', 'MAKE_SPEND_CONFIRM_WEBHOOK_URL',
@@ -186,9 +187,18 @@ const CRM_FIELDS = {
       { api: 'Motivation_Discovery_Response', type: 'textarea' },
       { api: 'Ambassador_Role_Category', type: 'picklist' },
       { api: 'Audience_Track', type: 'picklist' },
+      // Agent 3 (v2.1 sprint) fields — reconciled live 2026-07-10 on the `Ambassadors`
+      // module. Two diverge from the design-doc name because the 25-char field-label
+      // limit forced a shorter label, and Zoho generates api_name from that label:
+      //   Activation_Sprint_Start_Date -> Sprint_Start_Date
+      //   Alternative_Track_Entry_Date -> Alt_Track_Entry_Date
+      // See functions/agent3/manifest.js AMBASSADOR_FIELDS for the canonical map.
+      { api: 'Activation_Sprint_Week', type: 'number' },
+      { api: 'Sprint_Start_Date', type: 'date' },
+      { api: 'Sprint_Referral_Submitted', type: 'boolean' },
       { api: 'Last_Engagement_Date', type: 'date' },
       { api: 'Engagement_Track', type: 'picklist' },
-      { api: 'Alternative_Track_Entry_Date', type: 'date' },
+      { api: 'Alt_Track_Entry_Date', type: 'date' },
       { api: 'Alternative_Track_Month', type: 'number' },
       { api: 'Days_Since_Last_Referral', type: 'number' },
       { api: 'Content_Week_Position', type: 'number' },
@@ -224,13 +234,24 @@ const CRM_FIELDS = {
   prospects: {
     moduleKey: 'prospects',
     severity: 'critical',
+    // Reconciled 2026-07-08 against live Ambassador_Leads (post Agent 0 + Agent 1A
+    // builds). Three field names below were corrected from the original design-doc
+    // transcription, which never matched what Zoho actually generated as api_name:
+    //   First_Name              -> Name                 (Agent 0 reused the built-in field)
+    //   Organization             -> Company_Name          (same — built-in field reused)
+    //   VIP_Prospect_Pipeline_Stage -> VIP_Pipeline_Stage (Zoho's label-derived api_name)
+    // The stale names were never actually missing from Zoho — they were the wrong
+    // names to look up, which made this check report false "missing field" critical
+    // failures. Agent 1A's 6 new fields (Sequence_Email_*, Recruiting_Source/Channel
+    // on Ambassador_Leads — distinct from the same-named fields on Ambassadors below)
+    // are added here for the first time; they were previously invisible to this gate.
     fields: [
-      { api: 'First_Name', type: 'text' },
+      { api: 'Name', type: 'text' },
       { api: 'Email', type: 'email' },
       { api: 'Social_Profile_URL', type: 'url' },
       { api: 'Role_Category', type: 'picklist' },
       { api: 'Audience_Track', type: 'picklist' },
-      { api: 'Organization', type: 'text' },
+      { api: 'Company_Name', type: 'text' },
       { api: 'Channel_Source', type: 'text' },
       { api: 'Outreach_Status', type: 'picklist' },
       { api: 'Contact_Found', type: 'boolean' },
@@ -240,10 +261,16 @@ const CRM_FIELDS = {
       { api: 'Org_Influence_Score', type: 'number' },
       { api: 'VIP_Prospect', type: 'boolean' },
       { api: 'VIP_Prospect_Score', type: 'number' },
-      { api: 'VIP_Prospect_Pipeline_Stage', type: 'picklist' },
+      { api: 'VIP_Pipeline_Stage', type: 'picklist' },
       { api: 'Prospect_Declined_Date', type: 'date' },
       { api: 'Lead_Magnets_Downloaded', type: 'textarea' },
       { api: 'UTM_Source', type: 'text' },
+      { api: 'Sequence_Email_1_Sent', type: 'boolean' },
+      { api: 'Sequence_Email_1_Sent_Date', type: 'date' },
+      { api: 'Sequence_Email_2_Sent', type: 'boolean' },
+      { api: 'Sequence_Email_2_Sent_Date', type: 'date' },
+      { api: 'Recruiting_Source', type: 'text' },
+      { api: 'Recruiting_Channel', type: 'text' },
       { api: 'UTM_Campaign', type: 'text' },
     ],
   },

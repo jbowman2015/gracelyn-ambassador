@@ -125,7 +125,20 @@ After deploy, configure Job Scheduling in the Catalyst Console per each agent's 
 - ✅ Agent 5A (validation gate) — built, tested, deploy-targeted
 - ✅ cliqSummaryFunction — daily Zoho Projects → Cliq summary (10 PM CST job)
 - ✅ Agent 0 (Research & Intelligence) — built, tested, 13 CRM fields created live on `Ambassador_Leads`
-- ⬜ Agents 1A–1D, 2, 3, 4, 5, 6 — to build against `docs/design/`
+- ✅ Agent 3 (Engagement) — built, tested, 16 CRM fields created live on `Ambassadors` (sprint + engagement + VIP tier)
+- ✅ Agent 2 (Onboarding) — built, tested, 23 CRM fields created live on `Ambassadors` (compliance/win-back/auto-approve/VIP)
+- ✅ Agent 4 (Compliance Oversight) — built, tested, `Support_Tickets` module + 12 fields created live (HARD STOP #1 resolved; Coordination #2/#3 confirmed zero-divergence)
+- ✅ Agent 5 (Ambassador Support) — built, tested; concurrent build with Agent 4 — found `Support_Tickets` and all 9 SLA fields already created live by that session, matching Agent 5's expected field names exactly (no divergence, no duplicate fields created)
+- ✅ Agent 6 (Story Content Intake) — built, tested; daily buffer-monitoring Catalyst job only (story intake itself is a native Zoho Flow, not deployed code)
+- ✅ Agent 1B (Social Outreach) — built, tested, 1 new CRM field (`High_Engagement_Flag`) + `Social_Post_Logs` module created live on `Ambassador_Leads`
+- ✅ Agent 1C (Paid Advertising) — built, tested, kill switch verified; Ad Campaign Log module still needs to be created live by Parmeet before go-live
+- ✅ Agent 1A (Database Email) — built, tested, re-reconciled at merge time (17 fields, no drift); 6 new CRM fields created live on `Ambassador_Leads` (`Sequence_Email_1/2_Sent`+`_Date`, `Recruiting_Source`, `Recruiting_Channel`), `Outreach_Status` picklist extended (not forked) with 4 lifecycle values; Para DB / Student-Alumni populations not yet wired (their modules are still unconfirmed in Zoho — see Master Reference Sheet §4); email templates and Make.com scenarios pending Parmeet
+- ✅ Agent 1D (Lead Capture) — built, tested, 5 new CRM fields created live on `Ambassador_Leads`
+  (`Audience_Track`, `Lead_Magnets_Downloaded`, `UTM_Source`, `UTM_Campaign`, `Lead_State`); dedups
+  on `Email` (not `Social_Profile_URL` — see `docs/planning/Agent_Build_Playbook.md` Agent 1D entry)
+
+**All 11 agents are now on `main`.** Remaining work is Week 2: deploy + Job Scheduling per each
+`DEPLOY.md`, plus the Make.com/Zoho Forms/WorkDrive configuration each design doc calls for.
 
 > **Building the next agent?** Use `docs/planning/Agent_Build_Playbook.md` — it has the
 > order/status checklist, the shared "Standard Build Rules", and a ready-to-paste session

@@ -6,15 +6,15 @@ build session starts without re-deriving context. **One agent per session.**
 ## Build order & status
 - [x] **Agent 5A** — Setup Validation (go/no-go gate)
 - [x] **Agent 0** — Research & Intelligence *(on `main`)*
-- [ ] **Agent 1A** — Database Email
-- [ ] **Agent 1B** — Social Outreach
-- [ ] **Agent 1C** — Paid Advertising
-- [ ] **Agent 1D** — Lead Capture
-- [ ] **Agent 2** — Onboarding *(most complex)*
-- [ ] **Agent 3** — Engagement
-- [ ] **Agent 4** — Compliance Oversight
-- [ ] **Agent 5** — Ambassador Support
-- [ ] **Agent 6** — Story Content Intake
+- [x] **Agent 1A** — Database Email *(on `main`)*
+- [x] **Agent 1B** — Social Outreach *(on `main`)*
+- [x] **Agent 1C** — Paid Advertising
+- [x] **Agent 1D** — Lead Capture *(on `main`)*
+- [x] **Agent 2** — Onboarding *(most complex)*
+- [x] **Agent 3** — Engagement
+- [x] **Agent 4** — Compliance Oversight
+- [x] **Agent 5** — Ambassador Support
+- [x] **Agent 6** — Story Content Intake
 
 All remaining agents depend on **Agent 0** (now on `main`), not on each other — so after
 Agent 0 they can be built in any order (the order above is just a sensible default). Merge
@@ -101,8 +101,12 @@ prompt tells the session to read **§ Standard Build Rules** (this file) + that 
 ### Agent 1D — Lead Capture
 - **Doc:** `docs/design/Gracelyn_Agent_1D_Lead_Capture_v2.md`
 - **Function/branch:** `agent1D` · `claude/agent-1D-lead-capture`
-- **Notes:** Inbound lead capture (Zoho Forms → `Ambassador_Leads`). Dedup against the same
-  `Social_Profile_URL` key Agent 0 uses.
+- **Notes:** Inbound lead capture (Zoho Forms → `Ambassador_Leads`). Dedups on **`Email`**, not
+  `Social_Profile_URL` — corrected 2026-07-13. The lead capture form never collects a social
+  profile URL (design doc §4 Step 1 payload: `first_name, email, role_category, state,
+  lead_magnet_id, utm_source, utm_campaign`); every Social_Profile_URL would be blank, so that
+  key can't distinguish submitters. Design doc §4 Step 5 is explicit: search Ambassador_Leads by
+  email. See `functions/agent1D/manifest.js` `PROSPECT_FIELDS.dedupKey`.
 - **Zoho task fragment:** `Agents 1A` (shared task; tag `Agents 1A-1D`).
 
 ### Agent 2 — Onboarding *(most complex)*
@@ -143,6 +147,15 @@ prompt tells the session to read **§ Standard Build Rules** (this file) + that 
 - **Function/branch:** `agent6` · `claude/agent-6-story-intake`
 - **Notes:** Feeds Agent 3. **Coordination #1:** the `ROLE_CATEGORY` header it writes on the 2nd
   line of every story file must match the label Agent 3 reads — keep them identical.
+  **Confirmed 2026-07-10 by the Agent 3 session:** the literal header is
+  `ROLE_CATEGORY: <value>` (uppercase, underscore, colon-space) as the file's exact
+  2nd line — see `functions/agent3/manifest.js` `ROLE_CATEGORY_HEADER` /
+  `ROLE_CATEGORY_ANY` and `functions/agent3/story.js` `parseRoleCategory`. Value must
+  be one of the six controlled role categories (K12 Educator, Early Childhood, Faith
+  Community, Youth Serving Professional, Mission Aligned Influencer, Gracelyn
+  Community) or the literal `Any` for a category-agnostic story. Filenames must match
+  `Story_YYYY-MM-DD.txt` in WorkDrive Folder 05 — Agent 3's selection sorts on this
+  filename date.
 - **Zoho task fragment:** `Agent 6`.
 
 ---
