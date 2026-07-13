@@ -13,7 +13,9 @@ never commit real values** (see repo convention in `CLAUDE.md` and `.env.example
 | `AGENT4_MAIL_FROM_ADDRESS` | `compliance@gracelyn.edu` | Placeholder — confirm with Parmeet. The Zoho Mail account owning this address must exist under the OAuth token. |
 | `ZOHO_WORKDRIVE_CLIENT_ID` / `_SECRET` / `_REFRESH_TOKEN` | `<secret>` | WorkDrive OAuth. **Required.** Reads `ambassador_copy_rules.txt`. |
 | `WORKDRIVE_FOLDER_08_ID` | `<folder id>` | Brand assets + copy rules. **Required.** |
-| `ZOHO_ANALYTICS_CLIENT_ID` / `_SECRET` / `_REFRESH_TOKEN` / `ZOHO_ANALYTICS_WORKSPACE_ID` | `<secret>` / `<workspace id>` | Optional. **HARD STOP #2 (dashboard accessibility) was not confirmed as of this build.** When unset, the checkpoint and weekly report still send in full by email — `analytics.js` degrades to a no-op rather than failing the run. |
+| `ZOHO_ANALYTICS_WORKSPACE_ID` | `2396292000008898001` | ✅ Created live 2026-07-13 — org `hartwell2` (745685161), workspace "Ambassador Program Dashboards". |
+| `ZOHO_ANALYTICS_COORDINATOR_VIEW_ID` | `2396292000008901002` | ✅ Created live 2026-07-13 — table `Coordinator_Dashboard_Log` (12 columns; see `analytics.js` header). Schema + a test row write were both verified live. |
+| `ZOHO_ANALYTICS_CLIENT_ID` / `_SECRET` / `_REFRESH_TOKEN` | `<secret>` | **Still not set.** This deployed function needs its own OAuth self-client (separate from whatever session set up the workspace above) — see "Generating the Analytics self-client" below. Optional at deploy time: when unset, the checkpoint and weekly report still send in full by email — `analytics.js` degrades to a no-op rather than failing the run. |
 | `AMBASSADORS_MODULE_API_NAME` | `Ambassadors` | ✅ Confirmed live. |
 | `REFERRALS_MODULE_API_NAME` | `Referrals` | ✅ Confirmed live. |
 | `SUPPORT_TICKETS_MODULE_API_NAME` | `Support_Tickets` | ✅ Created live this session (see CRM reconciliation below — **HARD STOP #1 resolved**). |
@@ -71,10 +73,43 @@ Every generated `api_name` matches `functions/agent5A/manifest.js`
 exactly by construction. Agent 5, when built, should reuse these same names —
 do not create the module or fields again.
 
-**HARD STOP items (2) and (3)** — the Zoho Analytics dashboard and Agent 3's
-recalculation-completion webhook URL — were **not** confirmed this session.
-Both degrade gracefully rather than blocking: see `analytics.js` and the
-`/vip-audit` route notes above.
+**HARD STOP item (2)** — resolved 2026-07-13. Workspace + table created live
+(see the env var table above); `analytics.js` rewritten to POST a flattened
+row to `/restapi/v2/workspaces/{id}/views/{id}/rows` (the old code posted an
+unflattened nested object to the wrong endpoint and would not have worked
+against the real API — verified via a dry run with injected deps, matching
+the request shape the setup session's MCP calls used successfully). Only the
+deployed function's own OAuth self-client remains — see the section below.
+
+**HARD STOP item (3)** — Agent 3's recalculation-completion webhook URL —
+still **not** confirmed. Degrades gracefully: see the `/vip-audit` route
+notes above.
+
+## Generating the Analytics self-client (still needed before deploy)
+
+The workspace/table setup above used a separately-authorized session; the
+deployed Catalyst function needs its **own** OAuth credentials to write at
+runtime:
+
+1. `https://api-console.zoho.com/` (same Zoho account, org `hartwell2`) →
+   **Add Client** → **Self Client**. Copy the Client ID + Client Secret.
+2. On that Self Client's **Generate Code** tab, scopes:
+   `ZohoAnalytics.data.create` (write-only is sufficient — the deployed
+   function only adds rows, it doesn't create tables). 10-minute duration.
+   Generate → copy the code immediately (one-time use, expires fast).
+3. Exchange it for a refresh token:
+   ```bash
+   curl -X POST https://accounts.zoho.com/oauth/v2/token \
+     -d grant_type=authorization_code \
+     -d client_id=<client id> \
+     -d client_secret=<client secret> \
+     -d redirect_uri=https://www.zoho.com \
+     -d code=<the code from step 2>
+   ```
+   Response includes `refresh_token` — that's `ZOHO_ANALYTICS_REFRESH_TOKEN`.
+4. Set `ZOHO_ANALYTICS_CLIENT_ID`, `_CLIENT_SECRET`, `_REFRESH_TOKEN` (plus
+   the already-confirmed `_WORKSPACE_ID` / `_COORDINATOR_VIEW_ID` above)
+   before deploying.
 
 Three real divergences from the design doc, reconciled against the live
 `Ambassadors` / `Referrals` modules:

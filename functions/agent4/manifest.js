@@ -67,14 +67,21 @@ const ENV_SPEC = [
   { key: 'ZOHO_WORKDRIVE_REFRESH_TOKEN', required: true, group: 'Zoho' },
   { key: 'WORKDRIVE_FOLDER_08_ID', required: true, group: 'WorkDrive', note: 'Brand assets + ambassador_copy_rules.txt.' },
 
-  // Zoho Analytics — HARD STOP item #2 (dashboard accessibility) was not
-  // confirmed as of this session. Optional: when unset/unreachable, the
-  // checkpoint/report fall back to emailing the coordinator a text summary
-  // (design §8 failure table: "Zoho Analytics write fails").
-  { key: 'ZOHO_ANALYTICS_CLIENT_ID', required: false, group: 'Zoho', note: 'HARD STOP #2 not yet confirmed live.' },
+  // Zoho Analytics — HARD STOP item #2. Workspace + table created live
+  // 2026-07-13 (org hartwell2, workspace "Ambassador Program Dashboards",
+  // table Coordinator_Dashboard_Log). Client/secret/refresh token are still
+  // this deployed function's own OAuth self-client, separate from whatever
+  // authorized the setup session — not yet issued as of this commit. Optional:
+  // when unset/unreachable, the checkpoint/report fall back to emailing the
+  // coordinator a text summary (design §8 failure table: "Zoho Analytics
+  // write fails").
+  { key: 'ZOHO_ANALYTICS_CLIENT_ID', required: false, group: 'Zoho', note: 'Needs its own OAuth self-client — see DEPLOY.md.' },
   { key: 'ZOHO_ANALYTICS_CLIENT_SECRET', required: false, group: 'Zoho' },
   { key: 'ZOHO_ANALYTICS_REFRESH_TOKEN', required: false, group: 'Zoho' },
-  { key: 'ZOHO_ANALYTICS_WORKSPACE_ID', required: false, group: 'Zoho', note: 'Coordinator dashboard workspace id.' },
+  { key: 'ZOHO_ANALYTICS_WORKSPACE_ID', required: false, group: 'Zoho',
+    note: '✅ Confirmed live 2026-07-13: 2396292000008898001 ("Ambassador Program Dashboards").' },
+  { key: 'ZOHO_ANALYTICS_COORDINATOR_VIEW_ID', required: false, group: 'Zoho',
+    note: '✅ Confirmed live 2026-07-13: 2396292000008901002 (Coordinator_Dashboard_Log table).' },
 
   // CRM module names.
   { key: 'AMBASSADORS_MODULE_API_NAME', required: false, group: 'Config', note: 'Confirmed live: Ambassadors.' },

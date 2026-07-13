@@ -1,14 +1,26 @@
 'use strict';
 
 /**
- * Zoho Analytics helper — best-effort. HARD STOP #2 (coordinator dashboard
- * built + accessible via API) was not confirmed as of this session, so this
- * is deliberately minimal: when the workspace/credentials aren't configured,
- * `writeSummary` returns { ok: false, reason: 'not configured' } rather than
- * throwing, and callers fall back to the design's own §8 failure-table
- * recipe (email the coordinator the data directly as text; the checkpoint
- * and weekly report jobs already do this unconditionally, so no data is lost
- * either way).
+ * Zoho Analytics helper — writes one flattened row per checkpoint/report run
+ * to the coordinator dashboard table (workspace "Ambassador Program
+ * Dashboards", table Coordinator_Dashboard_Log — both created live
+ * 2026-07-13, resolving HARD STOP #2). When the workspace/view/credentials
+ * aren't configured, `writeSummary` returns { ok: false, reason: 'not
+ * configured' } rather than throwing, and callers fall back to the design's
+ * own §8 failure-table recipe (email the coordinator the data directly as
+ * text; the checkpoint and weekly report jobs already do this
+ * unconditionally, so no data is lost either way).
+ *
+ * checkpoint.js/weeklyReport.js pass a nested summary object (arrays of
+ * fraud items, applications, etc., or for weekly reports nested
+ * referralFee/ambassadorHealth/vipStatus/sla/contentCompliance objects) —
+ * Zoho Analytics tables take flat rows, so `buildRow` reduces each array to
+ * a count column and stores the full nested detail in Payload_JSON for
+ * drill-down. Table columns: Log_Date, Report_Type, Halted,
+ * Kill_Switch_Event_Count, Fraud_Item_Count,
+ * Applications_Awaiting_Approval_Count, Exception_Review_Count,
+ * Eligibility_Item_Count, Dormant_Escalation_Count, SLA_Breach_Count,
+ * System_Health_Note, Payload_JSON.
  */
 
 const https = require('https');
@@ -60,36 +72,61 @@ async function getAnalyticsToken() {
 function resetToken() { _token = null; }
 
 function isConfigured() {
-  return !!(process.env.ZOHO_ANALYTICS_CLIENT_ID && process.env.ZOHO_ANALYTICS_REFRESH_TOKEN && M.getEnv('ZOHO_ANALYTICS_WORKSPACE_ID'));
+  return !!(
+    process.env.ZOHO_ANALYTICS_CLIENT_ID &&
+    process.env.ZOHO_ANALYTICS_REFRESH_TOKEN &&
+    M.getEnv('ZOHO_ANALYTICS_WORKSPACE_ID') &&
+    M.getEnv('ZOHO_ANALYTICS_COORDINATOR_VIEW_ID')
+  );
+}
+
+/** Flatten a daily_checkpoint or weekly_report summary into one table row. */
+function buildRow(summary) {
+  return {
+    Log_Date: summary.date || '',
+    Report_Type: summary.type || '',
+    Halted: summary.halted || '',
+    Kill_Switch_Event_Count: String((summary.killSwitchEvents || []).length),
+    Fraud_Item_Count: String((summary.fraudItems || []).length),
+    Applications_Awaiting_Approval_Count: String((summary.applicationsAwaitingApproval || []).length),
+    Exception_Review_Count: String((summary.exceptionReviewItems || []).length),
+    Eligibility_Item_Count: String((summary.eligibilityItems || []).length),
+    Dormant_Escalation_Count: String((summary.dormantEscalations || []).length),
+    SLA_Breach_Count: String((summary.slaBreaches || []).length),
+    System_Health_Note: summary.systemHealthNote || '',
+    Payload_JSON: JSON.stringify(summary),
+  };
 }
 
 /**
- * Write a JSON summary row to the coordinator dashboard workspace. Never
+ * Write a flattened summary row to the coordinator dashboard table. Never
  * throws — returns { ok, reason? }. `deps.request`/`deps.getAnalyticsToken`
  * are injectable for tests.
  */
 async function writeSummary(summary, { deps = {} } = {}) {
-  if (!isConfigured()) return { ok: false, reason: 'not configured (HARD STOP #2 — dashboard not yet confirmed)' };
+  if (!isConfigured()) return { ok: false, reason: 'not configured (ZOHO_ANALYTICS_* env vars unset)' };
   try {
     const doRequest = deps.request || request;
     const token = deps.getAnalyticsToken ? await deps.getAnalyticsToken() : await getAnalyticsToken();
     const workspaceId = M.getEnv('ZOHO_ANALYTICS_WORKSPACE_ID');
-    const payload = JSON.stringify(summary);
+    const viewId = M.getEnv('ZOHO_ANALYTICS_COORDINATOR_VIEW_ID');
+    const config = JSON.stringify({ columns: buildRow(summary), dateFormat: 'yyyy-MM-dd' });
+    const payload = `CONFIG=${encodeURIComponent(config)}`;
     const res = await doRequest({
       hostname: ANALYTICS_HOST,
-      path: `/restapi/v2/workspaces/${encodeURIComponent(workspaceId)}/data`,
+      path: `/restapi/v2/workspaces/${encodeURIComponent(workspaceId)}/views/${encodeURIComponent(viewId)}/rows`,
       method: 'POST',
       headers: {
         Authorization: `Zoho-oauthtoken ${token}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(payload),
       },
     }, payload);
-    const ok = res.status >= 200 && res.status < 300;
-    return { ok, reason: ok ? null : `HTTP ${res.status}` };
+    const ok = res.status >= 200 && res.status < 300 && res.body && res.body.status !== 'failure';
+    return { ok, reason: ok ? null : `HTTP ${res.status}: ${typeof res.body === 'string' ? res.body : JSON.stringify(res.body)}` };
   } catch (err) {
     return { ok: false, reason: err.message };
   }
 }
 
-module.exports = { getAnalyticsToken, resetToken, isConfigured, writeSummary };
+module.exports = { getAnalyticsToken, resetToken, isConfigured, writeSummary, buildRow };
