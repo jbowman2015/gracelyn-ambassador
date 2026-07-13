@@ -32,9 +32,10 @@ committed reference copy of content that actually lives elsewhere at runtime.
   "Recognition and mission framing by default" instruction for this population),
   PROSPECT → Mission Impact (the Unknown-tag default), STUDENT → Pride and Gratitude.
   No template names the motivation tag or frame explicitly (Rule 6 of the frames doc).
-- **No CTA link**: `AMBASSADOR_FORM_BASE_URL` is unconfirmed in Zoho (Master
-  Reference Sheet §3, still ⬜). Every ask is "reply to this email" instead of a
-  link — deliberate, not an oversight (see the note above the templates).
+- **CTA link**: every ask points to `www.gracelyn.edu/ambassador-program`
+  (confirmed by Jessica). Written as literal text, not a substitution token —
+  the URL is the same for every recipient, so no template-substitution code
+  was needed (only `[FIRST_NAME]` in subjects is ever substituted at runtime).
 - **Three-layer structure preserved**: every body is exactly 3 paragraphs (mission
   hook / social proof or program description / simple ask), matching what
   `functions/agent1A/template-guard.js` checks after Claude personalizes the
@@ -55,7 +56,7 @@ The work you do every day with children matters more than most people acknowledg
 
 Gracelyn University is a Christian university built to equip educators for exactly this kind of work. Our Ambassador Program invites people who already believe in that mission, like you, to share Gracelyn with the teachers, coaches, and school staff in their communities who might be ready for the next step.
 
-Becoming a Gracelyn ambassador is simple: you share what you know, and we handle the rest. Your referral fee is paid after the educator you referred has been actively enrolled for four consecutive months: $100 for undergraduate programs, $200 for graduate programs. If that sounds like something you would want to be part of, reply to this email and we will send you the two-minute ambassador application.
+Becoming a Gracelyn ambassador is simple: you share what you know, and we handle the rest. Your referral fee is paid after the educator you referred has been actively enrolled for four consecutive months: $100 for undergraduate programs, $200 for graduate programs. If that sounds like something you would want to be part of, visit www.gracelyn.edu/ambassador-program to get started.
 Warmly,
 The Gracelyn Ambassador Team
 ```
@@ -71,7 +72,7 @@ We reached out last week about Gracelyn's Ambassador Program, and we wanted to f
 
 Gracelyn exists because every vulnerable child deserves an incredible teacher, and ambassadors like you help make that possible simply by sharing what you already believe.
 
-No pressure at all. If you would like to hear more, just reply to this email.
+No pressure at all. If you would like to learn more, visit www.gracelyn.edu/ambassador-program whenever you are ready.
 Warmly,
 The Gracelyn Ambassador Team
 ```
@@ -91,7 +92,7 @@ Every vulnerable child deserves an incredible teacher. That belief is why Gracel
 
 Gracelyn is a Christian university that equips educators like you to grow in their craft while continuing to serve where they already are. Our Ambassador Program invites people who care about that mission to share Gracelyn with the educators, coaches, and community leaders in their own networks.
 
-There is no selling involved. You simply share what you know, and Gracelyn takes it from there. Your referral fee is paid after the educator you referred has been actively enrolled for four consecutive months: $100 for undergraduate programs, $200 for graduate programs. If this sounds like something you would want to be part of, just reply to this email.
+There is no selling involved. You simply share what you know, and Gracelyn takes it from there. Your referral fee is paid after the educator you referred has been actively enrolled for four consecutive months: $100 for undergraduate programs, $200 for graduate programs. If this sounds like something you would want to be part of, visit www.gracelyn.edu/ambassador-program to learn more.
 Warmly,
 The Gracelyn Ambassador Team
 ```
@@ -107,7 +108,7 @@ We wanted to follow up because we think you would be a great fit for Gracelyn's 
 
 Every vulnerable child deserves an incredible teacher, and ambassadors help make that possible just by sharing what they already believe with the right people.
 
-No pressure. If you are interested, simply reply and we will send you what you need.
+No pressure. If you are interested, visit www.gracelyn.edu/ambassador-program whenever you are ready.
 Warmly,
 The Gracelyn Ambassador Team
 ```
@@ -127,7 +128,7 @@ You found Gracelyn when you needed it, and somewhere right now, an educator is s
 
 Gracelyn's Ambassador Program exists so that students and alumni like you can share what you found with someone who needs it. It costs nothing, it takes only a few minutes, and it means everything to the next person who says yes.
 
-When the educator you refer enrolls and stays actively enrolled for four consecutive months, your referral fee is paid: $100 for undergraduate programs, $200 for graduate programs. If you know someone who is ready, reply to this email and we will send you everything you need.
+When the educator you refer enrolls and stays actively enrolled for four consecutive months, your referral fee is paid: $100 for undergraduate programs, $200 for graduate programs. If someone comes to mind, visit www.gracelyn.edu/ambassador-program to get started.
 With gratitude,
 The Gracelyn Ambassador Team
 ```
@@ -143,7 +144,7 @@ We wanted to follow up because what you found at Gracelyn is worth sharing, and 
 
 Someone in your life, maybe another educator, a coworker, or a friend, is exactly where you were before you started your program.
 
-If someone comes to mind, just reply to this email.
+If someone comes to mind, visit www.gracelyn.edu/ambassador-program whenever you are ready.
 With gratitude,
 The Gracelyn Ambassador Team
 ```
@@ -156,11 +157,9 @@ The Gracelyn Ambassador Team
    this was written directly at Jessica's request instead. Recommend a quick review
    before these get set as real Catalyst env vars, especially given the referral-fee
    language is compliance-sensitive.
-2. **No CTA link.** See the note above — deliberate, but if you'd rather point to a
-   real application URL once `AMBASSADOR_FORM_BASE_URL` is confirmed, that's an easy
-   copy edit plus a small addition to `functions/agent1A/subject.js`-style substitution
-   (currently only `[FIRST_NAME]` is replaced; a body-level `[LINK]` token isn't wired
-   up anywhere yet).
+2. **CTA link resolved.** All six templates point to `www.gracelyn.edu/ambassador-program`
+   (confirmed by Jessica). If that URL ever changes, it needs a find-and-replace across
+   all six `_BODY` values — it's literal text, not a substitution token.
 3. **Signature line.** Every body ends with `Warmly,` / `With gratitude,` + team
    name on the next line — deliberately kept inside the same paragraph as the "simple
    ask" (single line break, not a blank line) so it doesn't add a 4th paragraph that
