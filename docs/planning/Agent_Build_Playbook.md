@@ -6,7 +6,7 @@ build session starts without re-deriving context. **One agent per session.**
 ## Build order & status
 - [x] **Agent 5A** — Setup Validation (go/no-go gate)
 - [x] **Agent 0** — Research & Intelligence *(on `main`)*
-- [ ] **Agent 1A** — Database Email
+- [x] **Agent 1A** — Database Email *(on `main`)*
 - [x] **Agent 1B** — Social Outreach *(on `main`)*
 - [x] **Agent 1C** — Paid Advertising
 - [ ] **Agent 1D** — Lead Capture
