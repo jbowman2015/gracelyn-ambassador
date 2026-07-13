@@ -129,9 +129,10 @@ Confirm each **from Zoho** (`GET /crm/v6/settings/modules`) — do not assume th
 ## 5. Policy thresholds (Dr. Flippen confirms)
 
 ⭐ = the 5 most sensitive (Zoho task JP1-T320, "Confirm 5 sensitive policy environment
-variables"). The four starred rows with a value are currently this doc's **proposed**
-defaults, not yet Dr. Flippen–confirmed — get explicit sign-off before treating them as final.
-`MISSION_KEYWORDS` has no proposed default; it's still unresolved.
+variables"). All five starred rows are currently **proposed** values only, not yet
+confirmed — get explicit sign-off before treating any of them as final. `MISSION_KEYWORDS`'s
+proposed list comes from `docs/design/Gracelyn_Agent_1B_Social_Outreach_v2.md` (owned by
+Parmeet, not Dr. Flippen — she updates it directly without a code change).
 
 | Env variable | Value | Status |
 |---|---|---|
@@ -146,7 +147,7 @@ defaults, not yet Dr. Flippen–confirmed — get explicit sign-off before treat
 | `VIP_AUDIT_TOLERANCE_PCT` | 10% | Proposed — pending sign-off |
 | `STORY_BUFFER_MINIMUM` | 4 | Proposed — pending sign-off |
 | `WEEKLY_BATCH_SIZE` | 100 | Proposed — pending sign-off |
-| ⭐ `MISSION_KEYWORDS` | — | ⬜ **Unresolved** — no proposed default; Parmeet/Dr. Flippen must define the keyword list |
+| ⭐ `MISSION_KEYWORDS` | vulnerable children, teacher development, educational equity, faith educator, underserved students, teacher shortage, paraprofessional, early childhood, foster care, mission-driven education | Proposed (source: `Gracelyn_Agent_1B_Social_Outreach_v2.md` §"initial suggested values") — pending Parmeet's review/edit; she owns this list going forward and updates it without a code change |
 | `SLA_TIER2_FIRST_RESPONSE_HOURS` | 24 | Proposed — pending sign-off |
 | `SLA_VIP_FIRST_RESPONSE_HOURS` | 4 | Proposed — pending sign-off |
 | `SLA_TIER2_RESOLUTION_HOURS` | 72 | Proposed — pending sign-off |
