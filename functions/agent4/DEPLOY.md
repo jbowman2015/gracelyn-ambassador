@@ -31,9 +31,9 @@ never commit real values** (see repo convention in `CLAUDE.md` and `.env.example
 | `VIP_POPULATION_THRESHOLD` | `10000` | Default. Same as Agent 3. |
 | `VIP_HIGH_PCT_SMALL` / `VIP_STD_PCT_SMALL` | `2.5` / `5` | Default. Same as Agent 3. |
 | `VIP_HIGH_PCT_LARGE` / `VIP_STD_PCT_LARGE` | `0.5` / `2.5` | Default. Same as Agent 3. |
-| `MAKE_AGENT4_SLA_BREACH_WEBHOOK` | `<url>` | Scenario 4. Optional — falls back to direct coordinator email. |
-| `MAKE_AGENT4_COMPLIANCE_WEBHOOK` | `<url>` | Scenario 5. Optional — falls back to direct coordinator email. |
-| `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` | `<url>` | Informational — Agent 3 now fires this live on completion (2026-07-13). Make.com Scenario 3 (not yet built — see `functions/agent3/DEPLOY.md`) routes it to POST `/vip-audit` here. No code in this function reads this var directly. |
+| `MAKE_AGENT4_SLA_BREACH_WEBHOOK` | `<url>` | Scenario 4. **Deferred 2026-07-14** — not built. Optional: `sla.js` falls back to sending the coordinator email directly via this function's own Zoho Mail OAuth creds when unset, so this scenario is a nice-to-have, not a blocker. Building it needs an email-sending connection (Zoho Mail/SMTP) authorized in the Make.com team first — `connections_list` confirms none exists yet, and that OAuth step has to happen in the Make UI, not headlessly. Also counts against the Make.com Free-plan 2-scenario cap (Scenario 3 already uses 1 of 2). |
+| `MAKE_AGENT4_COMPLIANCE_WEBHOOK` | `<url>` | Scenario 5. **Deferred 2026-07-14** — same reasoning as Scenario 4: `contentCompliance.js` falls back to direct coordinator email when unset, so this is optional. Same email-connection + scenario-cap blockers apply. |
+| `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` | `<url>` | Informational — Agent 3 fires this live on completion (2026-07-13). Make.com Scenario 3 ✅ built + activated live 2026-07-14 (scenario id `5654065`, hook id `2572117`, `https://hook.us2.make.com/m29ujmeeohuxbdoqef1moy9wbxh5exc7`) routes it to POST `/vip-audit` here. No code in this function reads this var directly — set it on **Agent 3**. |
 | `SUPPORT_COORDINATOR_EMAIL` | `<email>` | Canonical (alias: `COORDINATOR_EMAIL`, the design doc's name). **Required.** |
 | `PARMEET_ALERT_EMAIL` | `<email>` | **Required.** |
 | `VIP_MANAGER_EMAIL` | `<email>` | **Required.** CC'd on VIP breach escalations. |
@@ -81,11 +81,20 @@ against the real API — verified via a dry run with injected deps, matching
 the request shape the setup session's MCP calls used successfully). Only the
 deployed function's own OAuth self-client remains — see the section below.
 
-**HARD STOP item (3)** — partially resolved 2026-07-13. Agent 3's code now
-fires the completion webhook (`functions/agent3/monthly.js`); only the
-Make.com Scenario 3 routing it to `/vip-audit` here remains unbuilt (exact
-steps in `functions/agent3/DEPLOY.md`). Degrades gracefully either way — see
-the `/vip-audit` route notes above.
+**HARD STOP item (3)** — resolved 2026-07-14. Agent 3's code fires the
+completion webhook (`functions/agent3/monthly.js`), and the receiving
+Make.com Scenario 3 is now built and active (org `8356473` / team `2559968`,
+scenario id `5654065`): `gateway:CustomWebHook` (hook id `2572117`) →
+`http:MakeRequest` POST to
+`https://ambassador-scaling-project-928007691.development.catalystserverless.com/server/agent4/vip-audit`
+with the incoming `type/date/population/scoredCount/upgradedCount` fields
+mapped straight through as a JSON body. **Caveat:** that target URL follows
+Catalyst's standard Advanced I/O execution-URL pattern
+(`https://<project-domain>.catalystserverless.com/server/<function>/<route>`,
+domain from `.catalystrc`) but has **not been verified against a live
+deploy** — `agent4` isn't deployed yet. Before relying on this scenario,
+confirm the exact URL in Catalyst Console → Functions → `agent4` and update
+the Make.com scenario's HTTP module if it differs.
 
 ## Generating the Analytics self-client (still needed before deploy)
 

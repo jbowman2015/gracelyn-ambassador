@@ -61,13 +61,19 @@ defensively — empty/false rather than halting — until Agent 2 creates them.
 
 `monthlyVipRecalculation` now fires `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` on
 completion (added 2026-07-13, resolving the code-side half of Agent 4 HARD
-STOP #3). Build the receiving Make.com scenario:
-1. **Webhooks: Custom Webhook** → copy URL → this is
-   `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` (set on Agent 3).
-2. **HTTP: Make a Request** → POST → `<Agent 4 Catalyst function URL>/vip-audit`
-   → Body: pass the incoming webhook body through as-is (`{ population,
-   scoredCount, upgradedCount, date, type }` — `functions/agent4/vipAudit.js`
-   reads exactly these keys).
+STOP #3). ✅ **Built + activated live 2026-07-14** via the Make MCP connector
+(org `8356473`, team `2559968`, scenario id `5654065`):
+1. **Webhooks: Custom Webhook** (hook id `2572117`) → URL is
+   `https://hook.us2.make.com/m29ujmeeohuxbdoqef1moy9wbxh5exc7` — set this as
+   `MAKE_AGENT3_RECALC_COMPLETE_WEBHOOK` on Agent 3 at deploy time.
+2. **HTTP: Make a Request** → POST →
+   `https://ambassador-scaling-project-928007691.development.catalystserverless.com/server/agent4/vip-audit`
+   → Body: the incoming webhook fields (`type/date/population/scoredCount/upgradedCount`)
+   mapped straight through as JSON — `functions/agent4/vipAudit.js` reads
+   exactly these keys. **Caveat:** this target URL was inferred from
+   Catalyst's standard execution-URL pattern, not confirmed against a live
+   deploy (agent4 isn't deployed yet) — verify it in Catalyst Console once
+   agent4 goes live and update the scenario's HTTP module if it differs.
 3. No email step needed here — `runVipRecalculationAudit` sends its own
    Parmeet alert (pass/anomaly) via Agent 4's own alerting.
 
