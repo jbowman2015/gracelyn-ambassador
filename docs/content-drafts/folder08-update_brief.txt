@@ -1,0 +1,70 @@
+GRACELYN UNIVERSITY
+AMBASSADOR PROGRAM - UPDATE BRIEF
+File: update_brief.txt
+Location: WorkDrive 08 - Brand Assets
+Version: 1.0 (draft — Parmeet should review and refresh before upload)
+
+=============================================================
+WHAT THIS FILE IS FOR
+=============================================================
+
+Agent 3 reads this file for the Week 4 "Program Update" email in the standard
+four-week content calendar (docs/design/Gracelyn_Agent_3_Engagement_v2.md
+Section 5.2). Claude personalizes this content per ambassador but the
+substance, program news and forward-looking message, comes from here.
+
+This is NOT a one-time deliverable. It is meant to be refreshed periodically
+by Parmeet so the Week 4 email always reflects real, current program news
+instead of going stale. If this file is ever missing or empty, Agent 3's
+design doc says Claude generates a generic mission message instead, so
+nothing breaks, but ambassadors get a less specific, less interesting email
+until this is updated.
+
+Recommended refresh cadence: monthly, or whenever there is real news
+(a program milestone, a new track, a season closing out).
+
+Keep entries following ambassador_copy_rules.txt: no "commission," no em
+dashes, mission before any numbers, no admissions-counseling language.
+
+=============================================================
+CURRENT UPDATE (edit this section each refresh)
+=============================================================
+
+HEADLINE:
+Every referral this year is another door opening for a child who needed an
+incredible teacher.
+
+BODY:
+The Ambassador Program is growing. What started as a handful of educators
+sharing what they believe in has become a community of people who are
+willing to say, "I know someone who should hear about this." Every one of
+those conversations is doing exactly what it was built to do.
+
+Gracelyn is here for it, and we are building the tools to make it easier for
+you to keep sharing well: a clearer portal, faster answers to your questions,
+and more of the stories that remind you why this matters.
+
+FORWARD-LOOKING LINE:
+There is more coming. Keep an eye on your inbox and your portal for what's
+next.
+
+CLOSING:
+Thank you for being part of this. Every vulnerable child deserves an
+incredible teacher, and you are helping make that possible one conversation
+at a time.
+
+=============================================================
+NOTES FOR PARMEET
+=============================================================
+
+- Replace the CURRENT UPDATE section above with real news each refresh cycle.
+  Keep the section headers (HEADLINE / BODY / FORWARD-LOOKING LINE / CLOSING)
+  so Agent 3's prompt structure keeps working.
+- Do not remove this notes section; future editors need the context.
+- If there is no real news for a given month, it is fine to keep last
+  month's update rather than publish something invented. Do not fabricate
+  numbers or milestones that have not actually happened.
+
+=============================================================
+END OF UPDATE BRIEF
+=============================================================
