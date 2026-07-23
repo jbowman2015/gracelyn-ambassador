@@ -3,7 +3,11 @@
 		"name": "agent5A",
 		"stack": "node18",
 		"type": "advancedio",
-		"env_variables": {}
+		"env_variables": {
+			"ZOHO_CRM_CLIENT_ID": "1000.51Y5830O5VKYRGCTE1ILXFXC85K1RN",
+			"ZOHO_CRM_CLIENT_SECRET": "61868fe0124b46ab4107b50b6db40166de9b6ef792",
+			"ZOHO_CRM_REFRESH_TOKEN": "1000.b00f07d4f627cad80ecaaf3220e85cbe.5e312bc4bc399fac1083918477eaab02"
+		}
 	},
 	"execution": {
 		"main": "index.js"
